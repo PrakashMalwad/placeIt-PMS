@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import Navbar from '../components/Navbar'; // Adjust path if needed
+import Navbar from '../components/navbar'; 
 import TermsModal from '../components/studentterm';
 const StudentRegisterPage = () => {
   const [formData, setFormData] = useState({

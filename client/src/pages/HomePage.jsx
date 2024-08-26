@@ -2,8 +2,6 @@
 import Navbar from '../components/navbar';
 import Footer from '../components/footer';
 import HeroSection from '../components/homecomp/HeroSection';
-import CallToAction from '../components/homecomp/calltoaction';
-import Clients from '../components/homecomp/clients';
 import Objectives from '../components/homecomp/objectives';
 import Statistics from '../components/homecomp/statistics';
 import FeaturedServices from '../components/homecomp/featuredService';
@@ -13,8 +11,7 @@ function HomePage() {
     <>
       <Navbar />
       <HeroSection />
-      <CallToAction />
-      <Clients />
+      {/* <Clients /> */}
       <Objectives />
       <Statistics />
       <FeaturedServices />

@@ -18,6 +18,7 @@ function StudentDashboard() {
         console.error("Failed to parse user data from localStorage:", error);
       }
     }
+  
   }, []);
 
   return (

@@ -1,35 +1,53 @@
-
 import { Swiper, SwiperSlide } from 'swiper/react';
-
+import 'swiper/css';
+import 'swiper/css/free-mode';
 
 const Clients = () => {
   const clientImages = [
-    "client-1.svg",
-    "client-2.png",
-    "client-3.png",
-    "client-4.png",
-    "client-5.png",
-    "client-6.png",
-    "client-7.png",
-    "client-8.png",
+    "google.png",
+    "microsoft.png",
+    "amazon.png",
+    "apple.png",
+    "facebook.png",
+    "netflix.png",
+    "spotify.png",
+    "twitter.png",
   ];
 
   return (
-    <div className="flex w-full">
-      <section id="clients" className="clients py-10">
-        <div className="container mx-auto">
+    <div className="flex w-full justify-center">
+      <section id="clients" className="clients py-12 ">
+        <div className="container mx-auto items-center">
+          <h3 className="text-center text-3xl font-bold text-blue-800 mb-12">Our Trusted Clients</h3>
           <Swiper
-            spaceBetween={10}
-            slidesPerView={'auto'}
+            spaceBetween={30}
+            slidesPerView={4}
             freeMode={true}
-            className="client-swiper"
+            loop={true}
+            autoplay={{ delay: 2500, disableOnInteraction: false }}
+            breakpoints={{
+              640: {
+                slidesPerView: 2,
+                spaceBetween: 20,
+              },
+              768: {
+                slidesPerView: 3,
+                spaceBetween: 25,
+              },
+              1024: {
+                slidesPerView: 4,
+                spaceBetween: 30,
+              },
+            }}
+            className="client-swiper flex justify-center"
           >
             {clientImages.map((client, index) => (
-              <SwiperSlide key={index} className="flex-shrink-0">
+              <SwiperSlide key={index} className="flex-shrink-0 flex justify-center items-center">
                 <img
                   src={`assets/img/clients/${client}`}
                   alt={`Client ${index + 1}`}
-                  className="img-fluid"
+                  className="img-fluid grayscale hover:grayscale-0 transition-all duration-500 transform hover:scale-110 hover:shadow-xl rounded-lg border-2 border-transparent hover:border-blue-400"
+                  style={{ width: '160px', height: 'auto' }}
                 />
               </SwiperSlide>
             ))}

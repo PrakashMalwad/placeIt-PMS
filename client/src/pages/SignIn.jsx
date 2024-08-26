@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Navbar from "../components/Navbar";
+import Navbar from "../components/navbar";
 import { Oval } from "react-loader-spinner";
-import Footer from "../components/Footer";
+import Footer from "../components/footer";
 
 function SignIn() {
   const [email, setEmail] = useState("");
@@ -94,8 +94,8 @@ function SignIn() {
               >
                 <option value="student">Student</option>
                 <option value="admin">Admin</option>
-                <option value="company">Company</option>
-                <option value="coordinator">Placement Cell Coordinator</option>
+                <option value="company-coordinator">Company</option>
+                <option value="placementcell-coordinator">Placement Cell Coordinator</option>
               </select>
             </div>
             <div className="form-group">
