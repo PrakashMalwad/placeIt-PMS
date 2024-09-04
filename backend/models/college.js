@@ -1,12 +1,12 @@
 const mongoose = require('mongoose');
 
 const CollegeSchema = new mongoose.Schema({
-    collegeName: {
+    name: {
         type: String,
         required: true,
         trim: true
     },
-    collegeAddress: {
+    address: {
         type: String,
         required: true
     },
@@ -22,31 +22,31 @@ const CollegeSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    collegeType: {
+    type: {
         type: String,
         required: true
     },
-    collegeUniversity: {
+    university: {
         type: String,
         required: true
     },
-    collegeState: {
+    state: {
         type: String,
         required: true
     },
-    collegeCity: {
+    city: {
         type: String,
         required: true
     },
-    collegePincode: {
+    pincode: {
         type: String,
         required: true
     },
-    collegeEstablished: {
-        type: Date,
+    establishmentYear: {
+        type: Number, 
         required: true
     },
-    collegeAffiliated: {
+    affiliation: {
         type: String,
         required: true
     }

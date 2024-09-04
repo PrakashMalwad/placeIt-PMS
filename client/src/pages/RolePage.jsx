@@ -23,7 +23,7 @@ const RoleSelection = () => {
   return (
     <>
       <Navbar />
-      <div className="flex flex-col items-center py-8 h-screen bg-gray-100">
+      <div className="flex flex-col justify-center items-center  h-screen bg-gray-100">
         <h1 className="text-2xl sm:text-3xl font-bold mb-8 text-center">
           What&apos;s your <span className="text-blue-500">Role</span>?
         </h1>

@@ -1,7 +1,7 @@
 import { Outlet } from 'react-router-dom';
 import Navbar from '../components/navbar';
 import Footer from '../components/footer';
-import Sidebar from '../components/student-dash-comp/Sidebar';
+import Sidebar from '../components/student-dash-comp/sidebar';
 import { useState, useEffect } from 'react';
 
 function StudentDashboard() {
@@ -26,7 +26,7 @@ function StudentDashboard() {
       <Navbar setIsSidebarOpen={setIsSidebarOpen} role='student' />
       <div className="flex flex-1">
         <Sidebar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
-        <main className={`flex-1 p-6 lg:p-12 bg-gray-100 transition-transform duration-300 ease-in-out ${isSidebarOpen ? 'ml-64' : 'ml-0'}`}>
+        <main className={`flex-1 p-3 lg:p-12 bg-gray-100 transition-transform duration-300 ease-in-out ${isSidebarOpen ? 'ml-64' : 'ml-0'}`}>
           <h1 className="text-3xl font-semibold mb-6 text-left">Welcome, <span className="font-bold">{userName || 'User'}</span></h1>
           <div className="bg-white p-6 rounded-lg shadow-lg">
             {/* The Outlet component renders the active route's component */}

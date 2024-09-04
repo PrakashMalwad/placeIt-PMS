@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 const CallToAction = () => {
   return (
     <div className="flex justify-center py-7">
-      <section id="cta" className="cta bg-gradient-to-r from-blue-50 to-blue-100 p-10 m-4 rounded-lg shadow-lg">
+      <section id="cta" className="cta bg-gradient-to-r from-blue-50 to-blue-100 p-10 m-4 rounded-lg shadow-lgc">
         <div className="container mx-auto">
           <div className="flex flex-col md:flex-row items-center">
             <div className="text-xl md:w-2/3 order-last md:order-first text-center md:text-left">

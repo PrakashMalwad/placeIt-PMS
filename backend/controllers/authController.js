@@ -60,58 +60,100 @@ exports.loginUser = async (req, res) => {
     }
 };
 
+
 // Registration logic
 exports.registerUser = async (req, res) => {
-    const { role, email, password, cpassword, college, ...otherData } = req.body;
+  const { role, email, password, cpassword, college, ...otherData } = req.body;
 
-    try {
-        // Check if user already exists
-        const existingUser = await User.findOne({ email });
-        if (existingUser) {
-            return res.status(400).json({ msg: "Email already in use" });
-        }
-
-        // Check if password and confirm password match
-        if (password !== cpassword) {
-            return res.status(400).json({ msg: "Passwords do not match" });
-        }
-
-        // Hash the password
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        // Handle college validation
-        let collegeId;
-        if (college) {
-            if (mongoose.Types.ObjectId.isValid(college)) {
-                const existingCollege = await College.findById(college);
-                if (!existingCollege) {
-                    return res.status(400).json({ msg: "Invalid college ID" });
-                }
-                collegeId = existingCollege._id;
-            } else {
-                return res.status(400).json({ msg: "Invalid college ID format" });
-            }
-        }
-
-        let user = new User({
-            ...otherData,
-            email,
-            password: hashedPassword,
-            college: collegeId,});
-        
-        // Save user to database
-        await user.save();
-
-        // Generate JWT token
-        const token = jwt.sign(
-            { id: user._id, role: user.role },
-            process.env.JWT_SECRET,
-            { expiresIn: JWT_EXPIRES_IN }
-        );
-
-        res.status(201).json({ token, user: { id: user._id, role: user.role } });
-    } catch (err) {
-        console.error("Error registering user:", err.message);
-        res.status(500).json({ msg: "Server error" });
+  try {
+    // Check if user already exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ msg: "Email already in use" });
     }
+
+    // Check if password and confirm password match
+    if (password !== cpassword) {
+      return res.status(400).json({ msg: "Passwords do not match" });
+    }
+
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Handle college validation if applicable
+    let collegeId;
+    if (college) {
+      if (mongoose.Types.ObjectId.isValid(college)) {
+        const existingCollege = await College.findById(college);
+        if (!existingCollege) {
+          return res.status(400).json({ msg: "Invalid college ID" });
+        }
+        collegeId = existingCollege._id;
+      } else {
+        return res.status(400).json({ msg: "Invalid college ID format" });
+      }
+    }
+
+    let user;
+
+    // Determine the role and create the appropriate user model instance
+    switch (role) {
+      case 'student':
+        user = new Student({
+          ...otherData,
+          email,
+          password: hashedPassword,
+          college: collegeId,
+          role,
+        });
+        break;
+
+      case 'placementcell-Coordinator':
+        user = new PlacementCoordinator({
+          ...otherData,
+          email,
+          password: hashedPassword,
+          college: collegeId,
+          role,
+        });
+        break;
+
+      case 'company-coordinator':
+        user = new Company({
+          ...otherData,
+          email,
+          password: hashedPassword,
+          role,
+        });
+        break;
+
+      case 'admin':
+        user = new PlacementCellAdmin({
+          ...otherData,
+          email,
+          password: hashedPassword,
+          college: collegeId,
+          role,
+        });
+        break;
+
+      default:
+        return res.status(400).json({ msg: "Invalid role" });
+    }
+
+    // Save user to database
+    await user.save();
+
+    // Generate JWT token
+    const token = jwt.sign(
+      { id: user._id, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: process.env.JWT_EXPIRES_IN || '1h' }
+    );
+
+    res.status(201).json({ token, user: { id: user._id, role: user.role } });
+  } catch (err) {
+    console.error("Error registering user:", err.message);
+    res.status(500).json({ msg: "Server error" });
+  }
 };

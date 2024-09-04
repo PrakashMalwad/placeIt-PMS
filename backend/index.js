@@ -6,7 +6,7 @@ const connectDB = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const collegeRoutes = require('./routes/collegeRoutes');
-
+const driveRoutes= require('./routes/driveRoutes');
 // Connect to the database
 connectDB();
 
@@ -18,7 +18,7 @@ app.use(cors());
 app.use('/api/auth', authRoutes);
 app.use('/uploads', express.static('uploads'));
 app.use('/colleges', collegeRoutes);
-
+app.use('/api/drives', driveRoutes);
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {

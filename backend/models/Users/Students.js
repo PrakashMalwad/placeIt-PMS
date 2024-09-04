@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
-const User = require('./User'); // Import User model
-const College = require('../College'); // Import College model
-
+const User = require('./User'); 
+const College = require('../College'); 
 // Define the Student schema
 const StudentSchema = new mongoose.Schema({
     aboutme: { type: String },
@@ -23,13 +22,14 @@ const StudentSchema = new mongoose.Schema({
         required: true,
     },
     stream: { type: String },
-    contactno: { type: String },
+    contactno: { type: Number }, 
     address: { type: String },
     city: { type: String },
     state: { type: String },
     skills: { type: String },
     designation: { type: String },
     resume: { type: String },
+    profileImage: { type: String }, 
     termsAccepted: { type: Boolean, required: true }
 });
 
@@ -42,8 +42,6 @@ StudentSchema.virtual('age').get(function() {
     }
     return null;
 });
-
-
 
 // Ensuring virtual fields are serialized
 StudentSchema.set('toJSON', { virtuals: true });

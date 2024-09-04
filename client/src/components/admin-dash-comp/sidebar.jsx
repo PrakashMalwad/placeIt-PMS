@@ -1,15 +1,28 @@
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { FaUser, FaTools, FaCalendarCheck, FaGraduationCap, FaSignOutAlt, FaBars, FaTimes, FaClipboardList } from 'react-icons/fa';
+import { FaUser, 
+     FaCalendarCheck, FaSignOutAlt, FaBars, FaTimes,  FaCogs, FaUsers } from 'react-icons/fa';
 
 function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
-  
+  const [adminName, setAdminName] = useState('');
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const storedAdmin = localStorage.getItem("admin");
+    if (storedAdmin) {
+      try {
+        const admin = JSON.parse(storedAdmin);
+        setAdminName(admin.name || 'Admin'); // Fallback to 'Admin' if no name
+      } catch (error) {
+        console.error("Failed to parse admin data from localStorage:", error);
+      }
+    }
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    localStorage.removeItem("admin");
     navigate('/');
   };
 
@@ -33,12 +46,16 @@ function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
 
       {/* Sidebar */}
       <aside className={`fixed top-0 left-0 w-64 h-full bg-gray-100 p-6 shadow-lg transition-transform duration-300 ease-in-out ${isSidebarOpen ? 'translate-y-12 ' : '-translate-x-64'} md:translate-x-0 md:static`}>
-       
+        <div className="mb-6">
+          <h3 className="text-lg font-semibold">
+            Welcome, <span className="font-bold">{adminName}</span>
+          </h3>
+        </div>
         <nav>
           <ul className="space-y-4">
             <li>
               <NavLink
-                to=". "
+                to="dashboard"
                 className={({ isActive }) => isActive ? `${linkClasses} ${activeLinkClasses}` : linkClasses}
               >
                 <FaUser className="mr-3 text-xl" aria-hidden="true" />
@@ -47,51 +64,31 @@ function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
             </li>
             <li>
               <NavLink
-                to="show-drive"
+                to="manage-users"
                 className={({ isActive }) => isActive ? `${linkClasses} ${activeLinkClasses}` : linkClasses}
               >
-                <FaGraduationCap className="mr-3 text-xl" aria-hidden="true" />
-                <span className="text-sm">Show Active Drive</span>
+                <FaUsers className="mr-3 text-xl" aria-hidden="true" />
+                <span className="text-sm">Manage Users</span>
               </NavLink>
             </li>
             <li>
               <NavLink
-                to="my-applications"
-                className={({ isActive }) => isActive ? `${linkClasses} ${activeLinkClasses}` : linkClasses}
-              >
-                <FaClipboardList className="mr-3 text-xl" aria-hidden="true" />
-                <span className="text-sm">My Applications</span>
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="create-drive"
-                className={({ isActive }) => isActive ? `${linkClasses} ${activeLinkClasses}` : linkClasses}
-              >
-                <FaClipboardList className="mr-3 text-xl" aria-hidden="true" />
-                <span className="text-sm">Create drive</span>
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="my-skills"
-                className={({ isActive }) => isActive ? `${linkClasses} ${activeLinkClasses}` : linkClasses}
-              >
-                <FaTools className="mr-3 text-xl" aria-hidden="true" />
-                <span className="text-sm">My Skills</span>
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="interviews"
+                to="reports"
                 className={({ isActive }) => isActive ? `${linkClasses} ${activeLinkClasses}` : linkClasses}
               >
                 <FaCalendarCheck className="mr-3 text-xl" aria-hidden="true" />
-                <span className="text-sm">Interviews</span>
+                <span className="text-sm">Reports</span>
               </NavLink>
             </li>
-            
-            
+            <li>
+              <NavLink
+                to="settings"
+                className={({ isActive }) => isActive ? `${linkClasses} ${activeLinkClasses}` : linkClasses}
+              >
+                <FaCogs className="mr-3 text-xl" aria-hidden="true" />
+                <span className="text-sm">Settings</span>
+              </NavLink>
+            </li>
             <li>
               <button
                 onClick={handleLogout}
