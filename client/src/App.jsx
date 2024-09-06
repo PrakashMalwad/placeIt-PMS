@@ -16,6 +16,7 @@ import CompanyDashboard from "./pages/company-dashboard";
 import CreateDrive from "./components/company-dash-comp/createDrive";
 import AdminDashboard from "./pages/adminDashboard";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import DriveDetails from "./components/student-dash-comp/drivedetails";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
         <Route path="/register/studentRegister" element={<RegisterPage />} />
         <Route path="/student-dashboard" element={<StudentDashboard />}>
           <Route path="show-drive" element={<ShowDrive />} />
+          <Route path="show-drive/drive/:id" element={<DriveDetails />} />
           <Route path="my-skills" element={<MySkills />} />
           <Route path="my-applications" element={<MyApplications />} />
           <Route path="mailbox" element={<Mailbox />} />

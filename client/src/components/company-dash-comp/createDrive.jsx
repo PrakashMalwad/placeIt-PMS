@@ -60,7 +60,7 @@ const CreateDrive = () => {
     }
 
     try {
-      const response = await axios.post('/api/drives', formData);
+      const response = await axios.post('http://localhost:5000/api/drives', formData);
       if (response.status === 201) {
         setSuccess('Job drive created successfully');
         setFormData({

@@ -10,11 +10,11 @@ const jobApplicationSchema = new mongoose.Schema({
   studentResume: { type: String },
   drive: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "JobDrive",
+    ref: "JobDrives",
     required: true,
   },
   status: { type: String, required: true },
   appliedDate: { type: Date, required: true },
 });
-
+    
 module.exports = mongoose.model("JobApplication", jobApplicationSchema);

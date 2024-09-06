@@ -22,8 +22,8 @@ const paginate = async (model, query, page, limit) => {
 exports.getAllDrives = async (req, res) => {
   try {
     const { page = 1, limit = 10 } = req.query;
-    const { items, totalPages } = await paginate(Drive, {}, parseInt(page), parseInt(limit));
-    res.status(200).json({ items, totalPages, currentPage: parseInt(page) });
+    const { items: drives, totalPages } = await paginate(Drive, {}, parseInt(page), parseInt(limit));
+    res.status(200).json({ drives, totalPages, currentPage: parseInt(page) });
   } catch (error) {
     logger.error('Error fetching job drives:', error);
     res.status(500).json({ message: 'Error fetching job drives', error: error.message });
@@ -56,28 +56,39 @@ exports.searchDrives = async (req, res) => {
   }
 };
 
-// Create a new job drive
+// For Create a new job drive
 exports.createDrive = async (req, res) => {
   try {
-    const { company, date, location, eligibilityCriteria, jobDescription, applicationDeadline, contactPerson, contactEmail, contactPhone } = req.body;
+    const {
+      company,
+      date,
+      location,
+      eligibilityCriteria,
+      jobDescription,
+      applicationDeadline,
+      contactPerson,
+      contactEmail,
+      contactPhone
+    } = req.body;
 
     // Validate required fields
     if (!company || !date || !location) {
-      return res.status(400).json({ message: 'Missing required fields' });
+      return res.status(400).json({ message: 'Company, Date, and Location are required fields' });
     }
 
     // Date validation
     const today = new Date().toISOString().split('T')[0];
-    if (date < today || applicationDeadline < today) {
-      return res.status(400).json({ message: 'Date or application deadline must be today or a future date.' });
+    if (new Date(date) < new Date(today) || new Date(applicationDeadline) < new Date(today)) {
+      return res.status(400).json({ message: 'Date or Application Deadline must be today or a future date.' });
     }
 
     // Phone number validation
     const phoneRegex = /^\d{10}$/;
     if (!phoneRegex.test(contactPhone)) {
-      return res.status(400).json({ message: 'Invalid phone number format.' });
+      return res.status(400).json({ message: 'Invalid phone number format. It should be 10 digits.' });
     }
 
+    // Create a new Drive instance
     const newDrive = new Drive({
       company,
       date,
@@ -90,13 +101,15 @@ exports.createDrive = async (req, res) => {
       contactPhone
     });
 
+    // Save the drive
     const savedDrive = await newDrive.save();
     res.status(201).json({ message: 'Job drive created successfully', drive: savedDrive });
   } catch (error) {
     logger.error('Error creating job drive:', error);
-    res.status(400).json({ message: 'Error creating job drive', error: error.message });
+    res.status(500).json({ message: 'Internal Server Error', error: error.message });
   }
 };
+
 
 // Update an existing job drive
 exports.updateDrive = async (req, res) => {
@@ -164,3 +177,16 @@ exports.deleteDrive = async (req, res) => {
     res.status(500).json({ message: 'Server Error', error: error.message });
   }
 };
+  exports.getDriveById = async (req, res) =>{
+    try {
+      const { id } = req.params;
+      const drive = await Drive.findById(id);
+      if (!drive) {
+        return res.status(404).json({ message: 'Drive not found' });
+      }
+      res.status(200).json(drive);
+    } catch (error) {
+      logger.error('Error fetching drive details:', error);
+      res.status(500).json({ message: 'Error fetching drive details', error: error.message });
+    }
+  };

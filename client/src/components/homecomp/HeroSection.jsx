@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 const CallToAction = () => {
   return (
     <div className="flex justify-center py-7">
-      <section id="cta" className="cta bg-gradient-to-r from-blue-50 to-blue-100 p-10 m-4 rounded-lg shadow-lgc">
+      <section id="cta" className="cta bg-gradient-to-r from-blue-300 to-white p-10 w-full shadow-lgc">
         <div className="container mx-auto">
           <div className="flex flex-col md:flex-row items-center">
             <div className="text-xl md:w-2/3 order-last md:order-first text-center md:text-left">
@@ -23,7 +23,7 @@ const CallToAction = () => {
             </div>
             <div className="md:w-1/3 order-first md:order-last mb-4 md:mb-0">
               <img
-                src="assets/img/feature-7.jpg"
+                src=""
                 alt="Feature Image"
                 className="img-fluid rounded-lg shadow-md transform hover:scale-105 transition-transform duration-300"
               />

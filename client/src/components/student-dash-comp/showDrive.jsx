@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 function ShowDrive() {
   const [drives, setDrives] = useState([]);
@@ -9,20 +10,20 @@ function ShowDrive() {
   const [totalPages, setTotalPages] = useState(1);
   const [search, setSearch] = useState('');
 
-  // Fetch job drives from the backend
+  // Fetching job drives from the backend
   const fetchDrives = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.get('/api/drives', {
-        params: { page, search }
+      const response = await axios.get('http://localhost:5000/api/drives', {
+        params: { page, limit: 10, search }
       });
 
-      console.log('API Response:', response.data);  // Debugging line
+      console.log('API Response:', response.data);
       setDrives(response.data.drives || []);
       setTotalPages(response.data.totalPages || 1);
     } catch (err) {
-      console.error('Error fetching drives:', err.response || err);  // Debugging line
+      console.error('Error fetching drives:', err.response || err);
       setError('Failed to fetch job drives. Please try again later.');
       setDrives([]);
     } finally {
@@ -34,13 +35,13 @@ function ShowDrive() {
     fetchDrives();
   }, [fetchDrives]);
 
-  // Handle search input change
+  // Handling search input change
   const handleSearchChange = (e) => {
     setSearch(e.target.value);
     setPage(1); // Reset to the first page when searching
   };
 
-  // Handle pagination change
+  // Handling pagination change
   const handlePageChange = (newPage) => {
     if (newPage > 0 && newPage <= totalPages) {
       setPage(newPage);
@@ -74,33 +75,24 @@ function ShowDrive() {
       {/* Error Message */}
       {error && <div className="text-center text-red-500">{error}</div>}
 
-      {/* Job Drives Table */}
+      {/* Job Drives Cards */}
       {!loading && !error && drives.length > 0 && (
-        <div className="overflow-x-auto">
-          <table className="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
-            <thead className="bg-gray-800 text-white">
-              <tr>
-                <th className="py-3 px-2 md:px-6 text-left">Company</th>
-                <th className="py-3 px-2 md:px-6 text-left">Date</th>
-                <th className="py-3 px-2 md:px-6 text-left">Location</th>
-                <th className="py-3 px-2 md:px-6 text-left">Eligibility Criteria</th>
-                <th className="py-3 px-2 md:px-6 text-left">Application Deadline</th>
-                <th className="py-3 px-2 md:px-6 text-left">Contact Person</th>
-              </tr>
-            </thead>
-            <tbody className="text-gray-700">
-              {drives.map((drive) => (
-                <tr key={drive._id} className="border-b hover:bg-gray-100">
-                  <td className="py-3 px-2 md:px-6">{drive.company}</td>
-                  <td className="py-3 px-2 md:px-6">{new Date(drive.date).toLocaleDateString()}</td>
-                  <td className="py-3 px-2 md:px-6">{drive.location}</td>
-                  <td className="py-3 px-2 md:px-6">{drive.eligibilityCriteria}</td>
-                  <td className="py-3 px-2 md:px-6">{new Date(drive.applicationDeadline).toLocaleDateString()}</td>
-                  <td className="py-3 px-2 md:px-6">{drive.contactPerson}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          {drives.map((drive) => (
+            <div key={drive._id} className="bg-white shadow-md rounded-lg p-4">
+              <h3 className="text-xl font-semibold">{drive.company}</h3>
+              <p className="text-gray-600">{new Date(drive.date).toLocaleDateString()}</p>
+              <p className="text-gray-600">{drive.location}</p>
+              <p className="text-gray-600">{drive.eligibilityCriteria}</p>
+              <p className="text-gray-600">Deadline: {new Date(drive.applicationDeadline).toLocaleDateString()}</p>
+              <Link
+                to={`drive/${drive._id}`}
+                className="bg-blue-500 text-white px-4 py-2 rounded-md mt-4 inline-block text-center hover:bg-blue-600 focus:outline-none"
+              >
+                View Details
+              </Link>
+            </div>
+          ))}
         </div>
       )}
 

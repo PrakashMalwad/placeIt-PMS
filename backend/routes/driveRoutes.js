@@ -9,8 +9,11 @@ router.get('/', DriveController.getAllDrives);
 // Search job drives by title
 router.get('/search', DriveController.searchDrives);
 
+// Get Drive by its Id.
+router.get('/:id', DriveController.getDriveById);
+
 // Create a new job drive
-router.post('/add', DriveController.createDrive);
+router.post('/', DriveController.createDrive);
 
 // Update an existing job drive
 router.put('/:id', DriveController.updateDrive);
