@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const College = require('../models/College');
+const College = require('../models/college');
 
 // Route to get all colleges
 router.get('/get-colleges', async (req, res) => {
