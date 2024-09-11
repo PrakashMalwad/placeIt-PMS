@@ -8,7 +8,7 @@ const PlacementCoordinator = require("../models/Users/PlacementCoordinator");
 const CompanyCoordinator = require("../models/Users/CompanyCoordinator");
 const Admin = require("../models/Users/admin");  
 const PlacementCellAdmin = require("../models/Users/PlacementCellAdmin"); 
-const College = require("../models/College");
+const College = require("../models/college");
 
 // Login user
 exports.loginUser = async (req, res) => {
