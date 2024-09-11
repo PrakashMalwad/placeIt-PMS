@@ -1,9 +1,10 @@
+
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../components/navbar";
 import { Oval } from "react-loader-spinner";
 import Footer from "../components/footer";
-const apiUrl = import.meta.env.BACKEND_URL;
+const apiUrl = import.meta.env.VITE_BACKEND_URL;
 function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -18,7 +19,7 @@ function SignIn() {
     setIsLoading(true);
 
     try {
-        const response = await fetch("/api/auth/login", {
+        const response = await fetch(`${apiUrl}/api/auth/login`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
