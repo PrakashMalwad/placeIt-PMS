@@ -3,7 +3,7 @@ const User = require('./User'); // Import User model
 
 // Define the Admin schema
 const AdminSchema = new mongoose.Schema({
-    role: { type: String, enum: ['superadmin', 'admin'], default: 'admin' },
+    subrole: { type: String, enum: ['superadmin', 'admin','placementcelladmin','companyadmin'], default: 'admin' },
     permissions: { 
         type: [String], 
         enum: ['manageUsers', 'viewReports', 'configureSettings', 'manageRoles'], 

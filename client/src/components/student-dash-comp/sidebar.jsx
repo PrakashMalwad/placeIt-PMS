@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+
 import PropTypes from 'prop-types';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { FaUser, FaTools, FaCalendarCheck, FaGraduationCap, FaSignOutAlt, FaBars, FaTimes, FaClipboardList } from 'react-icons/fa';
@@ -6,6 +6,7 @@ import { FaUser, FaTools, FaCalendarCheck, FaGraduationCap, FaSignOutAlt, FaBars
 function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
   
   const navigate = useNavigate();
+
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -63,15 +64,7 @@ function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
                 <span className="text-sm">My Applications</span>
               </NavLink>
             </li>
-            <li>
-              <NavLink
-                to="create-drive"
-                className={({ isActive }) => isActive ? `${linkClasses} ${activeLinkClasses}` : linkClasses}
-              >
-                <FaClipboardList className="mr-3 text-xl" aria-hidden="true" />
-                <span className="text-sm">Create drive</span>
-              </NavLink>
-            </li>
+            
             <li>
               <NavLink
                 to="my-skills"

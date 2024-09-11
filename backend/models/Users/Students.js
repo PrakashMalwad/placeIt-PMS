@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const User = require('./User'); 
-const College = require('../College'); 
+const College = require('../college'); 
 // Define the Student schema
 const StudentSchema = new mongoose.Schema({
     aboutme: { type: String },

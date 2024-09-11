@@ -45,11 +45,7 @@ const CompanySchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
-  active: {
-    type: Number,
-    enum: [0, 1, 2],
-    default: 2,
-  },
+  
 });
 
 // Pre-save hook to hash the password before saving

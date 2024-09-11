@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config();  
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -6,6 +6,8 @@ const User = require("../models/Users/User");
 const Student = require("../models/Users/Students");
 const PlacementCoordinator = require("../models/Users/PlacementCoordinator");
 const CompanyCoordinator = require("../models/Users/CompanyCoordinator");
+const Admin = require("../models/Users/admin");  
+const PlacementCellAdmin = require("../models/Users/PlacementCellAdmin"); 
 const College = require("../models/College");
 
 // Login user
@@ -38,7 +40,7 @@ exports.loginUser = async (req, res) => {
         jwt.sign(
             payload,
             process.env.JWT_SECRET,
-            { expiresIn: "1h" },
+            { expiresIn: process.env.JWT_EXPIRES_IN || "1h" },  // Use env variables
             (err, token) => {
                 if (err) {
                     console.error("JWT Signing Error:", err);
@@ -60,10 +62,9 @@ exports.loginUser = async (req, res) => {
     }
 };
 
-
 // Registration logic
 exports.registerUser = async (req, res) => {
-  const { role, email, password, cpassword, college, ...otherData } = req.body;
+  const { role, email, password, cpassword, college, subrole, ...otherData } = req.body;
 
   try {
     // Check if user already exists
@@ -108,7 +109,7 @@ exports.registerUser = async (req, res) => {
         });
         break;
 
-      case 'placementcell-Coordinator':
+      case 'placementcell-coordinator':
         user = new PlacementCoordinator({
           ...otherData,
           email,
@@ -119,7 +120,7 @@ exports.registerUser = async (req, res) => {
         break;
 
       case 'company-coordinator':
-        user = new Company({
+        user = new CompanyCoordinator({
           ...otherData,
           email,
           password: hashedPassword,
@@ -128,6 +129,18 @@ exports.registerUser = async (req, res) => {
         break;
 
       case 'admin':
+        // For the admin, we handle subroles like 'superadmin', 'placementcelladmin', 'companyadmin', etc.
+        user = new Admin({
+          ...otherData,
+          email,
+          password: hashedPassword,
+          subrole: subrole || 'admin', // If subrole is not provided, default to 'admin'
+          role,
+        });
+        break;
+
+      case 'placementcell-admin':
+        // Handle placement cell admin as a special case
         user = new PlacementCellAdmin({
           ...otherData,
           email,
@@ -146,12 +159,12 @@ exports.registerUser = async (req, res) => {
 
     // Generate JWT token
     const token = jwt.sign(
-      { id: user._id, role: user.role },
+      { id: user._id, role: user.role, subrole: user.subrole },
       process.env.JWT_SECRET,
       { expiresIn: process.env.JWT_EXPIRES_IN || '1h' }
     );
 
-    res.status(201).json({ token, user: { id: user._id, role: user.role } });
+    res.status(201).json({ token, user: { id: user._id, role: user.role, subrole: user.subrole || null } });
   } catch (err) {
     console.error("Error registering user:", err.message);
     res.status(500).json({ msg: "Server error" });

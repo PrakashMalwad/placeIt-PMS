@@ -2,18 +2,18 @@ import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { FaUser, 
-     FaCalendarCheck, FaSignOutAlt, FaBars, FaTimes,  FaCogs, FaUsers } from 'react-icons/fa';
+     FaCalendarCheck, FaSignOutAlt, FaBars, FaTimes, FaGraduationCap, FaCogs, FaUsers } from 'react-icons/fa';
 
-function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
+function  Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
   const [adminName, setAdminName] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
-    const storedAdmin = localStorage.getItem("admin");
+    const storedAdmin = localStorage.getItem("user");
     if (storedAdmin) {
       try {
-        const admin = JSON.parse(storedAdmin);
-        setAdminName(admin.name || 'Admin'); // Fallback to 'Admin' if no name
+        const user = JSON.parse(storedAdmin);
+        setAdminName(user.name || 'user'); 
       } catch (error) {
         console.error("Failed to parse admin data from localStorage:", error);
       }
@@ -22,7 +22,7 @@ function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    localStorage.removeItem("admin");
+    localStorage.removeItem("user");
     navigate('/');
   };
 
@@ -72,6 +72,17 @@ function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
               </NavLink>
             </li>
             <li>
+              <NavLink
+                to="manage-drive"
+                className={({ isActive }) => isActive ? `${linkClasses} ${activeLinkClasses}` : linkClasses}
+              >
+                <FaGraduationCap className="mr-3 text-xl" aria-hidden="true" />
+                <span className="text-sm"> Manage Drive</span>
+              </NavLink>
+            </li>
+            
+            <li>
+
               <NavLink
                 to="reports"
                 className={({ isActive }) => isActive ? `${linkClasses} ${activeLinkClasses}` : linkClasses}

@@ -47,7 +47,7 @@ function SignIn() {
                     navigate("/student-dashboard");
                     break;
                 case "admin":
-                    navigate("/admin-dashboard");
+                    navigate("/admin/dashboard");
                     break;
                 case "company-coordinator":
                     navigate("/company-dashboard");

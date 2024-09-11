@@ -17,7 +17,8 @@ import CreateDrive from "./components/company-dash-comp/createDrive";
 import AdminDashboard from "./pages/adminDashboard";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import DriveDetails from "./components/student-dash-comp/drivedetails";
-
+import ManageUser from "./components/admin-dash-comp/ManageUser";
+import ManageDrive from "./components/admin-dash-comp/ManageDrive";
 function App() {
   return (
     <Router>
@@ -27,6 +28,7 @@ function App() {
         <Route path="/signin" element={<SignIn />} />
         <Route path="/register" element={<RoleSelection />} />
         <Route path="/register/studentRegister" element={<RegisterPage />} />
+        {/* Student Route */}
         <Route path="/student-dashboard" element={<StudentDashboard />}>
           <Route path="show-drive" element={<ShowDrive />} />
           <Route path="show-drive/drive/:id" element={<DriveDetails />} />
@@ -34,12 +36,21 @@ function App() {
           <Route path="my-applications" element={<MyApplications />} />
           <Route path="mailbox" element={<Mailbox />} />
           <Route path="interviews" element={<Interviews />} />
-          <Route path="create-drive" element={<CreateDrive />} />
+          
           <Route path="settings" element={<Settings />} />
           <Route path="profile" element={<EditProfile />} />
         </Route>
         <Route path="/company-dashboard" element={<CompanyDashboard />} />
-        <Route path="/admin/dashboard" element={<AdminDashboard />} />
+        {/* Admin DashRoute */}
+        <Route path="/admin/dashboard" element={<AdminDashboard />}>
+        <Route path="*" element={<ManageUser />} />
+        <Route path="manage-drive" element={<ManageDrive />} >
+        <Route path="create-drive" element={<CreateDrive />}/>
+        </Route>
+        {/* <Route path="/reports"/> */}
+        <Route path="manage-users" element={<ManageUser/>}/>
+        </Route> 
+        {/* Errorpage route */}
         <Route path="*" element={<ErrorPage />} />
       </Routes>
     </Router>

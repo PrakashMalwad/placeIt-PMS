@@ -9,6 +9,7 @@ function ShowDrive() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [search, setSearch] = useState('');
+  const [triggerSearch, setTriggerSearch] = useState(false); // New state to trigger search
 
   // Fetching job drives from the backend
   const fetchDrives = useCallback(async () => {
@@ -37,9 +38,18 @@ function ShowDrive() {
 
   // Handling search input change
   const handleSearchChange = (e) => {
-    setSearch(e.target.value);
-    setPage(1); // Reset to the first page when searching
+    setSearch(e.target.value); // Update search value
+    setPage(1); // Reset to the first page
+    setTriggerSearch(true); // Mark that search should be triggered
   };
+
+  // Fetch drives only when search is triggered or page changes
+  useEffect(() => {
+    if (triggerSearch) {
+      fetchDrives();
+      setTriggerSearch(false); // Reset trigger
+    }
+  }, [fetchDrives, triggerSearch]); // Only trigger fetch when `triggerSearch` changes
 
   // Handling pagination change
   const handlePageChange = (newPage) => {
@@ -49,45 +59,50 @@ function ShowDrive() {
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <h2 className="text-2xl font-bold text-center my-4 text-gray-800">Active Job Drives</h2>
+    <div className="container mx-auto p-6">
+      <h2 className="text-3xl font-bold text-center mb-4 text-gray-900">Active Job Drives</h2>
 
       {/* Search Bar */}
-      <div className="flex flex-col md:flex-row justify-center mb-6">
+      <div className="flex flex-col md:flex-row justify-center mb-8 items-center">
         <input
           type="text"
-          className="border border-gray-300 rounded-l-md py-2 px-4 w-full md:w-2/3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder="Search job drives"
+          className="border border-gray-300 rounded-l-md py-3 px-6 w-full md:w-1/2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+          placeholder="Search job drives..."
           value={search}
-          onChange={handleSearchChange}
+          onChange={handleSearchChange} // On input change, search is updated
         />
         <button
-          className="bg-blue-500 text-white px-4 py-2 rounded-r-md mt-2 md:mt-0 md:ml-2 hover:bg-blue-600 focus:outline-none"
-          onClick={fetchDrives}
+          className="bg-blue-600 text-white px-6 py-3 rounded-md mt-3 md:mt-0 md:ml-1 hover:bg-blue-700 transition duration-200 focus:outline-none"
+          onClick={fetchDrives} // Fetch results when clicking the button
         >
           Search
         </button>
       </div>
 
       {/* Loading Spinner */}
-      {loading && <div className="text-center text-gray-500">Loading...</div>}
+      {loading && <div className="animate-spin text-center text-gray-500">Loading...</div>}
 
       {/* Error Message */}
       {error && <div className="text-center text-red-500">{error}</div>}
 
       {/* Job Drives Cards */}
       {!loading && !error && drives.length > 0 && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
           {drives.map((drive) => (
-            <div key={drive._id} className="bg-white shadow-md rounded-lg p-4">
-              <h3 className="text-xl font-semibold">{drive.company}</h3>
-              <p className="text-gray-600">{new Date(drive.date).toLocaleDateString()}</p>
-              <p className="text-gray-600">{drive.location}</p>
-              <p className="text-gray-600">{drive.eligibilityCriteria}</p>
-              <p className="text-gray-600">Deadline: {new Date(drive.applicationDeadline).toLocaleDateString()}</p>
+            <div
+              key={drive._id}
+              className="bg-white shadow-lg rounded-lg p-6 hover:shadow-2xl transform hover:scale-105 transition duration-300"
+            >
+              <h3 className="text-2xl font-semibold text-gray-800 mb-2">{drive.company}</h3>
+              <p className="text-gray-500 mb-1">{new Date(drive.date).toLocaleDateString()}</p>
+              <p className="text-gray-500 mb-1">{drive.location}</p>
+              <p className="text-gray-500 mb-2">{drive.eligibilityCriteria}</p>
+              <p className="text-red-500 font-semibold">
+                Deadline: {new Date(drive.applicationDeadline).toLocaleDateString()}
+              </p>
               <Link
                 to={`drive/${drive._id}`}
-                className="bg-blue-500 text-white px-4 py-2 rounded-md mt-4 inline-block text-center hover:bg-blue-600 focus:outline-none"
+                className="block mt-4 text-center bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition duration-200"
               >
                 View Details
               </Link>
@@ -102,17 +117,17 @@ function ShowDrive() {
       )}
 
       {/* Pagination Controls */}
-      <div className="flex flex-col md:flex-row justify-center mt-6 space-y-2 md:space-y-0 md:space-x-4">
+      <div className="flex justify-center mt-8 space-x-4">
         <button
-          className={`px-4 py-2 rounded-md border ${page === 1 ? 'bg-gray-200 text-gray-500 cursor-not-allowed' : 'bg-blue-500 text-white hover:bg-blue-600'}`}
+          className={`px-6 py-2 rounded-lg font-semibold ${page === 1 ? 'bg-gray-200 text-gray-500 cursor-not-allowed' : 'bg-blue-600 text-white hover:bg-blue-700'}`}
           disabled={page === 1}
           onClick={() => handlePageChange(page - 1)}
         >
           Previous
         </button>
-        <span className="px-4 py-2 rounded-md border bg-white shadow-md">Page {page} of {totalPages}</span>
+        <span className="px-6 py-2 rounded-lg border bg-white shadow-md">Page {page} of {totalPages}</span>
         <button
-          className={`px-4 py-2 rounded-md border ${page === totalPages ? 'bg-gray-200 text-gray-500 cursor-not-allowed' : 'bg-blue-500 text-white hover:bg-blue-600'}`}
+          className={`px-6 py-2 rounded-lg font-semibold ${page === totalPages ? 'bg-gray-200 text-gray-500 cursor-not-allowed' : 'bg-blue-600 text-white hover:bg-blue-700'}`}
           disabled={page === totalPages}
           onClick={() => handlePageChange(page + 1)}
         >

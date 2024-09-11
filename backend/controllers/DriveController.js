@@ -3,190 +3,84 @@ const winston = require('winston');
 
 // Logger setup
 const logger = winston.createLogger({
-  transports: [new winston.transports.Console()]
+  transports: [new winston.transports.Console()],
 });
 
-// Utility function for paginati
+// Utility function for pagination
 const paginate = async (model, query, page, limit) => {
   const skip = (page - 1) * limit;
-  const [items, totalItems] = await Promise.all([
+  const [results, total] = await Promise.all([
     model.find(query).skip(skip).limit(limit),
-    model.countDocuments(query)
+    model.countDocuments(query),
   ]);
-
-  const totalPages = Math.ceil(totalItems / limit);
-  return { items, totalPages };
+  return {
+    results,
+    totalPages: Math.ceil(total / limit),
+  };
 };
 
-// Fetch all job drives with pagination
-exports.getAllDrives = async (req, res) => {
+// Fetch drives with pagination and search
+const getAllDrives = async (req, res) => {
+  const { page = 1, limit = 10, search = '' } = req.query;
   try {
-    const { page = 1, limit = 10 } = req.query;
-    const { items: drives, totalPages } = await paginate(Drive, {}, parseInt(page), parseInt(limit));
-    res.status(200).json({ drives, totalPages, currentPage: parseInt(page) });
+    const query = search ? { company: { $regex: search, $options: 'i' } } : {};
+    const { results, totalPages } = await paginate(Drive, query, +page, +limit);
+    res.json({ drives: results, totalPages });
   } catch (error) {
-    logger.error('Error fetching job drives:', error);
-    res.status(500).json({ message: 'Error fetching job drives', error: error.message });
+    logger.error(`Error fetching drives: ${error.message}`);
+    res.status(500).json({ message: 'Error fetching job drives' });
   }
 };
 
-// Search for job drives by title with pagination
-exports.searchDrives = async (req, res) => {
+// Create a new job drive
+const createDrive = async (req, res) => {
+  const { company, date, location, eligibilityCriteria, jobDescription, applicationDeadline, contactPerson, contactEmail, contactPhone } = req.body;
+  
   try {
-    const { search = '', page = 1, limit = 10 } = req.query;
-    const skip = (parseInt(page) - 1) * parseInt(limit);
-    const query = search ? { title: { $regex: search, $options: 'i' } } : {};
-
-    const drives = await Drive.find(query)
-      .skip(skip)
-      .limit(parseInt(limit))
-      .sort({ date: -1 });
-
-    const totalDrives = await Drive.countDocuments(query);
-    const totalPages = Math.ceil(totalDrives / parseInt(limit));
-
-    res.status(200).json({
-      drives,
-      totalPages,
-      currentPage: parseInt(page)
-    });
+    const newDrive = new Drive({ company, date, location, eligibilityCriteria, jobDescription, applicationDeadline, contactPerson, contactEmail, contactPhone });
+    await newDrive.save();
+    res.status(201).json(newDrive);
   } catch (error) {
-    logger.error('Error searching job drives:', error);
-    res.status(500).json({ message: 'Server Error', error: error.message });
+    logger.error(`Error creating drive: ${error.message}`);
+    res.status(500).json({ message: 'Error creating job drive' });
   }
 };
-
-// For Create a new job drive
-exports.createDrive = async (req, res) => {
-  try {
-    const {
-      company,
-      date,
-      location,
-      eligibilityCriteria,
-      jobDescription,
-      applicationDeadline,
-      contactPerson,
-      contactEmail,
-      contactPhone
-    } = req.body;
-
-    // Validate required fields
-    if (!company || !date || !location) {
-      return res.status(400).json({ message: 'Company, Date, and Location are required fields' });
-    }
-
-    // Date validation
-    const today = new Date().toISOString().split('T')[0];
-    if (new Date(date) < new Date(today) || new Date(applicationDeadline) < new Date(today)) {
-      return res.status(400).json({ message: 'Date or Application Deadline must be today or a future date.' });
-    }
-
-    // Phone number validation
-    const phoneRegex = /^\d{10}$/;
-    if (!phoneRegex.test(contactPhone)) {
-      return res.status(400).json({ message: 'Invalid phone number format. It should be 10 digits.' });
-    }
-
-    // Create a new Drive instance
-    const newDrive = new Drive({
-      company,
-      date,
-      location,
-      eligibilityCriteria,
-      jobDescription,
-      applicationDeadline,
-      contactPerson,
-      contactEmail,
-      contactPhone
-    });
-
-    // Save the drive
-    const savedDrive = await newDrive.save();
-    res.status(201).json({ message: 'Job drive created successfully', drive: savedDrive });
-  } catch (error) {
-    logger.error('Error creating job drive:', error);
-    res.status(500).json({ message: 'Internal Server Error', error: error.message });
-  }
-};
-
 
 // Update an existing job drive
-exports.updateDrive = async (req, res) => {
+const updateDrive = async (req, res) => {
+  const { id } = req.params;
+  const { company, date, location, eligibilityCriteria, jobDescription, applicationDeadline, contactPerson, contactEmail, contactPhone } = req.body;
+
   try {
-    const { id } = req.params;
-    const { company, date, location, eligibilityCriteria, jobDescription, applicationDeadline, contactPerson, contactEmail, contactPhone } = req.body;
-
-    // Validate required fields
-    if (!company || !date || !location) {
-      return res.status(400).json({ message: 'Missing required fields' });
-    }
-
-    // Date validation
-    const today = new Date().toISOString().split('T')[0];
-    if (date < today || applicationDeadline < today) {
-      return res.status(400).json({ message: 'Date or application deadline must be today or a future date.' });
-    }
-
-    // Phone number validation
-    const phoneRegex = /^\d{10}$/;
-    if (!phoneRegex.test(contactPhone)) {
-      return res.status(400).json({ message: 'Invalid phone number format.' });
-    }
-
-    const updatedDrive = await Drive.findByIdAndUpdate(
-      id,
-      {
-        company,
-        date,
-        location,
-        eligibilityCriteria,
-        jobDescription,
-        applicationDeadline,
-        contactPerson,
-        contactEmail,
-        contactPhone
-      },
-      { new: true, runValidators: true }
-    );
-
+    const updatedDrive = await Drive.findByIdAndUpdate(id, { company, date, location, eligibilityCriteria, jobDescription, applicationDeadline, contactPerson, contactEmail, contactPhone }, { new: true });
     if (!updatedDrive) {
-      return res.status(404).json({ message: 'Job drive not found' });
+      return res.status(404).json({ message: 'Drive not found' });
     }
-
-    res.status(200).json({ message: 'Job drive updated successfully', drive: updatedDrive });
+    res.json(updatedDrive);
   } catch (error) {
-    logger.error('Error updating job drive:', error);
-    res.status(400).json({ message: 'Error updating job drive', error: error.message });
+    logger.error(`Error updating drive: ${error.message}`);
+    res.status(500).json({ message: 'Error updating job drive' });
   }
 };
 
 // Delete a job drive
-exports.deleteDrive = async (req, res) => {
+const deleteDrive = async (req, res) => {
+  const { id } = req.params;
   try {
-    const { id } = req.params;
-    const deletedDrive = await Drive.findByIdAndDelete(id);
-
-    if (!deletedDrive) {
-      return res.status(404).json({ message: 'Job drive not found' });
+    const drive = await Drive.findByIdAndDelete(id);
+    if (!drive) {
+      return res.status(404).json({ message: 'Drive not found' });
     }
-
-    res.status(200).json({ message: 'Job drive deleted successfully' });
+    res.json({ message: 'Drive deleted' });
   } catch (error) {
-    logger.error('Error deleting job drive:', error);
-    res.status(500).json({ message: 'Server Error', error: error.message });
+    logger.error(`Error deleting drive: ${error.message}`);
+    res.status(500).json({ message: 'Error deleting job drive' });
   }
 };
-  exports.getDriveById = async (req, res) =>{
-    try {
-      const { id } = req.params;
-      const drive = await Drive.findById(id);
-      if (!drive) {
-        return res.status(404).json({ message: 'Drive not found' });
-      }
-      res.status(200).json(drive);
-    } catch (error) {
-      logger.error('Error fetching drive details:', error);
-      res.status(500).json({ message: 'Error fetching drive details', error: error.message });
-    }
-  };
+
+module.exports = {
+  getAllDrives,
+  createDrive,
+  updateDrive,
+  deleteDrive
+};

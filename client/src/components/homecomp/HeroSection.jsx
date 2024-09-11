@@ -1,38 +1,22 @@
-import { Link } from "react-router-dom";
 
-const CallToAction = () => {
+
+const HeroSection = () => {
   return (
-    <div className="flex justify-center py-7">
-      <section id="cta" className="cta bg-gradient-to-r from-blue-300 to-white p-10 w-full shadow-lgc">
-        <div className="container mx-auto">
-          <div className="flex flex-col md:flex-row items-center">
-            <div className="text-xl md:w-2/3 order-last md:order-first text-center md:text-left">
-              <h3 className="text-3xl font-bold text-blue-700 mb-4">
-                <strong className="text-blue-900"style={{ fontFamily: "'Istok Web', sans-serif" }}>PlaceIT</strong>
-              </h3>
-              <p className="py-4 text-gray-700 leading-relaxed">
-                The Placement Cell plays a crucial role in locating job
-                opportunities for undergraduates and postgraduates, connecting them with top employers.
-              </p>
-              <Link
-                to=""
-                className="cta-btn align-self-start mt-4 bg-blue-600 text-white px-6 py-3 rounded-full shadow-md hover:bg-blue-700 transition-colors duration-300"
-              >
-                Get Started
-              </Link>
-            </div>
-            <div className="md:w-1/3 order-first md:order-last mb-4 md:mb-0">
-              <img
-                src=""
-                alt="Feature Image"
-                className="img-fluid rounded-lg shadow-md transform hover:scale-105 transition-transform duration-300"
-              />
-            </div>
-          </div>
-        </div>
-      </section>
-    </div>
+    <section className="relative h-screen bg-cover bg-center" style={{ backgroundImage: "url('https://unsplash.com/photos/gray-concrete-bricks-painted-in-blue-QMDap1TAu0g')" }}>
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-800 to-blue-300 opacity-70"></div>
+      <div className="relative z-10 flex flex-col justify-center items-center h-full text-center text-white px-4">
+        <h1 className="text-4xl md:text-6xl font-bold mb-4">
+          Launch Your Career with Our Placement Management System
+        </h1>
+        <p className="text-lg md:text-xl mb-8">
+          Empowering students and companies to connect, grow, and succeed together. Start your journey today!
+        </p>
+        <a href="#get-started" className="px-6 py-3 bg-blue-600 rounded-full text-lg font-semibold hover:bg-blue-700 transition">
+          Get Started
+        </a>
+      </div>
+    </section>
   );
 };
 
-export default CallToAction;
+export default HeroSection;
