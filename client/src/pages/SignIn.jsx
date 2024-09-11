@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../components/navbar";
 import { Oval } from "react-loader-spinner";
 import Footer from "../components/footer";
-const apiUrl = import.meta.env.VITE_BACKEND_URL;
+const apiUrl = import.meta.env.BACKEND_URL;
 function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
