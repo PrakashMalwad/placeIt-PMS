@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const User = require('./User'); // Import the root User model
-const College = require('../College');
+const College = require('../college');
 
 // Define the Placement Cell Admin schema
 const PlacementCellAdminSchema = new mongoose.Schema({
