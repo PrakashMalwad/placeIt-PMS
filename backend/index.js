@@ -16,6 +16,8 @@ connectDB();
 app.use(express.json());
 app.use(cors());
 
+app.get('/', (req, res) => {
+    res.send('<h1> Api Chal Raha Hai </h1>');});
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/uploads', express.static('uploads'));
@@ -25,6 +27,7 @@ app.use('/api/users', userRoutes);
 
 const PORT = process.env.PORT || 5000;
 
+//
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
