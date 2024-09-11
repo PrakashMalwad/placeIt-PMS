@@ -59,4 +59,15 @@ This Placement Management System is a web application designed to facilitate the
 4. To Run Client Side
    ```bash
    npm run dev
-6. 
+#### Backend  
+
+1. Change Diretory to Backend
+   
+   ```bash
+   cd backend
+   
+2. To Start Server
+
+   ```bash
+   cd backend
+   
