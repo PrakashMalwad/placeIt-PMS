@@ -8,7 +8,7 @@ import EditProfile from "./components/student-dash-comp/EditProfile";
 import MyApplications from "./components/student-dash-comp/MyApplications";
 import Mailbox from "./components/student-dash-comp/Mailbox";
 import Settings from "./components/student-dash-comp/Settings";
-import MySkills from "./components/student-dash-comp/MySkills";
+import MySkills from "./components/student-dash-comp/Myskills";
 import ShowDrive from "./components/student-dash-comp/showDrive";
 import Interviews from "./components/student-dash-comp/Interviews";
 import ErrorPage from "./pages/ErrorPage";
