@@ -69,5 +69,5 @@ This Placement Management System is a web application designed to facilitate the
 2. To Start Server
 
    ```bash
-   cd backend
+  npm start dev
    
