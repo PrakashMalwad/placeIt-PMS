@@ -45,6 +45,22 @@ const createDrive = async (req, res) => {
     res.status(500).json({ message: 'Error creating job drive' });
   }
 };
+// Get drive by Id
+const getDriveById = async (req, res) => {
+  const { id } = req.params;
+  
+  try {
+    const drive = await Drive.findById(id);
+    if
+    (!drive) {
+      return res.status(404).json({ message: 'Drive not found' });
+    }
+    res.json(drive);
+    } catch (error) {
+    logger.error(`Error fetching drive: ${error.message}`);
+    res.status(500).json({ message: 'Error fetching job drive' });
+    }
+    };
 
 // Update an existing job drive
 const updateDrive = async (req, res) => {
@@ -80,6 +96,7 @@ const deleteDrive = async (req, res) => {
 
 module.exports = {
   getAllDrives,
+  getDriveById,
   createDrive,
   updateDrive,
   deleteDrive

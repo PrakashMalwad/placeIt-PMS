@@ -12,18 +12,9 @@ const driveRoutes = require("./routes/driveRoutes");
 // Connect to the database
 connectDB();
 
-const allowedOrigins = process.env.NODE_ENV === 'production'
-  ? process.env.FRONTEND_URL
-  : 'http://localhost:5173';
-
 // Middleware
 app.use(express.json());
-app.use(cors(
-  {
-    origin: allowedOrigins,
-    credentials: true,
-  }
-));
+app.use(cors());
 
 app.get("/", (req, res) => {
   res.send("<h1> Api Chal Raha Hai </h1>");
