@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-
+const apiUrl = import.meta.env.VITE_BACKEND_URL;
 function ManageJobDrives() {
   const [drives, setDrives] = useState([]);
   const [search, setSearch] = useState('');
@@ -23,7 +23,7 @@ function ManageJobDrives() {
   // Fetch job drives
   const fetchDrives = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/drives?page=${page}&limit=10&search=${search}`);
+      const response = await axios.get(`${apiUrl}/api/drives?page=${page}&limit=10&search=${search}`);
       setDrives(response.data.drives);
       setTotalPages(response.data.totalPages);
     } catch (error) {
@@ -43,11 +43,11 @@ function ManageJobDrives() {
     e.preventDefault();
     try {
       if (isEditing) {
-        await axios.put(`http://localhost:5000/api/drives/${editingId}`, form);
+        await axios.put(`${apiUrl}/api/drives/${editingId}`, form);
         setIsEditing(false);
         setEditingId(null);
       } else {
-        await axios.post('http://localhost:5000/api/drives', form);
+        await axios.post(`${apiUrl}/api/drives`, form);
       }
       fetchDrives();
       resetForm();
@@ -59,7 +59,7 @@ function ManageJobDrives() {
   // Delete a drive
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/drives/${id}`);
+      await axios.delete(`${apiUrl}/drives/${id}`);
       fetchDrives();
     } catch (error) {
       console.error('Error deleting drive:', error);

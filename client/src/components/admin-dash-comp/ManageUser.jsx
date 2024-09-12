@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { FaUserPlus, FaTrash, FaEdit, FaPause, FaPlay, FaSpinner, FaExclamationCircle, FaCheck } from 'react-icons/fa';
-
+const apiUrl = import.meta.env.VITE_BACKEND_URL;
 
 function ManageUser() {
   const [users, setUsers] = useState([]);
@@ -29,7 +29,7 @@ function ManageUser() {
         setIsLoading(false);
         return;
       }
-      const response = await axios.get('http://localhost:5000/api/users', {
+      const response = await axios.get(`${apiUrl}/api/users`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -49,7 +49,7 @@ function ManageUser() {
   const handleAddUser = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.post('http://localhost:5000/api/users', newUser, {
+      const response = await axios.post(`${apiUrl}/api/users`, newUser, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -65,7 +65,7 @@ function ManageUser() {
   const handleModifyUser = async (id, updatedUser) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.put(`http://localhost:5000/api/users/${id}`, updatedUser, {
+      const response = await axios.put(`${apiUrl}/api/users/${id}`, updatedUser, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -80,8 +80,8 @@ function ManageUser() {
   const handleToggleHoldStatus = async (id, isCurrentlyOnHold) => {
     try {
       const endpoint = isCurrentlyOnHold 
-        ? `http://localhost:5000/api/users/${id}`
-        : `http://localhost:5000/api/users/${id}`;
+        ? `${apiUrl}/api/users/${id}`
+        : `${apiUrl}/api/users/${id}`;
 
       const response = await axios.patch(endpoint);
       setUsers(users.map(user => (user._id === id ? response.data.user : user)));
@@ -93,7 +93,7 @@ function ManageUser() {
 
   const handleDeleteUser = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/users/${id}`);
+      await axios.delete(`${apiUrl}/users/${id}`);
       setUsers(users.filter(user => user._id !== id));
     } catch (error) {
       setError('Error deleting user: ' + error.message);
@@ -102,7 +102,7 @@ function ManageUser() {
 
   const handleVerify = async (id) => {
     try {
-      const response = await axios.patch(`http://localhost:5000/api/users/v/${id}`);
+      const response = await axios.patch(`${apiUrl}/api/users/v/${id}`);
       setUsers(users.map(user => (user._id === id ? response.data.user : user)));
     } catch (error) {
       setError('Error verifying user: ' + error.message);

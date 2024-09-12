@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import axios from 'axios';
-
+const apiUrl = import.meta.env.VITE_BACKEND_URL;
 const CreateDrive = () => {
   const [formData, setFormData] = useState({
     company: '',
@@ -60,7 +60,7 @@ const CreateDrive = () => {
     }
 
     try {
-      const response = await axios.post('http://localhost:5000/api/drives', formData);
+      const response = await axios.post(`${apiUrl}/api/drives`, formData);
       if (response.status === 201) {
         setSuccess('Job drive created successfully');
         setFormData({

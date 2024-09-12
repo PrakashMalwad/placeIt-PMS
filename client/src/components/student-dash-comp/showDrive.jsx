@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+const apiUrl = import.meta.env.VITE_BACKEND_URL;
 
 function ShowDrive() {
   const [drives, setDrives] = useState([]);
@@ -16,7 +17,7 @@ function ShowDrive() {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.get('http://localhost:5000/api/drives', {
+      const response = await axios.get(`${apiUrl}/api/drives`, {
         params: { page, limit: 10, search }
       });
 

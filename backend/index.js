@@ -1,29 +1,39 @@
-require('dotenv').config();
-const express = require('express');
+require("dotenv").config();
+const express = require("express");
 const app = express();
-const cors = require('cors');
-const connectDB = require('./config/db');
-const { auth, checkRole } = require('./middleware/auth');
-const authRoutes = require('./routes/authRoutes');
-const userRoutes = require('./routes/userRoutes');
-const collegeRoutes = require('./routes/collegeRoutes');
-const driveRoutes = require('./routes/driveRoutes');
+const cors = require("cors");
+const connectDB = require("./config/db");
+const { auth, checkRole } = require("./middleware/auth");
+const authRoutes = require("./routes/authRoutes");
+const userRoutes = require("./routes/userRoutes");
+const collegeRoutes = require("./routes/collegeRoutes");
+const driveRoutes = require("./routes/driveRoutes");
 
 // Connect to the database
 connectDB();
 
+const allowedOrigins = process.env.NODE_ENV === 'production'
+  ? process.env.FRONTEND_URL
+  : 'http://localhost:5173';
+
 // Middleware
 app.use(express.json());
-app.use(cors());
+app.use(cors(
+  {
+    origin: allowedOrigins,
+    credentials: true,
+  }
+));
 
-app.get('/', (req, res) => {
-    res.send('<h1> Api Chal Raha Hai </h1>');});
+app.get("/", (req, res) => {
+  res.send("<h1> Api Chal Raha Hai </h1>");
+});
 // Routes
-app.use('/api/auth', authRoutes);
-app.use('/uploads', express.static('uploads'));
-app.use('/colleges', collegeRoutes);
-app.use('/api/drives', driveRoutes);
-app.use('/api/users', userRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/uploads", express.static("uploads"));
+app.use("/colleges", collegeRoutes);
+app.use("/api/drives", driveRoutes);
+app.use("/api/users", userRoutes);
 
 const PORT = process.env.PORT || 5000;
 

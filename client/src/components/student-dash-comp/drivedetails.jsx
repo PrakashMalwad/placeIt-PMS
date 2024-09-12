@@ -1,6 +1,8 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+const apiUrl = import.meta.env.VITE_BACKEND_URL;
+
 
 function DriveDetails() {
   const { id } = useParams();
@@ -14,7 +16,7 @@ function DriveDetails() {
       setLoading(true);
       setError(null);
       try {
-        const response = await axios.get(`http://localhost:5000/api/drives/${id}`);
+        const response = await axios.get(`${apiUrl}/api/drives/${id}`);
         setDrive(response.data);
       } catch (err) {
         console.error('Failed to fetch drive details:', err);

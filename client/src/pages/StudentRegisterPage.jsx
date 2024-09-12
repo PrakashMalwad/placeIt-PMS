@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import Navbar from '../components/navbar'; 
 import TermsModal from '../components/studentterm';
+const apiUrl = import.meta.env.VITE_BACKEND_URL;
+
 const StudentRegisterPage = () => {
   const [formData, setFormData] = useState({
     fname: '',
@@ -36,7 +38,7 @@ const StudentRegisterPage = () => {
   useEffect(() => {
     const fetchColleges = async () => {
       try {
-        const response = await fetch('http://localhost:5000/colleges/get-colleges');
+        const response = await fetch(`${apiUrl}/colleges/get-colleges`);
         const data = await response.json();
         setColleges(data);
       } catch (error) {
