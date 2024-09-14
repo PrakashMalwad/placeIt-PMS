@@ -29,8 +29,8 @@ exports.loginUser = async (req, res) => {
             return res.status(400).json({ msg: "Role does not match" });
         }
 
-        if (user.status === 1) {
-            return res.status(400).json({ msg: "User is not active" });
+        if (user.status === 2) {
+            return res.status(201).json({ msg: "User is not verified" });
         }
 
         if (user.status === 0) {
