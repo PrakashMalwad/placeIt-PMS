@@ -19,38 +19,66 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import DriveDetails from "./components/student-dash-comp/drivedetails";
 import ManageUser from "./components/admin-dash-comp/ManageUser";
 import ManageDrive from "./components/admin-dash-comp/ManageDrive";
+import ProtectedRoute from "./routes/protectedRoute";  // Import the ProtectedRoute component
+
 function App() {
   return (
     <Router>
       <Routes>
+        {/* Public Routes */}
         <Route path="/" element={<HomePage />} />
-        <Route path="/err" element={<ErrorPage />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/register" element={<RoleSelection />} />
         <Route path="/register/studentRegister" element={<RegisterPage />} />
-        {/* Student Route */}
-        <Route path="/student-dashboard" element={<StudentDashboard />}>
+
+        {/* Protected Student Dashboard Routes */}
+        <Route 
+          path="/student-dashboard" 
+          element={
+            <ProtectedRoute>
+              <StudentDashboard />
+            </ProtectedRoute>
+          }
+        >
           <Route path="show-drive" element={<ShowDrive />} />
           <Route path="show-drive/drive/:id" element={<DriveDetails />} />
           <Route path="my-skills" element={<MySkills />} />
           <Route path="my-applications" element={<MyApplications />} />
           <Route path="mailbox" element={<Mailbox />} />
           <Route path="interviews" element={<Interviews />} />
-          
           <Route path="settings" element={<Settings />} />
           <Route path="profile" element={<EditProfile />} />
         </Route>
-        <Route path="/company-dashboard" element={<CompanyDashboard />} />
-        {/* Admin DashRoute */}
-        <Route path="/admin/dashboard" element={<AdminDashboard />}>
-        <Route path="*" element={<ManageUser />} />
-        <Route path="manage-drive" element={<ManageDrive />} >
-        <Route path="create-drive" element={<CreateDrive />}/>
+
+        {/* Protected Company Dashboard */}
+        <Route
+          path="/company-dashboard"
+          element={
+            <ProtectedRoute>
+              <CompanyDashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Protected Admin Dashboard Routes */}
+        <Route
+          path="/admin/dashboard"
+          element={
+            <ProtectedRoute>
+              <AdminDashboard />
+            </ProtectedRoute>
+          }
+        >
+          <Route path="manage-users" element={<ManageUser />} />
+          <Route path="manage-drive" element={<ManageDrive />}>
+            <Route path="create-drive" element={<CreateDrive />} />
+          </Route>
         </Route>
-        {/* <Route path="/reports"/> */}
-        <Route path="manage-users" element={<ManageUser/>}/>
-        </Route> 
+
         {/* Errorpage route */}
+        <Route path="/err" element={<ErrorPage />} />
+
+        {/* Catch-all for undefined routes */}
         <Route path="*" element={<ErrorPage />} />
       </Routes>
     </Router>
