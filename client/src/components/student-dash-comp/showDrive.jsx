@@ -60,20 +60,20 @@ function ShowDrive() {
   };
 
   return (
-    <div className="container mx-auto p-6">
-      <h2 className="text-3xl font-bold text-center mb-4 text-gray-900">Active Job Drives</h2>
+    <div className="container mx-auto px-4 py-6"> {/* Adjusted padding for better mobile experience */}
+      <h2 className="text-2xl md:text-3xl font-bold text-center mb-4 text-gray-900">Active Job Drives</h2>
 
       {/* Search Bar */}
-      <div className="flex flex-col md:flex-row justify-center mb-8 items-center">
+      <div className="flex flex-col md:flex-row justify-center mb-8 items-center w-full"> {/* Full width on mobile */}
         <input
           type="text"
-          className="border border-gray-300 rounded-l-md py-3 px-6 w-full md:w-1/2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+          className="border border-gray-300 rounded-md py-2 px-4 w-full md:w-1/2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 mb-3 md:mb-0" // Adjusted input padding and size
           placeholder="Search job drives..."
           value={search}
           onChange={handleSearchChange} // On input change, search is updated
         />
         <button
-          className="bg-blue-600 text-white px-6 py-3 rounded-md mt-3 md:mt-0 md:ml-1 hover:bg-blue-700 transition duration-200 focus:outline-none"
+          className="bg-blue-600 text-white px-4 py-2 rounded-md w-full md:w-auto md:ml-2 hover:bg-blue-700 transition duration-200 focus:outline-none" // Mobile-friendly button width
           onClick={fetchDrives} // Fetch results when clicking the button
         >
           Search
@@ -88,13 +88,13 @@ function ShowDrive() {
 
       {/* Job Drives Cards */}
       {!loading && !error && drives.length > 0 && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"> {/* Adjusted gap for mobile */}
           {drives.map((drive) => (
             <div
               key={drive._id}
-              className="bg-white shadow-lg rounded-lg p-6 hover:shadow-2xl transform hover:scale-105 transition duration-300"
+              className="bg-white shadow-lg rounded-lg p-4 hover:shadow-2xl transform hover:scale-105 transition duration-300" // Reduced padding for mobile
             >
-              <h3 className="text-2xl font-semibold text-gray-800 mb-2">{drive.company}</h3>
+              <h3 className="text-xl font-semibold text-gray-800 mb-2">{drive.company}</h3> {/* Adjusted font size */}
               <p className="text-gray-500 mb-1">{new Date(drive.date).toLocaleDateString()}</p>
               <p className="text-gray-500 mb-1">{drive.location}</p>
               <p className="text-gray-500 mb-2">{drive.eligibilityCriteria}</p>
@@ -120,15 +120,15 @@ function ShowDrive() {
       {/* Pagination Controls */}
       <div className="flex justify-center mt-8 space-x-4">
         <button
-          className={`px-6 py-2 rounded-lg font-semibold ${page === 1 ? 'bg-gray-200 text-gray-500 cursor-not-allowed' : 'bg-blue-600 text-white hover:bg-blue-700'}`}
+          className={`px-4 py-2 rounded-lg font-semibold ${page === 1 ? 'bg-gray-200 text-gray-500 cursor-not-allowed' : 'bg-blue-600 text-white hover:bg-blue-700'}`}
           disabled={page === 1}
           onClick={() => handlePageChange(page - 1)}
         >
           Previous
         </button>
-        <span className="px-6 py-2 rounded-lg border bg-white shadow-md">Page {page} of {totalPages}</span>
+        <span className="px-4 py-2 rounded-lg border bg-white shadow-md">Page {page} of {totalPages}</span>
         <button
-          className={`px-6 py-2 rounded-lg font-semibold ${page === totalPages ? 'bg-gray-200 text-gray-500 cursor-not-allowed' : 'bg-blue-600 text-white hover:bg-blue-700'}`}
+          className={`px-4 py-2 rounded-lg font-semibold ${page === totalPages ? 'bg-gray-200 text-gray-500 cursor-not-allowed' : 'bg-blue-600 text-white hover:bg-blue-700'}`}
           disabled={page === totalPages}
           onClick={() => handlePageChange(page + 1)}
         >

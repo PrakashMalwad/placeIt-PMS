@@ -1,5 +1,5 @@
 import { FaArrowCircleRight } from "react-icons/fa"
-function interviews() {
+function reports() {
   return (
     <div className="flex p-8">
     <FaArrowCircleRight className="mr-3 text-xl text-red-500" />
@@ -8,4 +8,4 @@ function interviews() {
   )
 }
 
-export default interviews
+export default reports

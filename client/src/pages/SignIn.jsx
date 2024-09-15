@@ -45,16 +45,16 @@ function SignIn() {
             switch (user.role) {
                 case "student":
         
-                    navigate("/student-dashboard");
+                    navigate("/student/dashboard");
                     break;
                 case "admin":
                     navigate("/admin/dashboard");
                     break;
                 case "company-coordinator":
-                    navigate("/company-dashboard");
+                    navigate("/company/dashboard");
                     break;
                 case "placement-coordinator":
-                    navigate("/coordinator-dashboard");
+                    navigate("/coordinator/dashboard");
                     break;
                 default:
                     navigate("/");

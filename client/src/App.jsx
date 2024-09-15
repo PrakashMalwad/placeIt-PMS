@@ -15,11 +15,13 @@ import ErrorPage from "./pages/ErrorPage";
 import CompanyDashboard from "./pages/company-dashboard";
 import CreateDrive from "./components/company-dash-comp/createDrive";
 import AdminDashboard from "./pages/adminDashboard";
+import Reports from "./components/admin-dash-comp/reports";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import DriveDetails from "./components/student-dash-comp/drivedetails";
 import ManageUser from "./components/admin-dash-comp/ManageUser";
 import ManageDrive from "./components/admin-dash-comp/ManageDrive";
 import ProtectedRoute from "./routes/protectedRoute";  // Import the ProtectedRoute component
+import StudentAnalytics from "./components/student-dash-comp/StudentAnalylics";
 
 function App() {
   return (
@@ -30,16 +32,20 @@ function App() {
         <Route path="/signin" element={<SignIn />} />
         <Route path="/register" element={<RoleSelection />} />
         <Route path="/register/studentRegister" element={<RegisterPage />} />
-
+        <Route path="/register/studentRegister" element={<RegisterPage />} />
         {/* Protected Student Dashboard Routes */}
         <Route 
-          path="/student-dashboard" 
+          path="/student/dashboard" 
           element={
             <ProtectedRoute>
               <StudentDashboard />
             </ProtectedRoute>
           }
         >
+           <Route 
+          index 
+          element={<StudentAnalytics/>} 
+        />s
           <Route path="show-drive" element={<ShowDrive />} />
           <Route path="show-drive/drive/:id" element={<DriveDetails />} />
           <Route path="my-skills" element={<MySkills />} />
@@ -52,7 +58,7 @@ function App() {
 
         {/* Protected Company Dashboard */}
         <Route
-          path="/company-dashboard"
+          path="/company/dashboard"
           element={
             <ProtectedRoute>
               <CompanyDashboard />
@@ -70,6 +76,7 @@ function App() {
           }
         >
           <Route path="manage-users" element={<ManageUser />} />
+          <Route path="reports" element={<Reports />} />
           <Route path="manage-drive" element={<ManageDrive />}>
             <Route path="create-drive" element={<CreateDrive />} />
           </Route>

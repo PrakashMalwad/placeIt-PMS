@@ -8,7 +8,8 @@ const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
 const collegeRoutes = require("./routes/collegeRoutes");
 const driveRoutes = require("./routes/driveRoutes");
-
+const notifyRoutes = require("./routes/notifyRoute");
+const applicationRoutes = require("./routes/applicationRoutes");
 // Connect to the database
 connectDB();
 
@@ -24,6 +25,9 @@ app.use("/api/auth", authRoutes);
 app.use("/uploads", express.static("uploads"));
 app.use("/colleges", collegeRoutes);
 app.use("/api/drives", driveRoutes);
+app.use("/api/notifications",notifyRoutes)
+app.use("/api/applications",applicationRoutes)
+
 app.use("/api/users", userRoutes);
 
 const PORT = process.env.PORT || 5000;

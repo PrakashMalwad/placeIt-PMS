@@ -26,7 +26,7 @@ function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
       {/* Mobile Menu Toggle Button */}
       <button 
         aria-label="Toggle Sidebar"
-        className="md:hidden static top-4 left-4 z-50 p-2 text-gray-600"
+        className="md:hidden bg-transparent border-blue-300 border-2 rounded-full fixed top-5 left-1 z-50 p-2 translate-y-12 tra text-blue-600"
         onClick={toggleSidebar}
       >
         {isSidebarOpen ? <FaTimes className="text-xl" aria-hidden="true" /> : <FaBars className="text-xl" aria-hidden="true" />}
@@ -39,7 +39,7 @@ function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
           <ul className="space-y-4">
             <li>
               <NavLink
-                to=". "
+                to="./ "
                 className={({ isActive }) => isActive ? `${linkClasses} ${activeLinkClasses}` : linkClasses}
               >
                 <FaUser className="mr-3 text-xl" aria-hidden="true" />

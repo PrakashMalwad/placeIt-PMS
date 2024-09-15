@@ -1,20 +1,27 @@
 const express = require('express');
-const router = express.Router();
-const College = require('../models/applications');
-const { getApplicationById,getAllApplications, createApplication,getApplicationByCollegeId } = require('../controllers/applicationController');
+const {
+    getAllApplications,
+    getApplicationByStudentId,
+    createApplication,
+    updateApplication,
+    deleteApplication
+} = require('../controllers/applicationController');
 
-// Route to get all Jobapplications
+const router = express.Router();
+
+// Route to get all job applications
 router.get('/', getAllApplications);
 
-// Route to get a application by ID
-router.get('/get/:id', getApplicationById);
+// Route to get applications by student ID
+router.get('/student/:id', getApplicationByStudentId);
 
-// Route to add new Job application
-router.post('/',createApplication);
+// Route to create a new job application
+router.post('/', createApplication);
 
-// Route to get application by college id
-router.get('/id:',getApplicationByCollegeId);
+// Route to update a job application (e.g., Withdraw)
+router.put('/:id', updateApplication);
 
-// Route to update Job application
+// Route to delete a job application
+router.delete('/:id', deleteApplication);
 
 module.exports = router;
