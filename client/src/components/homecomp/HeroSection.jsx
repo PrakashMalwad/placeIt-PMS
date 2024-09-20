@@ -14,18 +14,14 @@ const HeroSection = () => {
 
   return (
     <section
-      className="relative h-screen bg-cover bg-center"
-      style={{
-        backgroundImage: "url(clouds.png)",
-        backgroundPositionY: `${scrollPosition * 0.5}px`, // Parallax effect for background image
-      }}
+      className="relative h-screen bg-cover bg-center p-0"
     >
       <div className="absolute inset-0 bg-gradient-to-br from-blue-800 to-blue-300 opacity-70"></div>
-      <div className="absolute inset-0 flex items-center justify-between px-4">
+      <div className="absolute inset-0 flex items-center justify-between m-0">
         <img
           src="clouds.png" // Update path accordingly
           alt="Cloud Left"
-          className="w-auto h-auto opacity-50"
+          className=" md: w-full h-full opacity-50 "
           style={{ transform: `translateY(${scrollPosition * 0.3}px)` }} // Parallax effect for cloud image
         />
       </div>

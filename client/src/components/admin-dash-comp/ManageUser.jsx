@@ -316,6 +316,7 @@ function ManageUser() {
                 <option value="student">Student</option>
                 <option value="admin">Admin</option>
                 <option value="placement-cell">Placement Cell</option>
+                <option value="company-coordinator"> Company</option>
               </select>
               <select
                 className="w-full p-2 border border-gray-300 rounded-lg"
@@ -393,6 +394,8 @@ function ManageUser() {
                 <option value="student">Student</option>
                 <option value="admin">Admin</option>
                 <option value="placementcell-coordinator">Placement Cell</option>
+                <option value="company-coordinator">Company</option>
+
               </select>
               <select
                 className="w-full p-2 border border-gray-300 rounded-lg"

@@ -6,33 +6,27 @@ const bcrypt = require('bcryptjs');
 const CompanySchema = new mongoose.Schema({
   companyname: {
     type: String,
-    required: true,
     trim: true,
   },
   country: {
     type: String,
-    required: true,
     trim: true,
   },
   state: {
     type: String,
-    required: true,
     trim: true,
   },
   city: {
     type: String,
-    required: true,
     trim: true,
   },
   contactno: {
     type: String,
-    required: true,
     trim: true,
     match: [/^\+?[1-9]\d{1,14}$/, 'Invalid contact number format'], 
   },
   website: {
     type: String,
-    required: true,
     trim: true,
   },
   aboutme: {
@@ -42,7 +36,6 @@ const CompanySchema = new mongoose.Schema({
   },
   logo: {
     type: String,
-    required: true,
     trim: true,
   },
   

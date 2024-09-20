@@ -61,7 +61,7 @@ exports.createUser = async (req, res) => {
       case 'placementcell-coordinator':
         UserModel = PlacementCoordinator;
         break;
-      case 'companyCoordinator':
+      case 'company-coordinator':
         UserModel = CompanyCoordinator;
         break;
       case 'admin':

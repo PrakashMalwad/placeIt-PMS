@@ -41,6 +41,7 @@ function App() {
         <Route path="/register/studentRegister" element={<StudentRegisterPage />} />
         <Route path="/register/companyRegister" element={<CompanyRegisterPage />} />
         <Route path="/register/placementCellRegister" element={<PlacementCellRegisterPage/>} />
+        
         {/* Protected Student Dashboard Routes */}
         <Route 
           path="/student/dashboard" 
