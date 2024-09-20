@@ -1,10 +1,10 @@
-const { body, validationResult } = require('express-validator'); // For validation
-const User = require('../models/Users/User'); // Import User model
-const Student = require('../models/Users/Students'); // Import Student discriminator model
-const PlacementCoordinator = require('../models/Users/PlacementCoordinator'); // Import PlacementCoordinator discriminator model
-const CompanyCoordinator = require('../models/Users/CompanyCoordinator'); // Import CompanyCoordinator discriminator model
-const Admin = require('../models/Users/Admin'); // Import Admin discriminator model
-const PlacementCellAdmin = require('../models/Users/PlacementCellAdmin'); // Import PlacementCellAdmin discriminator model
+const { body, validationResult } = require('express-validator'); 
+const User = require('../models/Users/User');
+const Student = require('../models/Users/Students'); 
+const PlacementCoordinator = require('../models/Users/PlacementCoordinator'); 
+const CompanyCoordinator = require('../models/Users/CompanyCoordinator'); 
+const Admin = require('../models/Users/admin'); 
+const PlacementCellAdmin = require('../models/Users/PlacementCellAdmin');
 
 const bcrypt = require('bcryptjs'); // For password hashing
 // Get all users
