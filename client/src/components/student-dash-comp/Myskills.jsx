@@ -1,5 +1,5 @@
 import { FaArrowCircleRight } from 'react-icons/fa';
-import Quiz from './Quiz';
+import Quiz from './quiz';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 
