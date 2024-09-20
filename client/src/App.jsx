@@ -28,7 +28,7 @@ import StudentAnalytics from "./components/student-dash-comp/StudentAnalylics";
 import StudentProfile from "./components/student-dash-comp/profile";
 import SettingsPage from "./components/admin-dash-comp/settings";
 
-import PlacementCellDashboard from "./pages/placementcell-dashboard";
+import PlacementCellDashboard from "./pages/PlacementCell-dashboard";
 import ManageStudents from "./components/placementcell-dash-comp/ManageStudents";
 import PManageDrive from "./components/placementcell-dash-comp/ManageDrives"
 function App() {
