@@ -3,7 +3,6 @@ import HomePage from "./pages/HomePage";
 import StudentRegisterPage from "./pages/StudentRegisterPage";
 import CompanyRegisterPage from "./components/registeration-forms/CompanyRegisterform";
 import PlacementCellRegisterPage from "./components/registeration-forms/PlacementCellRegisterform";
-
 import RoleSelection from "./pages/RolePage";
 import SignIn from "./pages/SignIn";
 import StudentDashboard from "./pages/student-dashboard";
