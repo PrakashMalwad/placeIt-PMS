@@ -34,10 +34,22 @@ const getAllDrives = async (req, res) => {
 
 // Create a new job drive
 const createDrive = async (req, res) => {
-  const { company, date, location, eligibilityCriteria, jobDescription, applicationDeadline, contactPerson, contactEmail, contactPhone } = req.body;
-  
+  const { company, date, location, eligibilityCriteria, jobDescription, applicationDeadline, contactPerson, contactEmail, contactPhone, postedBy } = req.body;
+
   try {
-    const newDrive = new Drive({ company, date, location, eligibilityCriteria, jobDescription, applicationDeadline, contactPerson, contactEmail, contactPhone });
+    const newDrive = new Drive({
+      company,
+      date,
+      location,
+      eligibilityCriteria,
+      jobDescription,
+      applicationDeadline,
+      contactPerson,
+      contactEmail,
+      contactPhone,
+      postedBy, 
+    });
+    
     await newDrive.save();
     res.status(201).json(newDrive);
   } catch (error) {
@@ -45,6 +57,7 @@ const createDrive = async (req, res) => {
     res.status(500).json({ message: 'Error creating job drive' });
   }
 };
+
 // Get drive by Id
 const getDriveById = async (req, res) => {
   const { id } = req.params;
@@ -61,7 +74,20 @@ const getDriveById = async (req, res) => {
     res.status(500).json({ message: 'Error fetching job drive' });
     }
     };
-
+const getDriveByUser = async (req, res) => {
+  const { id } = req.params;
+  
+  try {
+    const drive = await Drive.find({ postedBy: id }).populate('postedBy','name email');
+    if (!drive || drive.length === 0) {
+      return res.status(404).json({ message: 'Drive not found' });
+    }
+    res.json(drive);
+  } catch (error) {
+    logger.error(`Error fetching drive: ${error.message}`);
+    res.status(500).json({ message: 'Error fetching job drive' });
+  }
+};
 // Update an existing job drive
 const updateDrive = async (req, res) => {
   const { id } = req.params;
@@ -97,6 +123,7 @@ const deleteDrive = async (req, res) => {
 module.exports = {
   getAllDrives,
   getDriveById,
+  getDriveByUser,
   createDrive,
   updateDrive,
   deleteDrive

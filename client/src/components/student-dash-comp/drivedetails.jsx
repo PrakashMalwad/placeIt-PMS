@@ -12,6 +12,7 @@ function DriveDetails() {
   const [applying, setApplying] = useState(false);
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
+  const [hasApplied, setHasApplied] = useState(false); // New state for tracking application status
 
   useEffect(() => {
     const fetchDriveDetails = async () => {
@@ -28,7 +29,26 @@ function DriveDetails() {
       }
     };
 
+    const checkIfApplied = async () => {
+      try {
+        const user = JSON.parse(localStorage.getItem('user'));
+
+        if (!user || !user.id) {
+          throw new Error('You need to be logged in to check application status.');
+        }
+
+        const response = await axios.get(`${apiUrl}/api/applications/student/${user.id}`);
+        const applied = response.data.some(application => application.drive.toString() === id);
+
+        setHasApplied(applied);
+      } catch (err) {
+        console.error('Failed to check application status:', err);
+        setError('Failed to check application status. Please try again later.');
+      }
+    };
+
     fetchDriveDetails();
+    checkIfApplied();
   }, [id]);
 
   const handleApply = async () => {
@@ -43,15 +63,20 @@ function DriveDetails() {
         throw new Error('You need to be logged in to apply.');
       }
 
+      if (hasApplied) {
+        throw new Error('You have already applied for this drive.');
+      }
+
       const application = {
         student: user.id,
         drive: id,
         appliedDate: new Date().toISOString(),
-        studentResume: '', // This should be updated based on your requirements
+        studentResume: '', 
       };
 
       await axios.post(`${apiUrl}/api/applications`, application);
       setSuccessMessage('Applied successfully!');
+      setHasApplied(true); // Update the state to reflect that the student has applied
     } catch (err) {
       console.error('Error applying for drive:', err);
       setError(err.response?.data?.message || 'Failed to apply. Please try again later.');
@@ -87,9 +112,9 @@ function DriveDetails() {
           applying ? 'opacity-50 cursor-not-allowed' : ''
         }`}
         onClick={handleApply}
-        disabled={applying}
+        disabled={applying || hasApplied} // Disable button if already applied
       >
-        {applying ? 'Applying...' : 'Apply'}
+        {applying ? 'Applying...' : hasApplied ? 'Already Applied' : 'Apply'}
       </button>
     </div>
   );

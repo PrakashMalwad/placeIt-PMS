@@ -9,7 +9,7 @@ const jobApplicationSchema = new mongoose.Schema({
   },
   studentResume: { 
     type: String, 
-    required: true,
+   
   },
   drive: {
     type: mongoose.Schema.Types.ObjectId,

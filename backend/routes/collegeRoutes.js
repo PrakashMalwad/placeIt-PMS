@@ -3,7 +3,7 @@ const router = express.Router();
 const College = require('../models/college');
 
 // Route to get all colleges
-router.get('/get-colleges', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const colleges = await College.find(); 
     res.json(colleges);
@@ -14,7 +14,7 @@ router.get('/get-colleges', async (req, res) => {
 });
 
 // Route to add a new college
-router.post('/add-college', async (req, res) => {
+router.post('/', async (req, res) => {
   const { name, address, contactNumber, website, logo, type, university, state, city, pincode, establishmentYear, affiliation } = req.body;
 
   // Validation

@@ -1,6 +1,9 @@
 import "./App.css";
 import HomePage from "./pages/HomePage";
-import RegisterPage from "./pages/StudentRegisterPage";
+import StudentRegisterPage from "./pages/StudentRegisterPage";
+import CompanyRegisterPage from "./components/registeration-forms/CompanyRegisterform";
+import PlacementCellRegisterPage from "./components/registeration-forms/PlacementCellRegisterform";
+
 import RoleSelection from "./pages/RolePage";
 import SignIn from "./pages/SignIn";
 import StudentDashboard from "./pages/student-dashboard";
@@ -22,7 +25,12 @@ import ManageUser from "./components/admin-dash-comp/ManageUser";
 import ManageDrive from "./components/admin-dash-comp/ManageDrive";
 import ProtectedRoute from "./routes/protectedRoute";  // Import the ProtectedRoute component
 import StudentAnalytics from "./components/student-dash-comp/StudentAnalylics";
+import StudentProfile from "./components/student-dash-comp/profile";
+import SettingsPage from "./components/admin-dash-comp/settings";
 
+import PlacementCellDashboard from "./pages/placementcell-dashboard";
+import ManageStudents from "./components/placementcell-dash-comp/ManageStudents";
+import PManageDrive from "./components/placementcell-dash-comp/ManageDrives"
 function App() {
   return (
     <Router>
@@ -31,11 +39,13 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/register" element={<RoleSelection />} />
-        <Route path="/register/studentRegister" element={<RegisterPage />} />
-        <Route path="/register/studentRegister" element={<RegisterPage />} />
+        <Route path="/register/studentRegister" element={<StudentRegisterPage />} />
+        <Route path="/register/companyRegister" element={<CompanyRegisterPage />} />
+        <Route path="/register/placementCellRegister" element={<PlacementCellRegisterPage/>} />
         {/* Protected Student Dashboard Routes */}
         <Route 
           path="/student/dashboard" 
+          
           element={
             <ProtectedRoute>
               <StudentDashboard />
@@ -45,7 +55,8 @@ function App() {
            <Route 
           index 
           element={<StudentAnalytics/>} 
-        />s
+        />
+          <Route path="dashboard" element={<StudentDashboard />} />
           <Route path="show-drive" element={<ShowDrive />} />
           <Route path="show-drive/drive/:id" element={<DriveDetails />} />
           <Route path="my-skills" element={<MySkills />} />
@@ -53,7 +64,9 @@ function App() {
           <Route path="mailbox" element={<Mailbox />} />
           <Route path="interviews" element={<Interviews />} />
           <Route path="settings" element={<Settings />} />
-          <Route path="profile" element={<EditProfile />} />
+          <Route path="profile" element={<StudentProfile />} >
+            <Route path="edit-profile" element={<EditProfile/>}/>
+          </Route>
         </Route>
 
         {/* Protected Company Dashboard */}
@@ -68,18 +81,40 @@ function App() {
 
         {/* Protected Admin Dashboard Routes */}
         <Route
+          path="/admin/"
+          >
+            <Route path="settings" element={<SettingsPage />} />
+          </Route>
+          
+        <Route
           path="/admin/dashboard"
           element={
             <ProtectedRoute>
               <AdminDashboard />
-            </ProtectedRoute>
+            </ProtectedRoute> 
           }
         >
           <Route path="manage-users" element={<ManageUser />} />
           <Route path="reports" element={<Reports />} />
+          <Route path="settings" element={<SettingsPage />} />
           <Route path="manage-drive" element={<ManageDrive />}>
+
             <Route path="create-drive" element={<CreateDrive />} />
+
           </Route>
+        </Route>
+        {/* Protected PlacementCell Dashboard Routes */}
+        <Route
+          path="/placementcell-coordinator/dashboard"
+          element={
+            <ProtectedRoute>
+              <PlacementCellDashboard/>
+            </ProtectedRoute>
+          }
+        >
+          <Route path="manage-students" element={<ManageStudents />}/>
+          <Route path="manage-drive" element={<PManageDrive />} />
+          <Route path="settings" element={<SettingsPage />} />
         </Route>
 
         {/* Errorpage route */}
@@ -87,7 +122,9 @@ function App() {
 
         {/* Catch-all for undefined routes */}
         <Route path="*" element={<ErrorPage />} />
+        <Route path="/admin/profile" element={<StudentProfile/>}/>
       </Routes>
+      
     </Router>
   );
 }

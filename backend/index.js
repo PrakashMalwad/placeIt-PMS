@@ -10,6 +10,8 @@ const collegeRoutes = require("./routes/collegeRoutes");
 const driveRoutes = require("./routes/driveRoutes");
 const notifyRoutes = require("./routes/notifyRoute");
 const applicationRoutes = require("./routes/applicationRoutes");
+const studendRoutes = require("./routes/studentRoutes");
+
 // Connect to the database
 connectDB();
 
@@ -23,10 +25,13 @@ app.get("/", (req, res) => {
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/uploads", express.static("uploads"));
-app.use("/colleges", collegeRoutes);
+app.use("/api/colleges", collegeRoutes);
 app.use("/api/drives", driveRoutes);
-app.use("/api/notifications",notifyRoutes)
-app.use("/api/applications",applicationRoutes)
+app.use("/api/notifications",notifyRoutes);
+app.use("/api/applications",applicationRoutes);
+app.use("/api/students",studendRoutes);
+
+
 
 app.use("/api/users", userRoutes);
 

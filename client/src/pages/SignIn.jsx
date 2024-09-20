@@ -53,8 +53,8 @@ function SignIn() {
                 case "company-coordinator":
                     navigate("/company/dashboard");
                     break;
-                case "placement-coordinator":
-                    navigate("/coordinator/dashboard");
+                case "placementcell-coordinator":
+                    navigate("/placementcell-coordinator/dashboard");
                     break;
                 default:
                     navigate("/");

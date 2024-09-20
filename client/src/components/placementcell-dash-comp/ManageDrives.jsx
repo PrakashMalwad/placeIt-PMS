@@ -1,45 +1,52 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
-import { toast } from 'react-toastify'; // Optional for notifications
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { toast } from "react-toastify"; // Optional for notifications
 
 const apiUrl = import.meta.env.VITE_BACKEND_URL;
 
 function ManageJobDrives() {
   const [drives, setDrives] = useState([]);
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [form, setForm] = useState({
-    company: '',
-    date: '',
-    location: '',
-    eligibilityCriteria: '',
-    jobDescription: '',
-    applicationDeadline: '',
-    contactPerson: '',
-    contactEmail: '',
-    contactPhone: '',
-    postedBy: '',
+    company: "",
+    date: "",
+    location: "",
+    eligibilityCriteria: "",
+    jobDescription: "",
+    applicationDeadline: "",
+    contactPerson: "",
+    contactEmail: "",
+    contactPhone: "",
+    postedBy: "",
   });
   const [isEditing, setIsEditing] = useState(false);
   const [editingId, setEditingId] = useState(null);
 
   // Add the Authorization header to axios
   useEffect(() => {
-    const token = localStorage.getItem('authToken');
+    const token = localStorage.getItem("authToken");
     if (token) {
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     }
   }, []);
 
-  // Fetch job drives
+  // Fetch job drives for the current user
   const fetchDrives = async () => {
     try {
-      const response = await axios.get(`${apiUrl}/api/drives?page=${page}&limit=10&search=${search}`);
-      setDrives(response.data.drives);
-      setTotalPages(response.data.totalPages);
+      const currentUser = JSON.parse(localStorage.getItem("user"));
+      const response = await axios.get(`${apiUrl}/api/drives/user/${currentUser.id}`, {
+        params: {
+          page,
+          limit: 10,
+          search,
+        },
+      });
+      setDrives(response.data);
+      setTotalPages(Math.ceil(response.data.length / 10)); // Adjust if pagination is handled differently
     } catch (error) {
-      console.error('Error fetching drives:', error);
+      console.error("Error fetching drives:", error);
     }
   };
 
@@ -56,29 +63,29 @@ function ManageJobDrives() {
 
     // Simple client-side validation
     if (!form.company || !form.date || !form.location) {
-      toast.error('Please fill in all required fields');
+      toast.error("Please fill in all required fields");
       return;
     }
 
     try {
-      const currentUser = JSON.parse(localStorage.getItem('user')); // Assuming user data is in local storage
-      const updatedForm = { ...form, postedBy: currentUser };
+      const currentUser = JSON.parse(localStorage.getItem("user"));
+      const updatedForm = { ...form, postedBy: currentUser.id };
 
       if (isEditing) {
         await axios.put(`${apiUrl}/api/drives/${editingId}`, updatedForm);
-        toast.success('Drive updated successfully');
+        toast.success("Drive updated successfully");
         setIsEditing(false);
         setEditingId(null);
       } else {
         await axios.post(`${apiUrl}/api/drives`, updatedForm);
-        toast.success('Drive added successfully');
+        toast.success("Drive added successfully");
       }
 
       fetchDrives();
       resetForm();
     } catch (error) {
-      console.error('Error submitting form:', error);
-      toast.error('Error submitting the drive');
+      console.error("Error submitting form:", error);
+      toast.error("Error submitting the drive");
     }
   };
 
@@ -87,10 +94,10 @@ function ManageJobDrives() {
     try {
       await axios.delete(`${apiUrl}/api/drives/${id}`);
       fetchDrives();
-      toast.success('Drive deleted successfully');
+      toast.success("Drive deleted successfully");
     } catch (error) {
-      console.error('Error deleting drive:', error);
-      toast.error('Error deleting the drive');
+      console.error("Error deleting drive:", error);
+      toast.error("Error deleting the drive");
     }
   };
 
@@ -103,16 +110,16 @@ function ManageJobDrives() {
 
   const resetForm = () => {
     setForm({
-      company: '',
-      date: '',
-      location: '',
-      eligibilityCriteria: '',
-      jobDescription: '',
-      applicationDeadline: '',
-      contactPerson: '',
-      contactEmail: '',
-      contactPhone: '',
-      postedBy: {},
+      company: "",
+      date: "",
+      location: "",
+      eligibilityCriteria: "",
+      jobDescription: "",
+      applicationDeadline: "",
+      contactPerson: "",
+      contactEmail: "",
+      contactPhone: "",
+      postedBy: "",
     });
   };
 
@@ -133,7 +140,12 @@ function ManageJobDrives() {
           onChange={(e) => setSearch(e.target.value)}
           className="border rounded p-2 mr-2"
         />
-        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">Search</button>
+        <button
+          type="submit"
+          className="bg-blue-500 text-white px-4 py-2 rounded"
+        >
+          Search
+        </button>
       </form>
 
       {/* Job Drives List */}
@@ -143,7 +155,7 @@ function ManageJobDrives() {
             <th className="px-4 py-2">Company</th>
             <th className="px-4 py-2">Date</th>
             <th className="px-4 py-2">Location</th>
-            <th className="px-4 py-2">Posted By</th> {/* Show posted by */}
+            <th className="px-4 py-2">Posted By</th>
             <th className="px-4 py-2">Actions</th>
           </tr>
         </thead>
@@ -151,12 +163,26 @@ function ManageJobDrives() {
           {drives.map((drive) => (
             <tr key={drive._id}>
               <td className="border px-4 py-2">{drive.company}</td>
-              <td className="border px-4 py-2">{new Date(drive.date).toLocaleDateString()}</td>
-              <td className="border px-4 py-2">{drive.location}</td>
-              <td className="border px-4 py-2">{drive.postedBy?.name || 'N/A'}</td> {/* Check for postedBy */}
               <td className="border px-4 py-2">
-                <button onClick={() => handleEdit(drive)} className="bg-yellow-500 text-white px-4 py-2 rounded mr-2">Edit</button>
-                <button onClick={() => handleDelete(drive._id)} className="bg-red-500 text-white px-4 py-2 rounded">Delete</button>
+                {new Date(drive.date).toLocaleDateString()}
+              </td>
+              <td className="border px-4 py-2">{drive.location}</td>
+              <td className="border px-4 py-2">
+                {drive.postedBy || "N/A"}
+              </td>
+              <td className="border px-4 py-2">
+                <button
+                  onClick={() => handleEdit(drive)}
+                  className="bg-yellow-500 text-white px-4 py-2 rounded mr-2"
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={() => handleDelete(drive._id)}
+                  className="bg-red-500 text-white px-4 py-2 rounded"
+                >
+                  Delete
+                </button>
               </td>
             </tr>
           ))}
@@ -165,14 +191,30 @@ function ManageJobDrives() {
 
       {/* Pagination */}
       <div className="mb-4">
-        <button onClick={() => setPage(page - 1)} disabled={page === 1} className="bg-blue-500 text-white px-4 py-2 rounded mr-2">Previous</button>
-        <span>Page {page} of {totalPages}</span>
-        <button onClick={() => setPage(page + 1)} disabled={page === totalPages} className="bg-blue-500 text-white px-4 py-2 rounded">Next</button>
+        <button
+          onClick={() => setPage(page - 1)}
+          disabled={page === 1}
+          className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
+        >
+          Previous
+        </button>
+        <span>
+          Page {page} of {totalPages}
+        </span>
+        <button
+          onClick={() => setPage(page + 1)}
+          disabled={page === totalPages}
+          className="bg-blue-500 text-white px-4 py-2 rounded"
+        >
+          Next
+        </button>
       </div>
 
       {/* Add/Edit Job Drive Form */}
       <form onSubmit={handleSubmit} className="bg-gray-100 p-4 rounded">
-        <h2 className="text-xl font-bold mb-4">{isEditing ? 'Edit Job Drive' : 'Add New Job Drive'}</h2>
+        <h2 className="text-xl font-bold mb-4">
+          {isEditing ? "Edit Job Drive" : "Add New Job Drive"}
+        </h2>
 
         <input
           type="text"
@@ -201,7 +243,9 @@ function ManageJobDrives() {
           type="text"
           placeholder="Eligibility Criteria"
           value={form.eligibilityCriteria}
-          onChange={(e) => setForm({ ...form, eligibilityCriteria: e.target.value })}
+          onChange={(e) =>
+            setForm({ ...form, eligibilityCriteria: e.target.value })
+          }
           className="border rounded p-2 mb-2 w-full"
         />
 
@@ -215,7 +259,9 @@ function ManageJobDrives() {
         <input
           type="date"
           value={form.applicationDeadline}
-          onChange={(e) => setForm({ ...form, applicationDeadline: e.target.value })}
+          onChange={(e) =>
+            setForm({ ...form, applicationDeadline: e.target.value })
+          }
           className="border rounded p-2 mb-2 w-full"
         />
 
@@ -243,7 +289,12 @@ function ManageJobDrives() {
           className="border rounded p-2 mb-4 w-full"
         />
 
-        <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded">{isEditing ? 'Update Drive' : 'Add Drive'}</button>
+        <button
+          type="submit"
+          className="bg-green-500 text-white px-4 py-2 rounded"
+        >
+          {isEditing ? "Update Drive" : "Add Drive"}
+        </button>
       </form>
     </div>
   );

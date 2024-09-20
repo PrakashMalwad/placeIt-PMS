@@ -26,6 +26,7 @@ const StudentRegisterPage = () => {
     resume: null,
     termsAccepted: false
   });
+
   const [passwordError, setPasswordError] = useState(false);
   const [colleges, setColleges] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -35,6 +36,7 @@ const StudentRegisterPage = () => {
   // Handle modal open/close
   const openTermsModal = () => setIsTermsModalOpen(true);
   const closeTermsModal = () => setIsTermsModalOpen(false);
+  
   useEffect(() => {
     const fetchColleges = async () => {
       try {
@@ -76,7 +78,7 @@ const StudentRegisterPage = () => {
     });
 
     try {
-      const response = await fetch('http://localhost:5000/api/auth/register', {
+      const response = await fetch(`${apiUrl}/auth/register`, {
         method: 'POST',
         body: formDataToSend,
       });
@@ -139,277 +141,28 @@ const StudentRegisterPage = () => {
         <form onSubmit={handleSubmit} className="max-w-4xl mx-auto bg-gray-200 p-8 rounded-lg shadow-lg space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-4">
-              {/* First Name */}
-              <div>
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="fname">First Name</label>
-                <input
-                  type="text"
-                  id="fname"
-                  name="fname"
-                  value={formData.fname}
-                  onChange={handleChange}
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline transition duration-300"
-                  required
-                />
-              </div>
-
-              {/* Last Name */}
-              <div>
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="lname">Last Name</label>
-                <input
-                  type="text"
-                  id="lname"
-                  name="lname"
-                  value={formData.lname}
-                  onChange={handleChange}
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline transition duration-300"
-                  required
-                />
-              </div>
-
-              {/* Email */}
-              <div>
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">Email</label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline transition duration-300"
-                  required
-                />
-              </div>
-
-              {/* About Me */}
-              <div>
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="aboutme">About Me</label>
-                <textarea
-                  id="aboutme"
-                  name="aboutme"
-                  value={formData.aboutme}
-                  onChange={handleChange}
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline transition duration-300"
-                  rows="4"
-                  required
-                />
-              </div>
-
-              {/* Date of Birth */}
-              <div>
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="dob">Date of Birth</label>
-                <input
-                  type="date"
-                  id="dob"
-                  name="dob"
-                  value={formData.dob}
-                  onChange={handleDateChange}
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline transition duration-300"
-                  required
-                />
-              </div>
-
-              {/* Age */}
-              <div>
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="age">Age</label>
-                <input
-                  type="number"
-                  id="age"
-                  name="age"
-                  value={formData.age}
-                  onChange={handleChange}
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline transition duration-300"
-                  readOnly
-                />
-              </div>
-
-              {/* College */}
-              <div>
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="college">College</label>
-                <select
-                  id="college"
-                  name="college"
-                  value={formData.college}
-                  onChange={handleChange}
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline transition duration-300"
-                  required
-                >
-                  <option value="">Select a college</option>
-                  {colleges.map(college => (
-                    <option key={college._id} value={college.id}>{college.name}</option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Passing Year */}
-              <div>
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="passingyear">Passing Year</label>
-                <input
-                  type="text"
-                  id="passingyear"
-                  name="passingyear"
-                  value={formData.passingyear}
-                  onChange={handleChange}
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline transition duration-300"
-                  required
-                />
-              </div>
-
-              {/* Qualification */}
-              <div>
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="qualification">Qualification</label>
-                <input
-                  type="text"
-                  id="qualification"
-                  name="qualification"
-                  value={formData.qualification}
-                  onChange={handleChange}
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline transition duration-300"
-                  required
-                />
-              </div>
-
-              {/* Stream */}
-              <div>
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="stream">Stream</label>
-                <input
-                  type="text"
-                  id="stream"
-                  name="stream"
-                  value={formData.stream}
-                  onChange={handleChange}
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline transition duration-300"
-                  required
-                />
-              </div>
+              <InputField label="First Name" id="fname" name="fname" value={formData.fname} onChange={handleChange} />
+              <InputField label="Last Name" id="lname" name="lname" value={formData.lname} onChange={handleChange} />
+              <InputField label="Email" id="email" name="email" value={formData.email} onChange={handleChange} type="email" />
+              <TextAreaField label="About Me" id="aboutme" name="aboutme" value={formData.aboutme} onChange={handleChange} />
+              <InputField label="Date of Birth" id="dob" name="dob" value={formData.dob} onChange={handleDateChange} type="date" />
+              <InputField label="Age" id="age" name="age" value={formData.age} onChange={handleChange} readOnly />
+              <SelectField label="College" id="college" name="college" value={formData.college} onChange={handleChange} options={colleges} />
+              <InputField label="Passing Year" id="passingyear" name="passingyear" value={formData.passingyear} onChange={handleChange} />
+              <InputField label="Qualification" id="qualification" name="qualification" value={formData.qualification} onChange={handleChange} />
+              <InputField label="Stream" id="stream" name="stream" value={formData.stream} onChange={handleChange} />
             </div>
 
             <div className="space-y-4">
-              {/* Password */}
-              <div>
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">Password</label>
-                <input
-                  type="password"
-                  id="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline transition duration-300 ${passwordError ? 'border-red-500' : ''}`}
-                  required
-                />
-                {passwordError && <p className="text-red-500 text-xs italic">Passwords do not match.</p>}
-              </div>
-
-              {/* Confirm Password */}
-              <div>
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="cpassword">Confirm Password</label>
-                <input
-                  type="password"
-                  id="cpassword"
-                  name="cpassword"
-                  value={formData.cpassword}
-                  onChange={handleChange}
-                  className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline transition duration-300 ${passwordError ? 'border-red-500' : ''}`}
-                  required
-                />
-              </div>
-
-              {/* Contact Number */}
-              <div>
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="contactno">Contact Number</label>
-                <input
-                  type="text"
-                  id="contactno"
-                  name="contactno"
-                  value={formData.contactno}
-                  onChange={handleChange}
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline transition duration-300"
-                  required
-                />
-              </div>
-
-              {/* Address */}
-              <div>
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="address">Address</label>
-                <textarea
-                  id="address"
-                  name="address"
-                  value={formData.address}
-                  onChange={handleChange}
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline transition duration-300"
-                  rows="3"
-                  required
-                />
-              </div>
-
-              {/* City */}
-              <div>
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="city">City</label>
-                <input
-                  type="text"
-                  id="city"
-                  name="city"
-                  value={formData.city}
-                  onChange={handleChange}
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline transition duration-300"
-                  required
-                />
-              </div>
-
-              {/* State */}
-              <div>
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="state">State</label>
-                <input
-                  type="text"
-                  id="state"
-                  name="state"
-                  value={formData.state}
-                  onChange={handleChange}
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline transition duration-300"
-                  required
-                />
-              </div>
-
-              {/* Skills */}
-              <div>
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="skills">Skills</label>
-                <textarea
-                  id="skills"
-                  name="skills"
-                  value={formData.skills}
-                  onChange={handleChange}
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline transition duration-300"
-                  rows="4"
-                  required
-                />
-              </div>
-
-              {/* Designation */}
-              <div>
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="designation">Designation</label>
-                <input
-                  type="text"
-                  id="designation"
-                  name="designation"
-                  value={formData.designation}
-                  onChange={handleChange}
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline transition duration-300"
-                  required
-                />
-              </div>
-
-              {/* Resume Upload */}
-              <div>
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="resume">Resume</label>
-                <input
-                  type="file"
-                  id="resume"
-                  name="resume"
-                  onChange={handleFileChange}
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline transition duration-300"
-                  required
-                />
-              </div>
+              <PasswordField label="Password" id="password" name="password" value={formData.password} onChange={handleChange} passwordError={passwordError} />
+              <PasswordField label="Confirm Password" id="cpassword" name="cpassword" value={formData.cpassword} onChange={handleChange} passwordError={passwordError} />
+              <InputField label="Contact Number" id="contactno" name="contactno" value={formData.contactno} onChange={handleChange} />
+              <TextAreaField label="Address" id="address" name="address" value={formData.address} onChange={handleChange} />
+              <InputField label="City" id="city" name="city" value={formData.city} onChange={handleChange} />
+              <InputField label="State" id="state" name="state" value={formData.state} onChange={handleChange} />
+              <TextAreaField label="Skills" id="skills" name="skills" value={formData.skills} onChange={handleChange} />
+              <InputField label="Designation" id="designation" name="designation" value={formData.designation} onChange={handleChange} />
+              <FileField label="Resume" id="resume" name="resume" onChange={handleFileChange} />
             </div>
           </div>
 
@@ -420,37 +173,107 @@ const StudentRegisterPage = () => {
               id="termsAccepted"
               name="termsAccepted"
               checked={formData.termsAccepted}
-              onChange={() => setFormData(prevData => ({ ...prevData, termsAccepted: !prevData.termsAccepted }))}
-              className="mr-2 leading-tight"
+              onChange={(e) => setFormData({ ...formData, termsAccepted: e.target.checked })}
               required
             />
-            <label htmlFor="termsAccepted" className="text-sm">
-              I accept the{' '}
-              <span
-                onClick={openTermsModal}
-                className="text-blue-500 cursor-pointer underline"
-              >
-                terms and conditions
-              </span>
+            <label htmlFor="termsAccepted" className="ml-2 text-gray-700">
+              I accept the <span className="underline cursor-pointer" onClick={openTermsModal}>Terms & Conditions</span>
             </label>
           </div>
 
-          {/* Submit Button */}
-          <div className="text-center">
-            <button
-              type="submit"
-              className="w-full md:w-auto bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300"
-              disabled={loading}
-            >
-              {loading ? 'Registering...' : 'Register'}
-            </button>
-          </div>
+          {loading ? <p>Loading...</p> : <button type="submit" className="w-full py-3 bg-blue-500 text-white font-bold rounded-lg hover:bg-blue-700 transition duration-300">Register</button>}
         </form>
-      </div>
-      <TermsModal isOpen={isTermsModalOpen} onClose={closeTermsModal} />
 
+        {/* Modal for Terms and Conditions */}
+        {isTermsModalOpen && <TermsModal onClose={closeTermsModal} />}
+      </div>
     </>
   );
 };
+
+// Input field component
+const InputField = ({ label, id, name, value, onChange, type = "text", readOnly = false }) => (
+  <div>
+    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor={id}>{label}</label>
+    <input
+      type={type}
+      id={id}
+      name={name}
+      value={value}
+      onChange={onChange}
+      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline transition duration-300"
+      readOnly={readOnly}
+      required
+    />
+  </div>
+);
+
+// TextArea field component
+const TextAreaField = ({ label, id, name, value, onChange }) => (
+  <div>
+    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor={id}>{label}</label>
+    <textarea
+      id={id}
+      name={name}
+      value={value}
+      onChange={onChange}
+      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline transition duration-300"
+      rows={3}
+      required
+    />
+  </div>
+);
+
+// Select field component
+const SelectField = ({ label, id, name, value, onChange, options = [] }) => (
+  <div>
+    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor={id}>{label}</label>
+    <select
+      id={id}
+      name={name}
+      value={value}
+      onChange={onChange}
+      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline transition duration-300"
+      required
+    >
+      <option value="">Select...</option>
+      {options.map(option => (
+        <option key={option.id} value={option.id}>{option.name}</option>
+      ))}
+    </select>
+  </div>
+);
+
+// Password field component
+const PasswordField = ({ label, id, name, value, onChange, passwordError }) => (
+  <div>
+    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor={id}>{label}</label>
+    <input
+      type="password"
+      id={id}
+      name={name}
+      value={value}
+      onChange={onChange}
+      className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline transition duration-300 ${passwordError ? 'border-red-500' : ''}`}
+      required
+    />
+    {passwordError && <p className="text-red-500 text-xs italic">Passwords do not match</p>}
+  </div>
+);
+
+// File field component
+const FileField = ({ label, id, name, onChange }) => (
+  <div>
+    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor={id}>{label}</label>
+    <input
+      type="file"
+      id={id}
+      name={name}
+      onChange={onChange}
+      className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+      required
+    />
+  </div>
+);
 
 export default StudentRegisterPage;

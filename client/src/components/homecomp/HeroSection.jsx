@@ -1,9 +1,34 @@
-
+import { useEffect, useState } from 'react';
 
 const HeroSection = () => {
+  const [scrollPosition, setScrollPosition] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollPosition(window.scrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
-    <section className="relative h-screen bg-cover bg-center" style={{ backgroundImage: "url('https://unsplash.com/photos/gray-concrete-bricks-painted-in-blue-QMDap1TAu0g')" }}>
+    <section
+      className="relative h-screen bg-cover bg-center"
+      style={{
+        backgroundImage: "url(clouds.png)",
+        backgroundPositionY: `${scrollPosition * 0.5}px`, // Parallax effect for background image
+      }}
+    >
       <div className="absolute inset-0 bg-gradient-to-br from-blue-800 to-blue-300 opacity-70"></div>
+      <div className="absolute inset-0 flex items-center justify-between px-4">
+        <img
+          src="clouds.png" // Update path accordingly
+          alt="Cloud Left"
+          className="w-auto h-auto opacity-50"
+          style={{ transform: `translateY(${scrollPosition * 0.3}px)` }} // Parallax effect for cloud image
+        />
+      </div>
       <div className="relative z-10 flex flex-col justify-center items-center h-full text-center text-white px-4">
         <h1 className="text-4xl md:text-6xl font-bold mb-4">
           Launch Your Career with Our Placement Management System

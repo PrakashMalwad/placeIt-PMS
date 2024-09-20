@@ -12,19 +12,19 @@ const featuredService = () => {
       icon: <FaUser />,
       title: 'Register',
       description: 'Register yourself here.',
-      link: '/register-candidates.jsx',
+      link: '/register',
     },
     {
       icon: <FaBuilding />,
       title: 'Look for companies',
       description: 'You can search for companies.',
-      link: '#',
+      link: '/signin',
     },
     {
       icon: <FaClipboardCheck />,
       title: 'Apply for Drives',
       description: 'Look for eligibility criteria and apply for companies accordingly.',
-      link: '#',
+      link: '/signin',
     },
   ];
 

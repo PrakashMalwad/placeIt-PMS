@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
 
 const apiUrl = import.meta.env.VITE_BACKEND_URL;
 
@@ -72,12 +71,7 @@ function MyApplications() {
             <p><strong>Company Name:</strong> {application.drive.company || 'N/A'}</p>
             <p><strong>Status:</strong> {application.status}</p>
             <p><strong>Applied Date:</strong> {new Date(application.appliedDate).toLocaleDateString()}</p>
-            <Link
-              to={`/application/${application._id}`}
-              className="block mt-4 text-center bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition duration-200"
-            >
-              View Details
-            </Link>
+            
             {application.status !== 'Withdrawn' && (
               <button
                 onClick={() => handleWithdraw(application._id)}

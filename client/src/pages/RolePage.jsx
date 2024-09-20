@@ -32,7 +32,7 @@ const RoleSelection = () => {
             onClick={() => handleRoleSelection('student')}
             className="cursor-pointer bg-white p-4 sm:p-6 rounded-lg shadow-lg text-center hover:bg-blue-50 transform transition duration-300 hover:scale-105"
           >
-            <img src="./src/assets/img/student-image.png" alt="Student" className="mb-4 h-16 sm:h-20 mx-auto" />
+            <img src="default-profile.png" alt="Student" className="mb-4 h-16 sm:h-20 mx-auto" />
             <p className="text-base sm:text-lg font-semibold">Student</p>
           </div>
           <div

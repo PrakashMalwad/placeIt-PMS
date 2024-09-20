@@ -1,23 +1,11 @@
-import { useEffect, useState } from 'react';
+
 import PropTypes from 'prop-types';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { FaUser, FaCalendarCheck, FaSignOutAlt, FaBars, FaTimes, FaGraduationCap, FaCogs, FaUsers } from 'react-icons/fa';
 
 function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
-  const [adminName, setAdminName] = useState('');
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const storedAdmin = localStorage.getItem('user');
-    if (storedAdmin) {
-      try {
-        const user = JSON.parse(storedAdmin);
-        setAdminName(user.name || 'user');
-      } catch (error) {
-        console.error('Failed to parse admin data from localStorage:', error);
-      }
-    }
-  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -53,11 +41,7 @@ function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
           isSidebarOpen ? 'translate-x-0' : '-translate-x-64'
         } md:translate-x-0 md:static md:w-64 w-64`}
       >
-        <div className="mb-6">
-          <h3 className="text-lg font-semibold">
-            Welcome, <span className="font-bold">{adminName}</span>
-          </h3>
-        </div>
+        
         <nav>
           <ul className="space-y-4">
             <li>
@@ -73,13 +57,13 @@ function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
             </li>
             <li>
               <NavLink
-                to="manage-users"
+                to="manage-students"
                 className={({ isActive }) =>
                   isActive ? `${linkClasses} ${activeLinkClasses}` : linkClasses
                 }
               >
                 <FaUsers className="mr-3 text-xl" aria-hidden="true" />
-                <span className="text-sm">Manage Users</span>
+                <span className="text-sm">Manage Students</span>
               </NavLink>
             </li>
             <li>

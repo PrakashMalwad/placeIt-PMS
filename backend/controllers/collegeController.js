@@ -17,6 +17,7 @@ exports.getAllColleges = async (req, res) => {
         const colleges = await College.find();
         res.status(200).json(colleges);
     } catch (error) {
+        
         res.status(500).json({ message: 'Error fetching colleges', error });
     }
 };

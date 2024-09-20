@@ -6,7 +6,7 @@ const StudentSchema = new mongoose.Schema({
     aboutme: { type: String },
     dob: { 
         type: Date,
-        required: true,
+        
     },
     college: {
         type: mongoose.Schema.Types.ObjectId,
@@ -15,11 +15,11 @@ const StudentSchema = new mongoose.Schema({
     },
     passingyear: { 
         type: Date,
-        required: true,
+        
     },
     qualification: { 
         type: String,
-        required: true,
+        
     },
     stream: { type: String },
     contactno: { type: Number }, 
@@ -30,7 +30,7 @@ const StudentSchema = new mongoose.Schema({
     designation: { type: String },
     resume: { type: String },
     profileImage: { type: String }, 
-    termsAccepted: { type: Boolean, required: true }
+    termsAccepted: { type: Boolean, default:false}
 });
 
 // Virtual for calculating age

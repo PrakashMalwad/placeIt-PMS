@@ -21,16 +21,28 @@ const getApplicationByStudentId = async (req, res) => {
     }
 };
 
-// Create a new job application
 const createApplication = async (req, res) => {
     try {
+        const { student, drive } = req.body;
+
+        // Check if an application with the same student and drive already exists
+        const existingApplication = await JobApplication.findOne({ student, drive });
+
+        if (existingApplication) {
+            return res.status(400).json({ message: 'Application already exists for this student and drive' });
+        }
+
+        // Create and save the new job application
         const newApplication = new JobApplication(req.body);
         const savedApplication = await newApplication.save();
+        
         res.status(201).json(savedApplication);
     } catch (error) {
+        console.log(error.message);
         res.status(400).json({ message: 'Error creating job application', error: error.message });
     }
 };
+
 
 // Update an existing job application (e.g., Withdraw)
 const updateApplication = async (req, res) => {

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import Logo from "../assets/img/logo.png";
 import { Link, useNavigate } from "react-router-dom";
-import { FaBars, FaCog, FaSignOutAlt, FaUser, FaDashcube, FaTimes } from "react-icons/fa";
+import { FaBars, FaSignOutAlt, FaUser, FaDashcube, FaTimes } from "react-icons/fa";
 
 function Navbar({ role }) {
   
@@ -94,16 +94,7 @@ function Navbar({ role }) {
                 Dashboard
               </Link>
             </li>
-            <li>
-              <Link
-                to={`/${role}/settings`}
-                className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
-                onClick={() => setIsProfileMenuOpen(false)}
-              >
-                <FaCog className="mr-2 inline" aria-hidden="true" />
-                Settings
-              </Link>
-            </li>
+            
             <li>
               <button
                 onClick={handleLogout}

@@ -10,11 +10,18 @@ const PlacementCoordinatorSchema = new mongoose.Schema({
     },
     department: {
         type: String,
-        required: true,
+        
+    },
+    contactPerson: {
+        type: String,
+        trim: true},
+    contactEmail: {
+        type: String,
+        trim: true,
+        match: [/^\S+@\S+\.\S+$/, 'Please enter a valid email address.'],
     },
     contactNumber: {
         type: String,
-        required: true,
     },
     officeAddress: {
         type: String,
@@ -24,7 +31,7 @@ const PlacementCoordinatorSchema = new mongoose.Schema({
     },
     termsAccepted: {
         type: Boolean,
-        required: true,
+        default: false,
     },
 });
 

@@ -1,10 +1,17 @@
-const User = require('../models/Users/User'); 
 const { body, validationResult } = require('express-validator'); // For validation
+const User = require('../models/Users/User'); // Import User model
+const Student = require('../models/Users/Students'); // Import Student discriminator model
+const PlacementCoordinator = require('../models/Users/PlacementCoordinator'); // Import PlacementCoordinator discriminator model
+const CompanyCoordinator = require('../models/Users/CompanyCoordinator'); // Import CompanyCoordinator discriminator model
+const Admin = require('../models/Users/Admin'); // Import Admin discriminator model
+const PlacementCellAdmin = require('../models/Users/PlacementCellAdmin'); // Import PlacementCellAdmin discriminator model
 
+const bcrypt = require('bcryptjs'); // For password hashing
 // Get all users
 exports.getAllUsers = async (req, res) => {
   try {
-    const users = await User.find();
+    const users = await User.find()
+      
     res.json(users);
   } catch (err) {
     res.status(500).json({ message: 'Error retrieving users: ' + err.message });
@@ -14,7 +21,19 @@ exports.getAllUsers = async (req, res) => {
 // Get a single user by ID
 exports.getUserById = async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
+    let user;
+    user = await Student.findById(req.params.id)
+      .populate('college')
+      .catch(() => Student.findById(req.params.id));
+    if (!user) user = await PlacementCoordinator.findById(req.params.id)
+      .catch(() => PlacementCoordinator.findById(req.params.id));
+    if (!user) user = await CompanyCoordinator.findById(req.params.id)
+      .catch(() => CompanyCoordinator.findById(req.params.id));
+    if (!user) user = await Admin.findById(req.params.id)
+      .catch(() => Admin.findById(req.params.id));
+    if (!user) user = await PlacementCellAdmin.findById(req.params.id)
+      .catch(() => PlacementCellAdmin.findById(req.params.id));
+    
     if (!user) return res.status(404).json({ message: 'User not found' });
     res.json(user);
   } catch (err) {
@@ -23,40 +42,70 @@ exports.getUserById = async (req, res) => {
 };
 
 // Create a new user
-exports.createUser = [
-  // Validation and sanitization
-  body('name').notEmpty().withMessage('Name is r    equired'),
-  body('email').isEmail().withMessage('Email is invalid'),
-  body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
 
-  async (req, res) => {
-    // Check validation results
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+exports.createUser = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ message: 'Validation errors', errors: errors.array() });
+  }
+
+  const { name, email, password, role, college } = req.body;
+
+  try {
+    let UserModel;
+
+    switch (role) {
+      case 'student':
+        UserModel = Student;
+        break;
+      case 'placementcell-coordinator':
+        UserModel = PlacementCoordinator;
+        break;
+      case 'companyCoordinator':
+        UserModel = CompanyCoordinator;
+        break;
+      case 'admin':
+        UserModel = Admin;
+        break;
+      default:
+        return res.status(400).json({ message: 'Invalid role' });
     }
 
-    const { name, email, password } = req.body;
-
-    try {
-      const userExists = await User.findOne({ email });
-      if (userExists) {
-        return res.status(400).json({ message: 'User already exists' });
-      }
-
-      const newUser = new User({ name, email, password });
-      await newUser.save();
-      res.status(201).json(newUser);
-    } catch (err) {
-      res.status(500).json({ message: 'Error creating user: ' + err.message });
+    // Check if user with the same email already exists
+    const existingUser = await UserModel.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: 'User already exists with this email' });
     }
-  },
-];
+
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Create a new user
+    const user = new UserModel({ name, email, password: hashedPassword, role, college });
+    await user.save();
+    res.status(201).json({ message: 'User created successfully', user });
+  } catch (err) {
+    console.error('Error creating user:', err.message);
+    res.status(500).json({ message: 'Error creating user: ' + err.message });
+  }
+};
+
 
 // Update an existing user
 exports.updateUser = async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
+    let user;
+    user = await Student.findById(req.params.id)
+      .catch(() => Student.findById(req.params.id));
+    if (!user) user = await PlacementCoordinator.findById(req.params.id)
+      .catch(() => PlacementCoordinator.findById(req.params.id));
+    if (!user) user = await CompanyCoordinator.findById(req.params.id)
+      .catch(() => CompanyCoordinator.findById(req.params.id));
+    if (!user) user = await Admin.findById(req.params.id)
+      .catch(() => Admin.findById(req.params.id));
+    if (!user) user = await PlacementCellAdmin.findById(req.params.id)
+      .catch(() => PlacementCellAdmin.findById(req.params.id));
+
     if (!user) return res.status(404).json({ message: 'User not found' });
 
     const { name, email, password } = req.body;
@@ -68,24 +117,48 @@ exports.updateUser = async (req, res) => {
     await user.save();
     res.json(user);
   } catch (err) {
+    console.log(err.message);
     res.status(500).json({ message: 'Error updating user: ' + err.message });
   }
 };
+
+// Delete a user
 exports.deleteUser = async (req, res) => {
-    try {
-      const result = await User.findByIdAndDelete(req.params.id);
-      if (!result) return res.status(404).json({ message: 'User not found' });
-      res.json({ message: 'User deleted successfully' });
-    } catch (err) {
-      res.status(500).json({ message: 'Error deleting user: ' + err.message });
-    }
-  };
-  
-  
+  try {
+    let result;
+    result = await Student.findByIdAndDelete(req.params.id)
+      .catch(() => Student.findByIdAndDelete(req.params.id));
+    if (!result) result = await PlacementCoordinator.findByIdAndDelete(req.params.id)
+      .catch(() => PlacementCoordinator.findByIdAndDelete(req.params.id));
+    if (!result) result = await CompanyCoordinator.findByIdAndDelete(req.params.id)
+      .catch(() => CompanyCoordinator.findByIdAndDelete(req.params.id));
+    if (!result) result = await Admin.findByIdAndDelete(req.params.id)
+      .catch(() => Admin.findByIdAndDelete(req.params.id));
+    if (!result) result = await PlacementCellAdmin.findByIdAndDelete(req.params.id)
+      .catch(() => PlacementCellAdmin.findByIdAndDelete(req.params.id));
+    
+    if (!result) return res.status(404).json({ message: 'User not found' });
+    res.json({ message: 'User deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ message: 'Error deleting user: ' + err.message });
+  }
+};
+
 // Toggle hold/unhold a user
 exports.holdUnholdUser = async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
+    let user;
+    user = await Student.findById(req.params.id)
+      .catch(() => Student.findById(req.params.id));
+    if (!user) user = await PlacementCoordinator.findById(req.params.id)
+      .catch(() => PlacementCoordinator.findById(req.params.id));
+    if (!user) user = await CompanyCoordinator.findById(req.params.id)
+      .catch(() => CompanyCoordinator.findById(req.params.id));
+    if (!user) user = await Admin.findById(req.params.id)
+      .catch(() => Admin.findById(req.params.id));
+    if (!user) user = await PlacementCellAdmin.findById(req.params.id)
+      .catch(() => PlacementCellAdmin.findById(req.params.id));
+
     if (!user) return res.status(404).json({ message: 'User not found' });
 
     user.status = user.status === 0 ? 1 : 0; // Toggle between hold (0) and active (1)
@@ -99,17 +172,27 @@ exports.holdUnholdUser = async (req, res) => {
 // Verify a user (set status to 1 if not already)
 exports.verifyuser = async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
+    let user;
+    user = await Student.findById(req.params.id)
+      .catch(() => Student.findById(req.params.id));
+    if (!user) user = await PlacementCoordinator.findById(req.params.id)
+      .catch(() => PlacementCoordinator.findById(req.params.id));
+    if (!user) user = await CompanyCoordinator.findById(req.params.id)
+      .catch(() => CompanyCoordinator.findById(req.params.id));
+    if (!user) user = await Admin.findById(req.params.id)
+      .catch(() => Admin.findById(req.params.id));
+    if (!user) user = await PlacementCellAdmin.findById(req.params.id)
+      .catch(() => PlacementCellAdmin.findById(req.params.id));
+
     if (!user) return res.status(404).json({ message: 'User not found' });
 
-    if (user.status === 2) {
-      user.status = 1; // Verify user
-      await user.save();
-      res.json({ message: 'User is now active', user });
-    } else {
-      res.json({ message: 'User is already verified or active' });
-    }
-  } catch (err) {
+    user.status = user.status === 2 ? 1 : 2;
+      
+    await user.save();
+    res.json({ message: 'User verified successfully', user });
+  }
+  catch (err) {
     res.status(500).json({ message: 'Error verifying user: ' + err.message });
   }
+
 };
