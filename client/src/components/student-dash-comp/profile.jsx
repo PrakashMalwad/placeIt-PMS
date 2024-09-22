@@ -5,17 +5,27 @@ const StudentProfile = () => {
   const [studentData, setStudentData] = useState(null); // Store student data
   const [loading, setLoading] = useState(true); // Loading state
   const [error, setError] = useState(null); // Error state
+  const [isEditing, setIsEditing] = useState(false); // Edit state
+  
 
   // Fetch student data based on authenticated user
   useEffect(() => {
     const fetchStudentData = async () => {
       try {
-        const response = await axios.get('/api/student/me', {
+        const response = await axios.get('/api/students', {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`, 
           }
         });
-        setStudentData(response.data); 
+        
+        if (response.headers['content-type'].includes('application/json')) {
+          const data = response.data[0]; // Get the first element of the array
+          setStudentData(data);
+        } else {
+          console.error("Response is not JSON", response.data);
+          setError('Invalid data format received');
+        }
+
         setLoading(false); 
       } catch (err) {
         console.error('Error fetching student data:', err);
@@ -26,6 +36,28 @@ const StudentProfile = () => {
 
     fetchStudentData();
   }, []); 
+
+  // Update student data
+  const handleUpdate = async () => {
+    try {
+      const response = await axios.put(`/api/students/${studentData.id}`, studentData, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`, 
+        }
+      });
+      setStudentData(response.data);
+      setIsEditing(false); // Turn off editing mode
+    } catch (error) {
+      console.error("Error updating student data:", error);
+      setError("Failed to update student profile data.");
+    }
+  };
+
+  // Handle input changes for form fields
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setStudentData({ ...studentData, [name]: value });
+  };
 
   // Display loading message
   if (loading) {
@@ -45,7 +77,6 @@ const StudentProfile = () => {
     );
   }
 
-  // Render profile if data is available
   return (
     <>
       <div className="container mx-auto p-6">
@@ -53,8 +84,8 @@ const StudentProfile = () => {
           <div className="flex flex-col items-center">
             {/* Profile Picture */}
             <img
-              src={studentData.profileImage || 'default-profile.png'}
-              alt="Profile"
+              src={studentData.profileImg || 'default-profile.png'}
+              alt="profile"
               className="rounded-full w-32 h-32 object-cover mb-4"
             />
 
@@ -63,45 +94,95 @@ const StudentProfile = () => {
 
             {/* Contact Info */}
             <p className="text-gray-600">{studentData.email}</p>
-            <p className="text-gray-600">{studentData.contactNo}</p>
+            <p className="text-gray-600">{studentData.contactno}</p>
 
             {/* Profile Information */}
-            <div className="mt-6 w-full text-left">
-              <h3 className="font-semibold text-lg text-gray-700">Profile Information</h3>
-              <div className="mt-4 space-y-2">
-                <div>
-                  <span className="font-medium text-gray-600">College:</span> {studentData.college}
+            {isEditing ? (
+              <div className="mt-6 w-full text-left">
+                <h3 className="font-semibold text-lg text-gray-700">Edit Profile Information</h3>
+                <div className="mt-4 space-y-2">
+                  <div>
+                    <label className="font-medium text-gray-600">About Me:</label>
+                    <textarea
+                      name="aboutme"
+                      value={studentData.aboutme || ''}
+                      onChange={handleChange}
+                      className="border p-2 w-full"
+                    />
+                  </div>
+                  <div>
+                    <label className="font-medium text-gray-600">Contact No:</label>
+                    <input
+                      type="text"
+                      name="contactno"
+                      value={studentData.contactno || ''}
+                      onChange={handleChange}
+                      className="border p-2 w-full"
+                    />
+                  </div>
+                  <div>
+                    <label className="font-medium text-gray-600">Address:</label>
+                    <input
+                      type="text"
+                      name="address"
+                      value={studentData.address || ''}
+                      onChange={handleChange}
+                      className="border p-2 w-full"
+                    />
+                  </div>
+                  <div>
+                    <label className="font-medium text-gray-600">Skills:</label>
+                    <input
+                      type="text"
+                      name="skills"
+                      value={studentData.skills || ''}
+                      onChange={handleChange}
+                      className="border p-2 w-full"
+                    />
+                  </div>
                 </div>
-                <div>
-                  <span className="font-medium text-gray-600">Course:</span> {studentData.course}
-                </div>
-                <div>
-                  <span className="font-medium text-gray-600">Year:</span> {studentData.year}
-                </div>
-                <div>
-                  <span className="font-medium text-gray-600">CGPA:</span> {studentData.cgpa}
-                </div>
-              </div>
-            </div>
 
-            {/* Skills Section */}
-            <div className="mt-6 w-full text-left">
-              <h3 className="font-semibold text-lg text-gray-700">Skills</h3>
-              <div className="mt-2">
-                {studentData.skills && studentData.skills.length > 0 ? (
-                  studentData.skills.map((skill, index) => (
-                    <span
-                      key={index}
-                      className="inline-block bg-blue-200 text-blue-800 text-sm px-2 py-1 rounded-full mr-2"
-                    >
-                      {skill}
-                    </span>
-                  ))
-                ) : (
-                  <span>No skills listed</span>
-                )}
+                {/* Update Button */}
+                <button
+                  onClick={handleUpdate}
+                  className="mt-4 bg-blue-500 text-white px-4 py-2 rounded"
+                >
+                  Save Changes
+                </button>
+                {/* Cancel Button */}
+                <button
+                  onClick={() => setIsEditing(false)}
+                  className="mt-4 bg-gray-500 text-white px-4 py-2 rounded ml-2"
+                >
+                  Cancel
+                </button>
               </div>
-            </div>
+            ) : (
+              <div className="mt-6 w-full text-left">
+                <h3 className="font-semibold text-lg text-gray-700">Profile Information</h3>
+                <div className="mt-4 space-y-2">
+                  <div>
+                    <span className="font-medium text-gray-600">About Me:</span> {studentData.aboutme}
+                  </div>
+                  <div>
+                    <span className="font-medium text-gray-600">Contact No:</span> {studentData.contactno}
+                  </div>
+                  <div>
+                    <span className="font-medium text-gray-600">Address:</span> {studentData.address}
+                  </div>
+                  <div>
+                    <span className="font-medium text-gray-600">Skills:</span> {studentData.skills}
+                  </div>
+                </div>
+                {/* Edit Button */}
+                <button
+                  onClick={() => setIsEditing(true)}
+                  className="mt-4 bg-green-500 text-white px-4 py-2 rounded"
+                >
+                  Edit Profile
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
