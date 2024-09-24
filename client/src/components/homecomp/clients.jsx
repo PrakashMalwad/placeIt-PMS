@@ -16,12 +16,14 @@ const Clients = () => {
 
   return (
     <div className="flex w-full justify-center">
-      <section id="clients" className="clients py-12 ">
-        <div className="container mx-auto items-center">
-          <h3 className="text-center text-3xl font-bold text-blue-800 mb-12">Our Trusted Clients</h3>
+      <section id="clients" className="clients py-12">
+        <div className="container mx-auto items-center px-4 md:px-8">
+          <h3 className="text-center text-2xl md:text-3xl font-bold text-blue-800 mb-8 md:mb-12">
+            Our Trusted Clients
+          </h3>
           <Swiper
-            spaceBetween={30}
-            slidesPerView={4}
+            spaceBetween={20}
+            slidesPerView={2}
             freeMode={true}
             loop={true}
             autoplay={{ delay: 2500, disableOnInteraction: false }}
@@ -47,7 +49,7 @@ const Clients = () => {
                   src={`assets/img/clients/${client}`}
                   alt={`Client ${index + 1}`}
                   className="img-fluid grayscale hover:grayscale-0 transition-all duration-500 transform hover:scale-110 hover:shadow-xl rounded-lg border-2 border-transparent hover:border-blue-400"
-                  style={{ width: '160px', height: 'auto' }}
+                  style={{ width: '120px', height: 'auto' }}
                 />
               </SwiperSlide>
             ))}

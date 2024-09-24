@@ -11,12 +11,14 @@ function ManageStudents() {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [isAddStudentModalOpen, setIsAddStudentModalOpen] = useState(false);
+ 
   const [colleges, setColleges] = useState([]);
   const [newStudent, setNewStudent] = useState({
     name: "",
     email: "",
     password: "",
-    phone: "",
+    role:"student",
+    contactno: "",
     college: "",
     
   });
@@ -25,7 +27,8 @@ function ManageStudents() {
     name: "",
     email: "",
     password: "",
-    phone: "",
+    role:"student",
+    contactno: "",
     college: "",
 
   });
@@ -38,7 +41,7 @@ function ManageStudents() {
   const fetchStudents = async () => {
     setIsLoading(true);
     try {
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
       if (!token) {
         setError("No token found");
         setIsLoading(false);
@@ -48,6 +51,7 @@ function ManageStudents() {
         headers: {
           Authorization: `Bearer ${token}`,
         },
+       
       });
       setStudents(response.data);
       setError(null);
@@ -60,7 +64,12 @@ function ManageStudents() {
 
   const fetchColleges = async () => {
     try {
-      const response = await fetch(`${apiUrl}/api/colleges/`);
+      const storedUser = sessionStorage.getItem('user');
+      const user = storedUser ? JSON.parse(storedUser) : null;
+      const currentuserId = user ? user.id : null;
+      // const user = sessionStorage.getItem("user");
+      const response = await fetch(`${apiUrl}/api/users/mycollege/${currentuserId}`)
+      ;
       const data = await response.json();
       setColleges(data);
     } catch (error) {
@@ -68,12 +77,22 @@ function ManageStudents() {
     }
   };
 
+  useEffect(() => {
+    if (colleges.length > 0) {
+      const filteredStudents = students.filter(student => 
+        colleges.some(college => college._id === student.college._id)
+      );
+      setStudents(filteredStudents);
+    }
+  }, [colleges, students]);
+
+
   const handleOpenModifyModal = (student) => {
     setSelectedStudent(student);
     setModifiedStudent({
       name: student.name || "",
       email: student.email || "",
-      phone: student.phone || "",
+      contactno: student.contactno || "",
       password: student.password || "",
     });
     setIsModifyStudentModalOpen(true);
@@ -85,15 +104,15 @@ function ManageStudents() {
       return;
     }
     try {
-      const token = localStorage.getItem("token");
-      const response = await axios.post(`${apiUrl}/api/students`, newStudent, {
+      const token = sessionStorage.getItem("token");
+      const response = await axios.post(`${apiUrl}/api/users`, newStudent, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
       setStudents([...students, response.data]);
       setIsAddStudentModalOpen(false);
-      setNewStudent({ name: "", email: "", phone: "", college: "" });
+      setNewStudent({ name: "", email: "", contactno: "", college: "",role:"student" });
       setError(null);
       toast.success("Student added successfully");
     } catch (error) {
@@ -108,9 +127,9 @@ function ManageStudents() {
       return;
     }
     try {
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
       const response = await axios.put(
-        `${apiUrl}/api/students/${selectedStudent._id}`,
+        `${apiUrl}/api/users/${selectedStudent._id}`,
         modifiedStudent,
         {
           headers: {
@@ -132,8 +151,8 @@ function ManageStudents() {
 
   const handleDeleteStudent = async (id) => {
     try {
-      const token = localStorage.getItem("token");
-      await axios.delete(`${apiUrl}/api/students/${id}`, {
+      const token = sessionStorage.getItem("token");
+      await axios.delete(`${apiUrl}/api/users/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -189,7 +208,7 @@ function ManageStudents() {
                   <tr key={student._id} className={index % 2 === 0 ? "bg-gray-50" : "bg-white"}>
                     <td className="border px-4 py-2">{student.name}</td>
                     <td className="border px-4 py-2">{student.email}</td>
-                    <td className="border px-4 py-2">{student.phone}</td>
+                    <td className="border px-4 py-2">{student.contactno}</td>
                     <td className="border px-4 py-2">
                       <div className="flex space-x-2">
                         <button
@@ -252,7 +271,7 @@ function ManageStudents() {
                 placeholder="Phone"
                 value={modifiedStudent.phone}
                 onChange={(e) =>
-                  setModifiedStudent({ ...modifiedStudent, phone: e.target.value })
+                  setModifiedStudent({ ...modifiedStudent, contactno: e.target.value })
                 }
               />
             </div>
@@ -312,7 +331,7 @@ function ManageStudents() {
                 placeholder="Phone"
                 value={newStudent.phone}
                 onChange={(e) =>
-                  setNewStudent({ ...newStudent, phone: e.target.value })
+                  setNewStudent({ ...newStudent, contactno: e.target.value })
                 }
               />
               <select
@@ -323,11 +342,9 @@ function ManageStudents() {
                 }
               >
                 <option value="">Select College</option>
-                {colleges.map((college) => (
-                  <option key={college._id} value={college._id}>
-                    {college.name}
+                  <option key={colleges._id} value={colleges._id}>
+                    {colleges.name}
                   </option>
-                ))}
               </select>
             </div>
             <div className="mt-6 flex justify-end space-x-4">

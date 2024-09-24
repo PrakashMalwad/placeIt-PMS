@@ -1,6 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+
+import { FaSpinner } from 'react-icons/fa'; 
+
 const apiUrl = import.meta.env.VITE_BACKEND_URL;
 
 function ShowDrive() {
@@ -11,7 +14,12 @@ function ShowDrive() {
   const [totalPages, setTotalPages] = useState(1);
   const [search, setSearch] = useState('');
   const [triggerSearch, setTriggerSearch] = useState(false); // New state to trigger search
-
+  useEffect(() => {
+    const token = sessionStorage.getItem('token');
+    if (token) {
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`; // Set default header for all Axios requests
+    }
+  }, []);
   // Fetching job drives from the backend
   const fetchDrives = useCallback(async () => {
     setLoading(true);
@@ -36,7 +44,7 @@ function ShowDrive() {
   useEffect(() => {
     fetchDrives();
   }, [fetchDrives]);
-
+ 
   // Handling search input change
   const handleSearchChange = (e) => {
     setSearch(e.target.value); // Update search value
@@ -81,7 +89,9 @@ function ShowDrive() {
       </div>
 
       {/* Loading Spinner */}
-      {loading && <div className="animate-spin text-center text-gray-500">Loading...</div>}
+      {loading && <div className="flex justify-center">
+            <FaSpinner className="animate- text-4xl text-blue-600" />
+          </div>}
 
       {/* Error Message */}
       {error && <div className="text-center text-red-500">{error}</div>}

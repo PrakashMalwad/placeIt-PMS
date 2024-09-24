@@ -1,7 +1,7 @@
 import { FaArrowCircleRight } from 'react-icons/fa';
 import Quiz from './quiz';
 import { useState } from 'react';
-import { useParams } from 'react-router-dom';
+// import { useParams } from 'react-router-dom';
 
 function Myskills() {
   const [showQuiz, setShowQuiz] = useState(false);
@@ -21,8 +21,6 @@ function Myskills() {
     { id: 12, name: 'Python', totalQuestions: 0 },
   ]);
 
-  const params = useParams();
-  const category = params.category;
 
   const handleSubjectSelect = (subject) => {
     setSelectedSubject(subject);
@@ -57,7 +55,7 @@ function Myskills() {
       {showQuiz && selectedSubject && (
         <div className="bg-white p-6 rounded-lg shadow-md mt-6">
           <h2 className="text-2xl font-bold mb-4">My Skills - {selectedSubject.name}</h2>
-          <Quiz category={category} tag={selectedSubject.name} />
+          <Quiz category={selectedSubject.name} />
         </div>
       )}
     </div>

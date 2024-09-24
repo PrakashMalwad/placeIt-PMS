@@ -23,7 +23,7 @@ function Navbar({ role }) {
   }, []);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
+    const storedUser = sessionStorage.getItem("user");
     if (storedUser) {
       try {
         const user = JSON.parse(storedUser);
@@ -31,7 +31,7 @@ function Navbar({ role }) {
         setProfileImage(user.profileImage || "/default-profile.png");
         setIsLoggedIn(true); // User is logged in if user data exists
       } catch (error) {
-        console.error("Failed to parse user data from localStorage:", error);
+        console.error("Failed to parse user data from sessionStorage:", error);
       }
     }
   }, []);
@@ -40,8 +40,8 @@ function Navbar({ role }) {
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("user");
     setIsLoggedIn(false); // Set logged in status to false
     navigate("/signin"); // Redirect to Sign In page after logging out
   };

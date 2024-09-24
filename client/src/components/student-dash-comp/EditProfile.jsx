@@ -98,7 +98,12 @@ const EditProfile = () => {
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-
+  useEffect(() => {
+    const token = sessionStorage.getItem('token');
+    if (token) {
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`; // Set default header for all Axios requests
+    }
+  }, []);
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();

@@ -6,25 +6,48 @@ const logger = winston.createLogger({
   transports: [new winston.transports.Console()],
 });
 
-// Utility function for pagination
-const paginate = async (model, query, page, limit) => {
-  const skip = (page - 1) * limit;
-  const [results, total] = await Promise.all([
-    model.find(query).skip(skip).limit(limit),
-    model.countDocuments(query),
-  ]);
-  return {
-    results,
-    totalPages: Math.ceil(total / limit),
-  };
+// get total drive 
+const getTotalDrives = async () => {
+  try {
+    return await Drive.countDocuments();
+  } catch (error) {
+    console.error(`Error counting drives: ${error.message}`);
+    return 0;
+  }
 };
 
-// Fetch drives with pagination and search
+
+  // Utility function for pagination with populate
+  const paginate = async (model, query, page, limit, populateOptions = '') => {
+    const skip = (page - 1) * limit;
+    const [results, total] = await Promise.all([
+      model.find(query).skip(skip).limit(limit).populate(populateOptions),
+      model.countDocuments(query),
+    ]);
+    return {
+      results,
+      totalPages: Math.ceil(total / limit),
+    };
+  };
+  const countJobDrivesByUser = async (req, res) => {
+    try {
+      const { userId } = req.params;
+      const count = await Drive.countDocuments({ postedBy: userId });
+      res.json({ count });
+    } catch (error) {
+      res.status(500).json({ message: 'Error counting job drives: ' + error.message });
+    }
+  };
+
+
+// Fetch drives with pagination, search, and populate
 const getAllDrives = async (req, res) => {
-  const { page = 1, limit = 10, search = '' } = req.query;
+  const { page = 1, limit = 10, search = '' } = req.query; 
   try {
     const query = search ? { company: { $regex: search, $options: 'i' } } : {};
-    const { results, totalPages } = await paginate(Drive, query, +page, +limit);
+    const populateOptions = { path: 'postedBy', select: 'name email' };
+    const { results, totalPages } = await paginate(Drive, query, +page, +limit, populateOptions);
+
     res.json({ drives: results, totalPages });
   } catch (error) {
     logger.error(`Error fetching drives: ${error.message}`);
@@ -32,9 +55,11 @@ const getAllDrives = async (req, res) => {
   }
 };
 
+
 // Create a new job drive
 const createDrive = async (req, res) => {
-  const { company, date, location, eligibilityCriteria, jobDescription, applicationDeadline, contactPerson, contactEmail, contactPhone, postedBy } = req.body;
+  const {id:userId} = req.user;
+  const { company, date, location, eligibilityCriteria, jobDescription, applicationDeadline, contactPerson, contactEmail, contactPhone, postedBy} = req.body;
 
   try {
     const newDrive = new Drive({
@@ -47,7 +72,7 @@ const createDrive = async (req, res) => {
       contactPerson,
       contactEmail,
       contactPhone,
-      postedBy, 
+      postedBy: userId, 
     });
     
     await newDrive.save();
@@ -91,10 +116,11 @@ const getDriveByUser = async (req, res) => {
 // Update an existing job drive
 const updateDrive = async (req, res) => {
   const { id } = req.params;
+  const {id:userID} = req.user;
   const { company, date, location, eligibilityCriteria, jobDescription, applicationDeadline, contactPerson, contactEmail, contactPhone } = req.body;
 
   try {
-    const updatedDrive = await Drive.findByIdAndUpdate(id, { company, date, location, eligibilityCriteria, jobDescription, applicationDeadline, contactPerson, contactEmail, contactPhone }, { new: true });
+    const updatedDrive = await Drive.findByIdAndUpdate(id, { company, date, location, eligibilityCriteria, jobDescription, applicationDeadline, contactPerson, contactEmail, contactPhone,postedBy:userID }, { new: true });
     if (!updatedDrive) {
       return res.status(404).json({ message: 'Drive not found' });
     }
@@ -126,5 +152,7 @@ module.exports = {
   getDriveByUser,
   createDrive,
   updateDrive,
-  deleteDrive
+  deleteDrive,
+  countJobDrivesByUser,
+  getTotalDrives,
 };

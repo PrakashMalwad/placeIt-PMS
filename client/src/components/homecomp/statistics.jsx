@@ -1,27 +1,36 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
+const apiUrl = import.meta.env.VITE_BACKEND_URL;
+
 const Statistics = () => {
   const [data, setData] = useState({
     totalDrives: 0,
-    jobOffers: 0,
-    resumes: 0,
-    dailyUsers: 0
+    companyregister: 0,
+    placementcell: 0,
+    dailyUsers: 0,
   });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Fetch data from API
     const fetchData = async () => {
       try {
-        const response = await axios.get('/home');
+        const response = await axios.get(`${apiUrl}/api/home`);
         setData(response.data);
       } catch (error) {
         console.error('Error fetching statistics data:', error);
+        setError('Failed to load statistics.');
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchData();
   }, []);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p className="text-red-500 text-center">{error}</p>;
 
   return (
     <section id="statistics" className="statistics py-12 bg-gray-50">
@@ -36,12 +45,12 @@ const Statistics = () => {
             <p className="text-lg font-medium">Total Drives</p>
           </div>
           <div className="bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 p-8 text-white text-center rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:scale-105">
-            <h3 className="text-4xl font-bold mb-2">{data.jobOffers}</h3>
-            <p className="text-lg font-medium">Job Offers</p>
+            <h3 className="text-4xl font-bold mb-2">{data.companyregister}</h3>
+            <p className="text-lg font-medium">Company Reached</p>
           </div>
           <div className="bg-gradient-to-r from-indigo-400 via-indigo-500 to-indigo-600 p-8 text-white text-center rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:scale-105">
-            <h3 className="text-4xl font-bold mb-2">{data.resumes}</h3>
-            <p className="text-lg font-medium">CV / Resume</p>
+            <h3 className="text-4xl font-bold mb-2">{data.placementcell}</h3>
+            <p className="text-lg font-medium">Placement Cell Reached</p>
           </div>
           <div className="bg-gradient-to-r from-purple-400 via-purple-500 to-purple-600 p-8 text-white text-center rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:scale-105">
             <h3 className="text-4xl font-bold mb-2">{data.dailyUsers}</h3>

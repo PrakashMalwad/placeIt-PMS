@@ -32,7 +32,7 @@ const HeroSection = () => {
         <p className="text-lg md:text-xl mb-8">
           Empowering students and companies to connect, grow, and succeed together. Start your journey today!
         </p>
-        <a href="#get-started" className="px-6 py-3 bg-blue-600 rounded-full text-lg font-semibold hover:bg-blue-700 transition">
+        <a href="#get-started" className="px-6 py-3 bg-blue-600 rounded-full text-lg font-semibold hover:bg-blue-700 transition ">
           Get Started
         </a>
       </div>

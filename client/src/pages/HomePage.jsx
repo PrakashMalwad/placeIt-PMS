@@ -5,6 +5,7 @@ import HeroSection from '../components/homecomp/HeroSection';
 import Objectives from '../components/homecomp/objectives';
 import FeaturedServices from '../components/homecomp/featuredService';
 import Statistics from '../components/homecomp/statistics';
+// import Client from '../components/homecomp/clients';
 
 function HomePage() {
   
@@ -12,7 +13,7 @@ function HomePage() {
   
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
+    const storedUser = sessionStorage.getItem("user");
     if (storedUser) {
       try {
         const user = JSON.parse(storedUser);
@@ -27,6 +28,7 @@ function HomePage() {
     <>
       <Navbar role={role} />
       <HeroSection />
+      {/* <Client /> */}
       <Objectives />
       <Statistics />
       <FeaturedServices />

@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const driveController = require('../controllers/DriveController');
+const auth = require('../middleware/auth');
 
 // Job Drive Routes
 router.get('/', driveController.getAllDrives);

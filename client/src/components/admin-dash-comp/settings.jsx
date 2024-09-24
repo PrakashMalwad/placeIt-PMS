@@ -1,7 +1,7 @@
 import  { useState } from 'react';
 
 const SettingsPage = () => {
-    const user = localStorage.getItem('user')
+    const user = sessionStorage.getItem('user')
   const [settings, setSettings] = useState({
     username: user.name,
     email: 'johndoe@example.com',

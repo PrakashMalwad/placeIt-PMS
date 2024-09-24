@@ -26,12 +26,11 @@ function ManageJobDrives() {
 
   // Add the Authorization header to axios
   useEffect(() => {
-    const token = localStorage.getItem('authToken');
+    const token = sessionStorage.getItem('token');
     if (token) {
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`; // Set default header for all Axios requests
     }
   }, []);
-
   // Fetch job drives
   const fetchDrives = async () => {
     try {
@@ -61,7 +60,7 @@ function ManageJobDrives() {
     }
 
     try {
-      const currentUser = JSON.parse(localStorage.getItem('user')); // Assuming user data is in local storage
+      const currentUser = JSON.parse(sessionStorage.getItem('user')); // Assuming user data is in local storage
       const updatedForm = { ...form, postedBy: currentUser };
 
       if (isEditing) {
@@ -178,6 +177,7 @@ function ManageJobDrives() {
           type="text"
           placeholder="Company"
           value={form.company}
+          required
           onChange={(e) => setForm({ ...form, company: e.target.value })}
           className="border rounded p-2 mb-2 w-full"
         />
@@ -185,6 +185,8 @@ function ManageJobDrives() {
         <input
           type="date"
           value={form.date}
+          required
+
           onChange={(e) => setForm({ ...form, date: e.target.value })}
           className="border rounded p-2 mb-2 w-full"
         />
@@ -193,6 +195,8 @@ function ManageJobDrives() {
           type="text"
           placeholder="Location"
           value={form.location}
+          required
+
           onChange={(e) => setForm({ ...form, location: e.target.value })}
           className="border rounded p-2 mb-2 w-full"
         />
@@ -201,6 +205,8 @@ function ManageJobDrives() {
           type="text"
           placeholder="Eligibility Criteria"
           value={form.eligibilityCriteria}
+          required
+
           onChange={(e) => setForm({ ...form, eligibilityCriteria: e.target.value })}
           className="border rounded p-2 mb-2 w-full"
         />
@@ -208,6 +214,8 @@ function ManageJobDrives() {
         <textarea
           placeholder="Job Description"
           value={form.jobDescription}
+          required
+
           onChange={(e) => setForm({ ...form, jobDescription: e.target.value })}
           className="border rounded p-2 mb-2 w-full"
         ></textarea>
@@ -215,6 +223,8 @@ function ManageJobDrives() {
         <input
           type="date"
           value={form.applicationDeadline}
+          required
+
           onChange={(e) => setForm({ ...form, applicationDeadline: e.target.value })}
           className="border rounded p-2 mb-2 w-full"
         />
@@ -223,6 +233,7 @@ function ManageJobDrives() {
           type="text"
           placeholder="Contact Person"
           value={form.contactPerson}
+          required
           onChange={(e) => setForm({ ...form, contactPerson: e.target.value })}
           className="border rounded p-2 mb-2 w-full"
         />
@@ -231,6 +242,8 @@ function ManageJobDrives() {
           type="email"
           placeholder="Contact Email"
           value={form.contactEmail}
+          required
+
           onChange={(e) => setForm({ ...form, contactEmail: e.target.value })}
           className="border rounded p-2 mb-2 w-full"
         />
@@ -239,6 +252,8 @@ function ManageJobDrives() {
           type="text"
           placeholder="Contact Phone"
           value={form.contactPhone}
+          required
+
           onChange={(e) => setForm({ ...form, contactPhone: e.target.value })}
           className="border rounded p-2 mb-4 w-full"
         />

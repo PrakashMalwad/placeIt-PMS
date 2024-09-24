@@ -11,13 +11,13 @@ function AdminDashboard() {
   const [userRole, setUserRole] = useState("");
  // Effect to fetch user data from localStorage
  useEffect(() => {
-  const storedUser = localStorage.getItem("user");
+  const storedUser = sessionStorage.getItem("user");
   if (storedUser) {
     try {
       const user = JSON.parse(storedUser);
       setUserRole(user.role || ""); // Set user role if available
     } catch (error) {
-      console.error("Failed to parse user data from localStorage:", error);
+      console.error("Failed to parse user data from sessionStorage:", error);
     }
   }
 }, []);

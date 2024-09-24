@@ -35,9 +35,9 @@ function SignIn() {
                 throw new Error("Invalid response format");
             }
 
-            localStorage.setItem("token", token);
+            sessionStorage.setItem("token", token);
 
-            localStorage.setItem("user", JSON.stringify(user));
+            sessionStorage.setItem("user", JSON.stringify(user));
 
             setSuccessMessage("Login successful!");
             setErrorMessage("");

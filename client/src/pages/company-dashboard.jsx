@@ -13,8 +13,8 @@ function CompanyDashboard() {
 
   const handleLogout = () => {
     // Implement logout logic here
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("user");
     window.location.href = "/"; //
   };
 

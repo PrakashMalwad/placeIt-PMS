@@ -4,7 +4,8 @@ const {
     getApplicationByStudentId,
     createApplication,
     updateApplication,
-    deleteApplication
+    deleteApplication,
+    countApplicationByUser
 } = require('../controllers/applicationController');
 
 const router = express.Router();
@@ -12,6 +13,8 @@ const router = express.Router();
 // Route to get all job applications
 router.get('/', getAllApplications);
 
+// Route to get application by student id
+router.get('/student-count/:id', countApplicationByUser);
 // Route to get applications by student ID
 router.get('/student/:id', getApplicationByStudentId);
 

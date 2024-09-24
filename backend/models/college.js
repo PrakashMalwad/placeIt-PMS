@@ -20,10 +20,12 @@ const CollegeSchema = new mongoose.Schema({
     },
     logo: {
         type: String,
+        
         required: true
     },
     type: {
         type: String,
+        enum: ['Public', 'Private'],
         required: true
     },
     university: {

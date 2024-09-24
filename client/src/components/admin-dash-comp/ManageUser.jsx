@@ -24,7 +24,8 @@ function ManageUser() {
     email: "",
     password: "",
     role: "",
-    college: "", 
+    college: "",
+    postedBy:"",
   });
   const [isModifyUserModalOpen, setIsModifyUserModalOpen] = useState(false); // Add this line
   const [modifiedUser, setModifiedUser] = useState({
@@ -34,17 +35,23 @@ function ManageUser() {
     password: "",
     role: "",
     college: "",
+    postedBy:"",
   });
-
+  useEffect(() => {
+    const token = sessionStorage.getItem("token");
+    if (token) {
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`; // Set default header for all Axios requests
+    }
+  }, []);
   useEffect(() => {
     fetchUsers();
-    fetchColleges(); // Added call to fetch colleges
+    fetchColleges();
   }, []);
 
   const fetchUsers = async () => {
     setIsLoading(true);
     try {
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
       if (!token) {
         setError("No token found");
         setIsLoading(false);
@@ -74,12 +81,8 @@ function ManageUser() {
 
   const fetchColleges = async () => {
     try {
-      const token = localStorage.getItem("token");
-      const response = await axios.get(`${apiUrl}/api/colleges`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const token = sessionStorage.getItem("token");
+      const response = await axios.get(`${apiUrl}/api/colleges`);
       setColleges(response.data); // Storing fetched colleges in state
     } catch (error) {
       setError("Error fetching colleges: " + error.message);
@@ -88,15 +91,12 @@ function ManageUser() {
 
   const handleAddUser = async () => {
     try {
-      const token = localStorage.getItem("token");
-      const response = await axios.post(`${apiUrl}/api/users`, newUser, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.post(`${apiUrl}/api/users`, newUser, );
       setUsers([...users, response.data]);
       setIsAddUserModalOpen(false);
       setNewUser({ name: "", email: "", password: "", role: "", college: "" }); // Reset form
+      fetchColleges();
+      fetchUsers();
     } catch (error) {
       setError("Error adding user: " + error.message);
     }
@@ -104,7 +104,7 @@ function ManageUser() {
 
   const handleModifyUser = async (id, updatedUser) => {
     try {
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
       const response = await axios.put(
         `${apiUrl}/api/users/${id}`,
         updatedUser,
@@ -115,6 +115,7 @@ function ManageUser() {
         }
       );
       setUsers(users.map((user) => (user._id === id ? response.data : user)));
+      fetchColleges();
     } catch (error) {
       setError("Error modifying user: " + error.message);
     }
@@ -128,7 +129,7 @@ function ManageUser() {
 
       const response = await axios.patch(endpoint, null, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
         },
       });
       setUsers(
@@ -144,7 +145,7 @@ function ManageUser() {
     try {
       await axios.delete(`${apiUrl}/api/users/${id}`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
         },
       });
       setUsers(users.filter((user) => user._id !== id));
@@ -157,7 +158,7 @@ function ManageUser() {
     try {
       const response = await axios.patch(`${apiUrl}/api/users/v/${id}`, null, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
         },
       });
       setUsers(
@@ -199,15 +200,13 @@ function ManageUser() {
           <div className="space-y-8">
             <div className="flex justify-between items-center">
               <h2 className="text-2xl font-semibold">Users</h2>
-              
+
               <button
                 className=" m-2 bg-gradient-to-r from-green-400 to-green-600 text-white px-5 py-3 rounded-lg flex items-center transition-transform transform hover:scale-105 active:scale-95"
                 onClick={() => setIsAddUserModalOpen(true)}
               >
                 <FaUserPlus className="mr-2" /> Add User
               </button>
-              
-             
             </div>
 
             <table className="min-w-full bg-white border border-gray-300">
@@ -241,8 +240,19 @@ function ManageUser() {
                           className="bg-green-500 text-white px-3 py-1 rounded-lg flex items-center"
                           onClick={() => handleVerify(user._id)}
                         >
-                          <FaCheck className="mr-2" /> Verify
+                          {user.status === 2 ? (
+                            <>
+                              <FaCheck className="mr-2" />
+                              Verify
+                            </>
+                          ) : (
+                            <>
+                              <FaPause className="mr-2" />
+                              UnVerify
+                            </>
+                          )}
                         </button>
+
                         <button
                           className={`text-white px-3 py-1 rounded-lg flex items-center ${
                             user.status === 0 ? "bg-green-500" : "bg-yellow-500"
@@ -282,6 +292,7 @@ function ManageUser() {
                 type="text"
                 className="w-full p-2 border border-gray-300 rounded-lg"
                 placeholder="Name"
+                required
                 value={modifiedUser.name}
                 onChange={(e) =>
                   setModifiedUser({ ...modifiedUser, name: e.target.value })
@@ -291,6 +302,7 @@ function ManageUser() {
                 type="email"
                 className="w-full p-2 border border-gray-300 rounded-lg"
                 placeholder="Email"
+                required
                 value={modifiedUser.email}
                 onChange={(e) =>
                   setModifiedUser({ ...modifiedUser, email: e.target.value })
@@ -300,6 +312,7 @@ function ManageUser() {
                 type="password"
                 className="w-full p-2 border border-gray-300 rounded-lg"
                 placeholder="Password"
+                required
                 value={modifiedUser.password}
                 onChange={(e) =>
                   setModifiedUser({ ...modifiedUser, password: e.target.value })
@@ -308,6 +321,7 @@ function ManageUser() {
               <select
                 className="w-full p-2 border border-gray-300 rounded-lg"
                 value={modifiedUser.role}
+                required
                 onChange={(e) =>
                   setModifiedUser({ ...modifiedUser, role: e.target.value })
                 }
@@ -360,6 +374,7 @@ function ManageUser() {
                 type="text"
                 className="w-full p-2 border border-gray-300 rounded-lg"
                 placeholder="Name"
+                required
                 value={newUser.name}
                 onChange={(e) =>
                   setNewUser({ ...newUser, name: e.target.value })
@@ -369,6 +384,7 @@ function ManageUser() {
                 type="email"
                 className="w-full p-2 border border-gray-300 rounded-lg"
                 placeholder="Email"
+                required
                 value={newUser.email}
                 onChange={(e) =>
                   setNewUser({ ...newUser, email: e.target.value })
@@ -378,6 +394,7 @@ function ManageUser() {
                 type="password"
                 className="w-full p-2 border border-gray-300 rounded-lg"
                 placeholder="Password"
+                required
                 value={newUser.password}
                 onChange={(e) =>
                   setNewUser({ ...newUser, password: e.target.value })
@@ -386,6 +403,7 @@ function ManageUser() {
               <select
                 className="w-full p-2 border border-gray-300 rounded-lg"
                 value={newUser.role}
+                required
                 onChange={(e) =>
                   setNewUser({ ...newUser, role: e.target.value })
                 }
@@ -393,9 +411,10 @@ function ManageUser() {
                 <option value="">Select Role</option>
                 <option value="student">Student</option>
                 <option value="admin">Admin</option>
-                <option value="placementcell-coordinator">Placement Cell</option>
+                <option value="placementcell-coordinator">
+                  Placement Cell
+                </option>
                 <option value="company-coordinator">Company</option>
-
               </select>
               <select
                 className="w-full p-2 border border-gray-300 rounded-lg"

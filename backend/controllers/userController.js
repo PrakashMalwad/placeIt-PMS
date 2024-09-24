@@ -6,24 +6,68 @@ const CompanyCoordinator = require('../models/Users/CompanyCoordinator');
 const Admin = require('../models/Users/admin'); 
 const PlacementCellAdmin = require('../models/Users/PlacementCellAdmin');
 
+
 const bcrypt = require('bcryptjs'); // For password hashing
+
+// get users count
+exports.getUserCount = async () => {
+  try {
+    return await User.countDocuments();
+  } catch (error) {
+    console.error(`Error counting users: ${error.message}`);
+    return 0;
+  }
+}
+
+// company coord count 
+exports.getCompanyCoordinatorCount = async () => {
+  try {
+    return await CompanyCoordinator.countDocuments();
+  } catch (error) {
+    console.error(`Error counting company coordinators: ${error.message}`);
+    return 0;
+  }
+}
+// placement cordninator count 
+exports.getPlacementCoordinatorCount = async () => {
+  try {
+    return await PlacementCoordinator.countDocuments();
+  } catch (error) {
+    console.error(`Error counting placement coordinators: ${error.message}`);
+    return 0;
+  }
+}
 // Get all users
 exports.getAllUsers = async (req, res) => {
   try {
-    const users = await User.find()
-      
+    const users = await User.find();
     res.json(users);
   } catch (err) {
     res.status(500).json({ message: 'Error retrieving users: ' + err.message });
   }
 };
 
+exports.getUserByIdme = async (req, res) => {
+    try {
+      const userId = req.user.id; // Get the user ID from the request object
+      const user = await User.findById(userId).select('-password'); // Exclude sensitive data like password
+  
+      if (!user) {
+        return res.status(404).json({ msg: 'User not found' });
+      }
+  
+      res.json(user);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ msg: 'Server error' });
+    }
+  };
 // Get a single user by ID
 exports.getUserById = async (req, res) => {
   try {
     let user;
     user = await Student.findById(req.params.id)
-      .populate('college')
+      .populate('college','name phoneno')
       .catch(() => Student.findById(req.params.id));
     if (!user) user = await PlacementCoordinator.findById(req.params.id)
       .catch(() => PlacementCoordinator.findById(req.params.id));
@@ -33,6 +77,8 @@ exports.getUserById = async (req, res) => {
       .catch(() => Admin.findById(req.params.id));
     if (!user) user = await PlacementCellAdmin.findById(req.params.id)
       .catch(() => PlacementCellAdmin.findById(req.params.id));
+    if (!user) user = await User.findById(req.params.id)
+      .catch(() => User.findById(req.params.id));
     
     if (!user) return res.status(404).json({ message: 'User not found' });
     res.json(user);
@@ -44,11 +90,7 @@ exports.getUserById = async (req, res) => {
 // Create a new user
 
 exports.createUser = async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ message: 'Validation errors', errors: errors.array() });
-  }
-
+  
   const { name, email, password, role, college } = req.body;
 
   try {
@@ -95,7 +137,7 @@ exports.createUser = async (req, res) => {
 exports.updateUser = async (req, res) => {
   try {
     let user;
-    user = await Student.findById(req.params.id)
+    user = await User.findById(req.params.id)
       .catch(() => Student.findById(req.params.id));
     if (!user) user = await PlacementCoordinator.findById(req.params.id)
       .catch(() => PlacementCoordinator.findById(req.params.id));
@@ -144,6 +186,27 @@ exports.deleteUser = async (req, res) => {
   }
 };
 
+//get college by user id
+exports.getCollegeByUserId = async (req, res) => {
+  try {
+    let user;
+    user = await Student.findById(req.params.id)
+      .populate('college','collegename phoneno')
+      .catch(() => Student.findById(req.params.id));
+    if (!user) user = await PlacementCoordinator.findById(req.params.id)
+      .populate('college','name contactNumber')
+    .catch(() => PlacementCoordinator.findById(req.params.id));
+    if (!user) user = await CompanyCoordinator.findById(req.params.id)
+      .populate('college','name contactNumber')
+      .catch(() => CompanyCoordinator.findById(req.params.id));
+  
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    res.json(user.college);
+  } catch (err) {
+    res.status(500).json({ message: 'Error retrieving college: ' + err.message });
+  }
+};
+
 // Toggle hold/unhold a user
 exports.holdUnholdUser = async (req, res) => {
   try {
@@ -183,7 +246,6 @@ exports.verifyuser = async (req, res) => {
       .catch(() => Admin.findById(req.params.id));
     if (!user) user = await PlacementCellAdmin.findById(req.params.id)
       .catch(() => PlacementCellAdmin.findById(req.params.id));
-
     if (!user) return res.status(404).json({ message: 'User not found' });
 
     user.status = user.status === 2 ? 1 : 2;

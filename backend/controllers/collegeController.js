@@ -34,7 +34,7 @@ exports.getCollegeById = async (req, res) => {
         res.status(500).json({ message: 'Error fetching college', error });
     }
 };
-
+ 
 // Update a college by ID
 exports.updateCollege = async (req, res) => {
     try {

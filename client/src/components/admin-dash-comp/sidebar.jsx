@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { FaUser, FaCalendarCheck, FaSignOutAlt, FaBars, FaTimes, FaGraduationCap, FaCogs, FaUsers } from 'react-icons/fa';
+import { FaUser, FaCalendarCheck, FaSignOutAlt, FaBars, FaTimes, FaGraduationCap, FaCogs, FaUsers, FaAccusoft, FaMicrophoneAltSlash, FaCloudMeatball, FaCampground, FaBuilding } from 'react-icons/fa';
 
 function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
   const [adminName, setAdminName] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
-    const storedAdmin = localStorage.getItem('user');
+    const storedAdmin = sessionStorage.getItem('user');
     if (storedAdmin) {
       try {
         const user = JSON.parse(storedAdmin);
@@ -20,8 +20,8 @@ function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('user');
     navigate('/');
   };
 
@@ -94,6 +94,29 @@ function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
               </NavLink>
             </li>
             <li>
+              <NavLink
+                to="showEnquiries"
+                className={({ isActive }) =>
+                  isActive ? `${linkClasses} ${activeLinkClasses}` : linkClasses
+                }
+              >
+                <FaAccusoft className="mr-3 text-xl" aria-hidden="true" />
+                <span className="text-sm"> Show Enquiries</span>
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                to="manage-college"
+                className={({ isActive }) =>
+                  isActive ? `${linkClasses} ${activeLinkClasses}` : linkClasses
+                }
+              >
+                <FaBuilding className="mr-3 text-xl" aria-hidden="true" />
+                <span className="text-sm"> Manage College</span>
+              </NavLink>
+            </li>
+            <li>
+
               <NavLink
                 to="reports"
                 className={({ isActive }) =>

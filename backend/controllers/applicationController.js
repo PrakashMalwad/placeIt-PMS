@@ -10,6 +10,16 @@ const getAllApplications = async (req, res) => {
     }
 };
 
+const countApplicationByUser = async (req, res) => {
+    try {
+      const { userId } = req.params;
+      const count = await JobApplication    .countDocuments({ postedBy: userId });
+      res.json({ count });
+    } catch (error) {
+      res.status(500).json({ message: 'Error counting job drives: ' + error.message });
+    }
+  };
+  
 // Get a job application by student ID
 const getApplicationByStudentId = async (req, res) => {
     try {
@@ -76,6 +86,7 @@ const deleteApplication = async (req, res) => {
 module.exports = {
     getAllApplications,
     getApplicationByStudentId,
+    countApplicationByUser,
     createApplication,
     updateApplication,
     deleteApplication

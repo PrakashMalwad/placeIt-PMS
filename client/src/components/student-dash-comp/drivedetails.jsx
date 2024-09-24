@@ -11,9 +11,15 @@ function DriveDetails() {
   const [loading, setLoading] = useState(true);
   const [applying, setApplying] = useState(false);
   const [error, setError] = useState(null);
+  const [applicationError, setApplicationError] = useState(null); // Separate error for checking application status
   const [successMessage, setSuccessMessage] = useState(null);
   const [hasApplied, setHasApplied] = useState(false); // New state for tracking application status
-
+  useEffect(() => {
+    const token = sessionStorage.getItem('token');
+    if (token) {
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`; // Set default header for all Axios requests
+    }
+  }, []);
   useEffect(() => {
     const fetchDriveDetails = async () => {
       setLoading(true);
@@ -31,19 +37,23 @@ function DriveDetails() {
 
     const checkIfApplied = async () => {
       try {
-        const user = JSON.parse(localStorage.getItem('user'));
+        const user = JSON.parse(sessionStorage.getItem('user'));
 
         if (!user || !user.id) {
           throw new Error('You need to be logged in to check application status.');
         }
 
         const response = await axios.get(`${apiUrl}/api/applications/student/${user.id}`);
-        const applied = response.data.some(application => application.drive.toString() === id);
+        console.log(response.data); // Log the response to debug the structure
+        const applied = response.data.some(application => {
+          const driveId = application.drive?._id || application.drive?.id || application.drive;
+          return driveId && driveId.toString() === id;
+        });
 
         setHasApplied(applied);
       } catch (err) {
         console.error('Failed to check application status:', err);
-        setError('Failed to check application status. Please try again later.');
+        setApplicationError('Failed to check application status. Please try again later.');
       }
     };
 
@@ -57,7 +67,7 @@ function DriveDetails() {
     setSuccessMessage(null);
 
     try {
-      const user = JSON.parse(localStorage.getItem('user'));
+      const user = JSON.parse(sessionStorage.getItem('user'));
 
       if (!user || !user.id) {
         throw new Error('You need to be logged in to apply.');
@@ -71,7 +81,7 @@ function DriveDetails() {
         student: user.id,
         drive: id,
         appliedDate: new Date().toISOString(),
-        studentResume: '', 
+        studentResume: '', // Add a resume field if needed
       };
 
       await axios.post(`${apiUrl}/api/applications`, application);
@@ -104,6 +114,7 @@ function DriveDetails() {
       <p><strong>Application Deadline:</strong> {new Date(drive.applicationDeadline).toLocaleDateString()}</p>
       <p><strong>Contact Person:</strong> {drive.contactPerson}</p>
 
+      {applicationError && <div className="text-center text-red-500 mt-4">{applicationError}</div>}
       {successMessage && <div className="text-center text-green-500 mt-4">{successMessage}</div>}
       {error && <div className="text-center text-red-500 mt-4">{error}</div>}
 

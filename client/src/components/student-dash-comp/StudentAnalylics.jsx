@@ -1,4 +1,5 @@
 import { useState } from 'react';
+
 import { FaBell, FaChartBar, FaFileAlt, FaCalendarAlt } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
@@ -14,6 +15,8 @@ function StudentAnalytics() {
     { _id: '2', company: 'Innova Solutions', date: '2024-09-25' },
     { _id: '3', company: 'Alpha Industries', date: '2024-10-05' },
   ];
+
+  
 
   const notifications = [
     { id: '1', message: 'New interview scheduled with TechCorp', timestamp: '2024-09-14T10:30:00' },

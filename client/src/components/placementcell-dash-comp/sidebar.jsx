@@ -8,8 +8,8 @@ function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
 
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('user');
     navigate('/');
   };
 
@@ -36,11 +36,9 @@ function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
       </button>
 
       {/* Sidebar */}
-      <aside
-        className={`fixed top-0 left-0 h-full bg-gray-100 p-6 shadow-lg transition-transform duration-300 ease-in-out z-40 ${
-          isSidebarOpen ? 'translate-x-0' : '-translate-x-64'
-        } md:translate-x-0 md:static md:w-64 w-64`}
-      >
+      <aside className={`fixed top-0 left-0 w-64 h-full bg-gray-100 p-6 shadow-lg transition-transform duration-300 ease-in-out ${isSidebarOpen ? 'translate-y-12 ' : '-translate-x-64'} md:translate-x-0 md:static`}>
+
+      
         
         <nav>
           <ul className="space-y-4">
