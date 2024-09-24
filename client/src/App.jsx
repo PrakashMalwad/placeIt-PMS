@@ -33,7 +33,7 @@ import ManageDrive from "./components/admin-dash-comp/ManageDrive";
 import ManageUser from "./components/admin-dash-comp/ManageUser";
 import Reports from "./components/admin-dash-comp/reports";
 import SettingsPage from "./components/admin-dash-comp/settings";
-import ManageCollege from "./components/admin-dash-comp/manageCollege";
+import ManageCollege from "./components/admin-dash-comp/ManageCollege";
 
 
 // Placement Cell Components
