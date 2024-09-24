@@ -2,7 +2,7 @@ const express = require('express');
 
 const router = express.Router();
 
-const { getTotalDrives } = require('../controllers/driveController');
+const { getTotalDrives } = require('../controllers/DriveController');
 const { getUserCount } = require('../controllers/userController');
 const { getCompanyCoordinatorCount } = require('../controllers/userController');
 
