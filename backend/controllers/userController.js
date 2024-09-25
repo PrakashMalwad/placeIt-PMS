@@ -5,6 +5,7 @@ const PlacementCoordinator = require('../models/Users/PlacementCoordinator');
 const CompanyCoordinator = require('../models/Users/CompanyCoordinator'); 
 const Admin = require('../models/Users/admin'); 
 const PlacementCellAdmin = require('../models/Users/PlacementCellAdmin');
+const { gfs } = require('../config/db');
 
 
 const bcrypt = require('bcryptjs'); // For password hashing
@@ -88,14 +89,13 @@ exports.getUserById = async (req, res) => {
 };
 
 // Create a new user
-
 exports.createUser = async (req, res) => {
-  
-  const { name, email, password, role, college } = req.body;
+  const { name, email, password, role, college } = req.body; // Ensure you extract all necessary fields
 
   try {
     let UserModel;
 
+    // Determine which model to use based on the role
     switch (role) {
       case 'student':
         UserModel = Student;
@@ -113,7 +113,7 @@ exports.createUser = async (req, res) => {
         return res.status(400).json({ message: 'Invalid role' });
     }
 
-    // Check if user with the same email already exists
+    // Check if a user with the same email already exists
     const existingUser = await UserModel.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: 'User already exists with this email' });
@@ -123,8 +123,13 @@ exports.createUser = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Create a new user
-    const user = new UserModel({ name, email, password: hashedPassword, role, college });
-    await user.save();
+    const user = new UserModel({ 
+      ...req.body, // Spread the rest of the fields from the request body
+      password: hashedPassword, // Assign the hashed password
+      role // Ensure the role is included
+    });
+
+    await user.save(); // Save the user to the database
     res.status(201).json({ message: 'User created successfully', user });
   } catch (err) {
     console.error('Error creating user:', err.message);
@@ -258,3 +263,40 @@ exports.verifyuser = async (req, res) => {
   }
 
 };
+
+// Upload Profile Image
+exports.uploadProfileImage = async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).send({ msg: 'No file uploaded' });
+        }
+
+        // Assuming req.user.id is available from authentication middleware
+        const user = await User.findById(req.user.id);
+        if (!user) {
+            return res.status(404).send({ msg: 'User not found' });
+        }
+
+        // Update user profile with the uploaded image's file ID
+        user.profileImage = req.file.id; // Store the file ID from GridFS
+        await user.save();
+
+        res.status(200).send({ msg: 'Profile image uploaded successfully', fileId: req.file.id });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({ msg: 'Server error' });
+    }
+};
+
+// Get Profile Image by File ID
+exports.getProfileImage = (req, res) => {
+    gfs.files.findOne({ _id: mongoose.Types.ObjectId(req.params.fileId) }, (err, file) => {
+        if (err || !file) {
+            return res.status(404).send({ msg: 'File not found' });
+        }
+
+        const readstream = gfs.createReadStream(file._id);
+        readstream.pipe(res);
+    });
+};
+

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify'; // Optional for notifications
 
 const apiUrl = import.meta.env.VITE_BACKEND_URL;
@@ -22,24 +23,29 @@ function ManageJobDrives() {
     postedBy: '',
   });
   const [isEditing, setIsEditing] = useState(false);
-
-
   const [editingId, setEditingId] = useState(null);
+  const [loading, setLoading] = useState(false); // Loading state
 
- 
   // Fetch job drives
   const fetchDrives = async () => {
+    setLoading(true); // Start loading
     try {
-      const response = await axios.get(`${apiUrl}/api/drives?page=${page}&limit=10&search=${search}`,
-        {
+      const currentUser = sessionStorage.getItem('user');
+      const userId = JSON.parse(currentUser).id;
+      const response = await axios.get(`${apiUrl}/api/drives/byuser/${userId}`, {
         headers: {
           Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-      }});
+        },
+        params: { page, search },
+      });
+
       setDrives(response.data.drives);
       setTotalPages(response.data.totalPages);
     } catch (error) {
       console.error('Error fetching drives:', error);
       toast.error('Error fetching drives');
+    } finally {
+      setLoading(false); // Stop loading
     }
   };
 
@@ -61,7 +67,7 @@ function ManageJobDrives() {
     }
 
     try {
-      const currentUser = JSON.parse(sessionStorage.getItem('user')); // Assuming user data is in session storage
+      const currentUser = JSON.parse(sessionStorage.getItem('user'));
       const updatedForm = { ...form, postedBy: currentUser };
 
       if (isEditing) {
@@ -84,13 +90,15 @@ function ManageJobDrives() {
 
   // Delete a drive
   const handleDelete = async (id) => {
-    try {
-      await axios.delete(`${apiUrl}/api/drives/${id}`);
-      fetchDrives();
-      toast.success('Drive deleted successfully');
-    } catch (error) {
-      console.error('Error deleting drive:', error);
-      toast.error('Error deleting the drive');
+    if (window.confirm('Are you sure you want to delete this drive?')) {
+      try {
+        await axios.delete(`${apiUrl}/api/drives/${id}`);
+        fetchDrives();
+        toast.success('Drive deleted successfully');
+      } catch (error) {
+        console.error('Error deleting drive:', error);
+        toast.error('Error deleting the drive');
+      }
     }
   };
 
@@ -100,22 +108,10 @@ function ManageJobDrives() {
     setEditingId(drive._id);
     setForm({
       ...drive,
-      date: new Date(drive.date).toISOString().split('T')[0], // Convert date to ISO format for input
+      date: new Date(drive.date).toISOString().split('T')[0],
       applicationDeadline: new Date(drive.applicationDeadline).toISOString().split('T')[0],
     });
   };
-
-  // View applications (Ensure this function exists)
-  const handleView = async (id) => {
-    try {
-      const response = await axios.get(`${apiUrl}/api/application/${id}`);
-      setApplications(response.data.applications);
-    } catch (error) {
-      console.error('Error fetching applications:', error);
-      toast.error('Failed to fetch applications');
-    }
-  };
-  
 
   const resetForm = () => {
     setForm({
@@ -128,7 +124,7 @@ function ManageJobDrives() {
       contactPerson: '',
       contactEmail: '',
       contactPhone: '',
-      postedBy: '', // Reset postedBy as empty string or object
+      postedBy: '',
     });
     setIsEditing(false);
     setEditingId(null);
@@ -154,6 +150,9 @@ function ManageJobDrives() {
         <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">Search</button>
       </form>
 
+      {/* Loading Indicator */}
+      {loading ? <div className="mb-4">Loading...</div> : null}
+
       {/* Job Drives List */}
       <table className="min-w-full table-auto mb-4">
         <thead>
@@ -161,7 +160,7 @@ function ManageJobDrives() {
             <th className="px-4 py-2">Company</th>
             <th className="px-4 py-2">Date</th>
             <th className="px-4 py-2">Location</th>
-            <th className="px-4 py-2">Posted By</th> {/* Show posted by */}
+            <th className="px-4 py-2">Posted By</th>
             <th className="px-4 py-2">Actions</th>
           </tr>
         </thead>
@@ -171,11 +170,16 @@ function ManageJobDrives() {
               <td className="border px-4 py-2">{drive.company}</td>
               <td className="border px-4 py-2">{new Date(drive.date).toLocaleDateString()}</td>
               <td className="border px-4 py-2">{drive.location}</td>
-              <td className="border px-4 py-2">{drive.postedBy?.name || 'N/A'}</td> {/* Check for postedBy */}
+              <td className="border px-4 py-2">{drive.postedBy?.name || 'N/A'}</td>
               <td className="border px-4 py-2">
                 <button onClick={() => handleEdit(drive)} className="bg-yellow-500 text-white px-4 py-2 rounded mr-2">Edit</button>
                 <button onClick={() => handleDelete(drive._id)} className="bg-red-500 text-white px-4 py-2 rounded">Delete</button>
-                <button onClick={() => handleView(drive._id)} className="bg-blue-500 text-white px-4 py-2 rounded ml-2">View Applications</button>
+                <Link
+                  to={`applications/${drive._id}`}
+                  className="block mt-4 text-center bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition duration-200"
+                >
+                  View Applications
+                </Link>
               </td>
             </tr>
           ))}
@@ -184,9 +188,9 @@ function ManageJobDrives() {
 
       {/* Pagination */}
       <div className="mb-4">
-        <button onClick={() => setPage(page - 1)} disabled={page === 1} className="bg-blue-500 text-white px-4 py-2 rounded mr-2">Previous</button>
+        <button onClick={() => setPage((prev) => Math.max(prev - 1, 1))} disabled={page === 1} className="bg-blue-500 text-white px-4 py-2 rounded mr-2">Previous</button>
         <span>Page {page} of {totalPages}</span>
-        <button onClick={() => setPage(page + 1)} disabled={page === totalPages} className="bg-blue-500 text-white px-4 py-2 rounded">Next</button>
+        <button onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))} disabled={page === totalPages} className="bg-blue-500 text-white px-4 py-2 rounded">Next</button>
       </div>
 
       {/* Add/Edit Job Drive Form */}
@@ -197,6 +201,7 @@ function ManageJobDrives() {
           type="text"
           placeholder="Company"
           value={form.company}
+          required
           onChange={(e) => setForm({ ...form, company: e.target.value })}
           className="border rounded p-2 mb-2 w-full"
         />
@@ -204,6 +209,8 @@ function ManageJobDrives() {
         <input
           type="date"
           value={form.date}
+          required
+
           onChange={(e) => setForm({ ...form, date: e.target.value })}
           className="border rounded p-2 mb-2 w-full"
         />
@@ -212,6 +219,8 @@ function ManageJobDrives() {
           type="text"
           placeholder="Location"
           value={form.location}
+          required
+
           onChange={(e) => setForm({ ...form, location: e.target.value })}
           className="border rounded p-2 mb-2 w-full"
         />
@@ -220,6 +229,8 @@ function ManageJobDrives() {
           type="text"
           placeholder="Eligibility Criteria"
           value={form.eligibilityCriteria}
+          required
+
           onChange={(e) => setForm({ ...form, eligibilityCriteria: e.target.value })}
           className="border rounded p-2 mb-2 w-full"
         />
@@ -227,6 +238,8 @@ function ManageJobDrives() {
         <textarea
           placeholder="Job Description"
           value={form.jobDescription}
+          required
+
           onChange={(e) => setForm({ ...form, jobDescription: e.target.value })}
           className="border rounded p-2 mb-2 w-full"
         ></textarea>
@@ -234,6 +247,8 @@ function ManageJobDrives() {
         <input
           type="date"
           value={form.applicationDeadline}
+          required
+
           onChange={(e) => setForm({ ...form, applicationDeadline: e.target.value })}
           className="border rounded p-2 mb-2 w-full"
         />
@@ -242,6 +257,7 @@ function ManageJobDrives() {
           type="text"
           placeholder="Contact Person"
           value={form.contactPerson}
+          required
           onChange={(e) => setForm({ ...form, contactPerson: e.target.value })}
           className="border rounded p-2 mb-2 w-full"
         />
@@ -250,6 +266,8 @@ function ManageJobDrives() {
           type="email"
           placeholder="Contact Email"
           value={form.contactEmail}
+          required
+
           onChange={(e) => setForm({ ...form, contactEmail: e.target.value })}
           className="border rounded p-2 mb-2 w-full"
         />
@@ -258,6 +276,8 @@ function ManageJobDrives() {
           type="text"
           placeholder="Contact Phone"
           value={form.contactPhone}
+          required
+
           onChange={(e) => setForm({ ...form, contactPhone: e.target.value })}
           className="border rounded p-2 mb-4 w-full"
         />

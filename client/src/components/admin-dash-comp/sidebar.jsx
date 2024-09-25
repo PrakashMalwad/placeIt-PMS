@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { FaUser, FaCalendarCheck, FaSignOutAlt, FaBars, FaTimes, FaGraduationCap, FaCogs, FaUsers, FaAccusoft, FaMicrophoneAltSlash, FaCloudMeatball, FaCampground, FaBuilding } from 'react-icons/fa';
+import { FaUser, FaCalendarCheck, FaSignOutAlt, FaBars, FaTimes, FaGraduationCap, FaCogs, FaUsers, FaAccusoft, FaCampground, FaBuilding } from 'react-icons/fa';
 
 function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
   const [adminName, setAdminName] = useState('');
@@ -48,11 +48,8 @@ function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
       </button>
 
       {/* Sidebar */}
-      <aside
-        className={`fixed top-0 left-0 h-full bg-gray-100 p-6 shadow-lg transition-transform duration-300 ease-in-out z-40 ${
-          isSidebarOpen ? 'translate-x-0' : '-translate-x-64'
-        } md:translate-x-0 md:static md:w-64 w-64`}
-      >
+      <aside className={`fixed top-0 left-0 w-64 h-full bg-gray-100 p-6 shadow-lg transition-transform duration-300 ease-in-out ${isSidebarOpen ? 'translate-y-12 ' : '-translate-x-64'} md:translate-x-0 md:static`}>
+
         <div className="mb-6">
           <h3 className="text-lg font-semibold">
             Welcome, <span className="font-bold">{adminName}</span>
@@ -111,12 +108,24 @@ function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
                   isActive ? `${linkClasses} ${activeLinkClasses}` : linkClasses
                 }
               >
-                <FaBuilding className="mr-3 text-xl" aria-hidden="true" />
+                <FaCampground className="mr-3 text-xl" aria-hidden="true" />
                 <span className="text-sm"> Manage College</span>
               </NavLink>
             </li>
+            
             <li>
+              <NavLink
+                to="manage-company"
+                className={({ isActive }) =>
+                  isActive ? `${linkClasses} ${activeLinkClasses}` : linkClasses
+                }
+              >
+                <FaBuilding className="mr-3 text-xl" aria-hidden="true" />
+                <span className="text-sm"> Manage Company</span>
+              </NavLink>
+            </li>
 
+            <li>
               <NavLink
                 to="reports"
                 className={({ isActive }) =>

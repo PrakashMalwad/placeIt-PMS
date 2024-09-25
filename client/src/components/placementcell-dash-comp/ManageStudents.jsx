@@ -340,7 +340,7 @@ function ManageStudents() {
                 onChange={(e) =>
                   setNewStudent({ ...newStudent, college: e.target.value })
                 }
-              >
+              >console.log(colleges)
                 <option value="">Select College</option>
                   <option key={colleges._id} value={colleges._id}>
                     {colleges.name}

@@ -5,6 +5,7 @@ const {
     createApplication,
     updateApplication,
     deleteApplication,
+    getApplicationByDriveId,
     countApplicationByUser
 } = require('../controllers/applicationController');
 
@@ -16,8 +17,10 @@ router.get('/', getAllApplications);
 // Route to get application by student id
 router.get('/student-count/:id', countApplicationByUser);
 // Route to get applications by student ID
+router.get('/c/', getApplicationByStudentId);
 router.get('/student/:id', getApplicationByStudentId);
-
+// Route to get applications by drive ID
+router.get('/drive/:id', getApplicationByDriveId);
 // Route to create a new job application
 router.post('/', createApplication);
 

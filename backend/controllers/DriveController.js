@@ -6,6 +6,28 @@ const logger = winston.createLogger({
   transports: [new winston.transports.Console()],
 });
 
+// Get drive posted by me 
+const getDrivePostedByMe = async (req, res) => {
+  const {id:userId}  = req.user;
+  console.log('User object:', req.user);
+  const drive = await Drive.find({ postedBy: userId });
+  if (!drive) {
+    return res.status(404).json({ message: 'Drive not found' });
+  }
+  res.json(drive);
+}
+
+
+const getDriveByCollege = async (req, res) => {
+  const { id } = req.params;
+  const drive = await Drive.findOne({ where: { college_id: id } });
+  if (!drive) {
+    return res.status(404).json({ message: 'Drive not found' });
+  }
+  res.json(drive);
+}
+
+
 // get total drive 
 const getTotalDrives = async () => {
   try {
@@ -99,20 +121,38 @@ const getDriveById = async (req, res) => {
     res.status(500).json({ message: 'Error fetching job drive' });
     }
     };
-const getDriveByUser = async (req, res) => {
-  const { id } = req.params;
-  
-  try {
-    const drive = await Drive.find({ postedBy: id }).populate('postedBy','name email');
-    if (!drive || drive.length === 0) {
-      return res.status(404).json({ message: 'Drive not found' });
-    }
-    res.json(drive);
-  } catch (error) {
-    logger.error(`Error fetching drive: ${error.message}`);
-    res.status(500).json({ message: 'Error fetching job drive' });
-  }
-};
+
+    const getDriveByUser = async (req, res) => {
+      const { id } = req.params;
+      const page = parseInt(req.query.page) || 1; // Get the page number from query, default to 1
+      const limit = parseInt(req.query.limit) || 10; // Get the limit from query, default to 10
+    
+      try {
+        // Use the paginate utility function
+        const { results: drives, totalPages } = await paginate(
+          Drive,
+          { postedBy: id }, 
+          page,
+          limit,
+          'postedBy' // Populate postedBy field
+        );
+    
+        if (!drives || drives.length === 0) {
+          return res.status(404).json({ message: 'Drive not found' });
+        }
+    
+        res.json({
+          drives,
+          totalPages, // Total pages from pagination utility
+          currentPage: page, // Current page number
+        });
+      } catch (error) {
+        logger.error(`Error fetching drives: ${error.message}`);
+        res.status(500).json({ message: 'Error fetching job drives' });
+      }
+    };
+
+
 // Update an existing job drive
 const updateDrive = async (req, res) => {
   const { id } = req.params;
@@ -148,11 +188,13 @@ const deleteDrive = async (req, res) => {
 
 module.exports = {
   getAllDrives,
+  getDrivePostedByMe,
   getDriveById,
   getDriveByUser,
   createDrive,
   updateDrive,
   deleteDrive,
   countJobDrivesByUser,
+  getDriveByCollege,
   getTotalDrives,
 };

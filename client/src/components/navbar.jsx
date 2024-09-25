@@ -3,9 +3,11 @@ import PropTypes from "prop-types";
 import Logo from "../assets/img/logo.png";
 import { Link, useNavigate } from "react-router-dom";
 import { FaBars, FaSignOutAlt, FaUser, FaDashcube, FaTimes } from "react-icons/fa";
+import axios from "axios";
 
 function Navbar({ role }) {
   
+  const apiUrl = import.meta.env.VITE_BACKEND_URL;
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -21,20 +23,46 @@ function Navbar({ role }) {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
+  useEffect(() => {
+    const token = sessionStorage.getItem('token');
+    if (token) {
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`; // Set default header for all Axios requests
+    }
+  }, []);
   useEffect(() => {
     const storedUser = sessionStorage.getItem("user");
+  
+    const fetchUserProfile = async () => {
+      try {
+        const response = await axios.get(`${apiUrl}/api/file/my-profile`); // Fetch profile
+  
+        // Check if response contains the necessary data before accessing it
+        if (response.data && response.data.user && response.data.user.profileImage) {
+          const profileUrl = response.data.user.profileImage; // Access profileImage
+          setProfileImage(profileUrl); // Set profile image URL
+        } else {
+          console.error("Profile image not found in the response");
+          setProfileImage("/default-profile.png"); // Fallback to default image
+        }
+      } catch (error) {
+        console.error('Error fetching user profile:', error.message);
+        setProfileImage("/default-profile.png"); // Fallback in case of error
+      }
+    };
+  
+    fetchUserProfile();
+  
     if (storedUser) {
       try {
         const user = JSON.parse(storedUser);
         setUserName(user.name || "");
-        setProfileImage(user.profileImage || "/default-profile.png");
         setIsLoggedIn(true); // User is logged in if user data exists
       } catch (error) {
         console.error("Failed to parse user data from sessionStorage:", error);
       }
     }
   }, []);
+  
 
   const toggleProfileMenu = () => setIsProfileMenuOpen(!isProfileMenuOpen);
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);

@@ -3,7 +3,7 @@ const JobApplication = require("../models/JobApplication");
 // Get all job applications
 const getAllApplications = async (req, res) => {
     try {
-        const applications = await JobApplication.find().populate("student drive");
+        const applications = await JobApplication.find();
         res.status(200).json(applications);
     } catch (error) {
         res.status(404).json({ message: 'Error fetching job applications', error: error.message });
@@ -24,17 +24,47 @@ const countApplicationByUser = async (req, res) => {
 const getApplicationByStudentId = async (req, res) => {
     try {
         const { id } = req.params;
-        const applications = await JobApplication.find({ student: id }).populate("student drive");
+        const applications = await JobApplication.find({ student: id }).populate({ 
+            path: 'student', // Adjust to match your schema
+            select: 'name resume' // Populate only name and resume
+        });
+         // Populate student name
         res.status(200).json(applications);
     } catch (error) {
         res.status(404).json({ message: 'Error fetching job applications', error: error.message });
     }
 };
 
+
+// Get a job application by drive ID
+// Get applications by drive ID
+// Get applications by drive ID
+const getApplicationByDriveId = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const applications = await JobApplication.find({ drive: id })
+            .populate({ 
+                path: 'student', // Adjust to match your schema
+                select: 'name resume' // Populate only name and resume
+            })
+            
+        res.status(200).json(applications);
+    } catch (error) {
+        res.status(404).json({ message: 'Error fetching job applications', error: error.message });
+    }
+};
+
+
+// Create a new job application
 const createApplication = async (req, res) => {
     try {
+        const {id:
+            studentId
+        } = req.user;
+        
         const { student, drive } = req.body;
 
+    
         // Check if an application with the same student and drive already exists
         const existingApplication = await JobApplication.findOne({ student, drive });
 
@@ -43,7 +73,8 @@ const createApplication = async (req, res) => {
         }
 
         // Create and save the new job application
-        const newApplication = new JobApplication(req.body);
+        const newApplication = new JobApplication(
+            {student:studentId,...req.body});
         const savedApplication = await newApplication.save();
         
         res.status(201).json(savedApplication);
@@ -86,6 +117,7 @@ const deleteApplication = async (req, res) => {
 module.exports = {
     getAllApplications,
     getApplicationByStudentId,
+    getApplicationByDriveId,
     countApplicationByUser,
     createApplication,
     updateApplication,

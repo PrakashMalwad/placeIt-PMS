@@ -1,77 +1,132 @@
-
-import  { useState, useEffect } from 'react';
-import { useHistory, useParams } from 'react-router-dom'; // useHistory for navigating back
-import axios from 'axios';
-import { toast } from 'react-toastify';
+import { useParams, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import ResumeModal from "../ResumeModal";
 
 const apiUrl = import.meta.env.VITE_BACKEND_URL;
 
-function ShowApplications() {
-  const { driveId } = useParams(); // Assuming you are passing driveId through route params
+function ShowApplication() {
+  const { id } = useParams(); // 'id' is the drive ID
+  const navigate = useNavigate();
   const [applications, setApplications] = useState([]);
+  const [drive, setDrive] = useState(null); // To display drive details
   const [loading, setLoading] = useState(true);
-  const history = useHistory(); // To handle the back button navigation
+  const [error, setError] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+const [selectedResumeUrl, setSelectedResumeUrl] = useState('');
+  const handleViewResume = (resumeUrl) => {
+    setSelectedResumeUrl(resumeUrl);
+    setIsModalOpen(true);
+};
 
-  // Fetch applications related to a specific drive
+const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedResumeUrl(''); // Reset the URL when closing
+};
+
+  // Set the authorization token for Axios
+  useEffect(() => {
+    const token = sessionStorage.getItem("token");
+    if (token) {
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    }
+  }, []);
+
+  // Fetch applications and drive details
   useEffect(() => {
     const fetchApplications = async () => {
+      setLoading(true);
+      setError(null);
       try {
-        const response = await axios.get(`${apiUrl}/api/application/${driveId}`);
-        setApplications(response.data.applications);
-      } catch (error) {
-        console.error('Error fetching applications:', error);
-        toast.error('Failed to fetch applications');
+        // Fetch applications for the specific drive
+        const applicationsResponse = await axios.get(
+          `${apiUrl}/api/applications/drive/${id}`
+        );
+        setApplications(applicationsResponse.data);
+
+        // Optionally, fetch drive details
+        const driveResponse = await axios.get(`${apiUrl}/api/drives/${id}`);
+        setDrive(driveResponse.data);
+      } catch (err) {
+        console.error("Failed to fetch applications:", err);
+        setError("Failed to fetch applications. Please try again later.");
       } finally {
         setLoading(false);
       }
     };
 
     fetchApplications();
-  }, [driveId]);
+  }, [id]);
 
-  // Handle Back Button
-  const handleBack = () => {
-    history.goBack(); // Go back to the previous page
-  };
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div className="text-center text-red-500">{error}</div>;
+  if (!applications || applications.length === 0)
+    return (
+      <div className="text-center text-gray-500">
+        No applications available for this drive.
+      </div>
+    );
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Applications for Drive: {driveId}</h1>
-
-      {/* Back Button */}
-      <button onClick={handleBack} className="bg-gray-500 text-white px-4 py-2 rounded mb-4">
+      <button
+        className="bg-blue-500 text-white px-4 py-2 rounded-md mt-4 hover:bg-gray-600 focus:outline-none"
+        onClick={() => navigate(-1)}
+      >
         Back
       </button>
 
-      {/* Loading Spinner */}
-      {loading ? (
-        <p>Loading applications...</p>
-      ) : applications.length > 0 ? (
-        <table className="min-w-full table-auto mb-4">
-          <thead>
-            <tr>
-              <th className="px-4 py-2">Application ID</th>
-              <th className="px-4 py-2">Student ID</th>
-              <th className="px-4 py-2">Status</th>
-              <th className="px-4 py-2">Applied Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            {applications.map((app) => (
-              <tr key={app._id}>
-                <td className="border px-4 py-2">{app._id}</td>
-                <td className="border px-4 py-2">{app.studentId}</td>
-                <td className="border px-4 py-2">{app.status}</td>
-                <td className="border px-4 py-2">{new Date(app.appliedDate).toLocaleDateString()}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      {drive ? (
+        <h2 className="text-2xl font-bold text-center my-4 text-gray-800">
+          Applications for {drive.company}
+        </h2>
       ) : (
-        <p>No applications found for this drive.</p>
+        <h2 className="text-2xl font-bold text-center my-4 text-gray-800">
+          Applications
+        </h2>
       )}
-    </div>
+
+      <table className="min-w-full table-auto mb-4">
+        <thead>
+          <tr>
+            <th className="px-4 py-2">Student Name</th>
+            <th className="px-4 py-2">Applied Date</th>
+            <th className="px-4 py-2">Status</th>
+            <th className="px-4 py-2">Resume</th>
+          </tr>
+        </thead>
+        <tbody>
+          {applications.map((application) => (
+            <tr key={application._id}>
+              <td className="border px-4 py-2">
+                {application.student?.name || "N/A"}
+              </td>
+              <td className="border px-4 py-2">
+                {new Date(application.appliedDate).toLocaleDateString()}
+              </td>
+              <td className="border px-4 py-2">
+                {application.status || "Pending"}
+              </td>
+              <td className="border px-4 py-2">
+                <button
+                  onClick={() => handleViewResume(application.resumeUrl)}
+                  className="bg-gray-200 p-2 text-blue-500"
+                >
+                  View Resume
+                </button>
+              </td>
+
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <ResumeModal
+                isOpen={isModalOpen}
+                onClose={handleCloseModal}
+                resumeUrl={selectedResumeUrl}
+            />
+        </div>
   );
 }
 
-export default ShowApplications;
+export default ShowApplication;

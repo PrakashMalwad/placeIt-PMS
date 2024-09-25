@@ -18,6 +18,8 @@ function ManageUser() {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [companies, setCompanies] = useState([]);
+
   const [isAddUserModalOpen, setIsAddUserModalOpen] = useState(false);
   const [newUser, setNewUser] = useState({
     name: "",
@@ -25,17 +27,20 @@ function ManageUser() {
     password: "",
     role: "",
     college: "",
-    postedBy:"",
+    postedBy: "",
+    company: "",
   });
+  const currentuser = JSON.parse(sessionStorage.getItem("user"));
   const [isModifyUserModalOpen, setIsModifyUserModalOpen] = useState(false); // Add this line
   const [modifiedUser, setModifiedUser] = useState({
     // Add this state
     name: "",
     email: "",
     password: "",
+    company: "",
     role: "",
     college: "",
-    postedBy:"",
+    postedBy: "",
   });
   useEffect(() => {
     const token = sessionStorage.getItem("token");
@@ -46,8 +51,22 @@ function ManageUser() {
   useEffect(() => {
     fetchUsers();
     fetchColleges();
+    fetchCompanies();
   }, []);
-
+  const fetchCompanies = async () => {
+    try {
+      const token = sessionStorage.getItem("token");
+      const response = await axios.get(`${apiUrl}/api/companies`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log(response.data);
+      setCompanies(response.data);
+    } catch (error) {
+      setError("Error fetching companies: " + error.message);
+    }
+  };
   const fetchUsers = async () => {
     setIsLoading(true);
     try {
@@ -81,7 +100,6 @@ function ManageUser() {
 
   const fetchColleges = async () => {
     try {
-      const token = sessionStorage.getItem("token");
       const response = await axios.get(`${apiUrl}/api/colleges`);
       setColleges(response.data); // Storing fetched colleges in state
     } catch (error) {
@@ -91,10 +109,17 @@ function ManageUser() {
 
   const handleAddUser = async () => {
     try {
-      const response = await axios.post(`${apiUrl}/api/users`, newUser, );
+      const response = await axios.post(`${apiUrl}/api/users`, newUser);
       setUsers([...users, response.data]);
       setIsAddUserModalOpen(false);
-      setNewUser({ name: "", email: "", password: "", role: "", college: "" }); // Reset form
+      setNewUser({
+        name: "",
+        email: "",
+        password: "",
+        role: "",
+        college: "",
+        company: "",
+      }); // Reset form
       fetchColleges();
       fetchUsers();
     } catch (error) {
@@ -183,7 +208,7 @@ function ManageUser() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50">
+    <div className="flex flex-col bg-gray-50">
       <h1 className="text-4xl font-semibold">Manage Users</h1>
 
       <main className="flex-1 p-8">
@@ -220,64 +245,63 @@ function ManageUser() {
                 </tr>
               </thead>
               <tbody>
-                {users.map((user) => (
-                  <tr key={user._id}>
-                    <td className="border px-4 py-2">{user.name}</td>
-                    <td className="border px-4 py-2">{user.email}</td>
-                    <td className="border px-4 py-2">{user.role}</td>
-                    <td className="border px-4 py-2">
-                      {getStatusText(user.status)}
-                    </td>
-                    <td className="border px-4 py-2">
-                      <div className="flex space-x-2">
-                        <button
-                          className="bg-blue-500 text-white px-3 py-1 rounded-lg flex items-center"
-                          onClick={() => handleOpenModifyModal(user)}
-                        >
-                          <FaEdit className="mr-2" /> Modify
-                        </button>
-                        <button
-                          className="bg-green-500 text-white px-3 py-1 rounded-lg flex items-center"
-                          onClick={() => handleVerify(user._id)}
-                        >
-                          {user.status === 2 ? (
-                            <>
-                              <FaCheck className="mr-2" />
-                              Verify
-                            </>
-                          ) : (
-                            <>
-                              <FaPause className="mr-2" />
-                              UnVerify
-                            </>
-                          )}
-                        </button>
+                {users
+                  .filter((user) => user._id !== currentuser.id)
+                  .map((user) => (
+                    <tr key={user._id}>
+                      <td className="border px-4 py-2">{user.name}</td>
+                      <td className="border px-4 py-2">{user.email}</td>
+                      <td className="border px-4 py-2">{user.role}</td>
+                      <td className="border px-4 py-2">
+                        {getStatusText(user.status)}
+                      </td>
+                      <td className="border px-4 py-2">
+                        <div className="flex flex-wrap space-x-2">
+                          <button
+                            className="bg-blue-500 text-white px-2 py-1 rounded"
+                            onClick={() => {
+                              handleOpenModifyModal(user);
+                            }}
+                          >
+                            <FaEdit />
+                          </button>
 
-                        <button
-                          className={`text-white px-3 py-1 rounded-lg flex items-center ${
-                            user.status === 0 ? "bg-green-500" : "bg-yellow-500"
-                          }`}
-                          onClick={() =>
-                            handleToggleHoldStatus(user._id, user.status === 0)
-                          }
-                        >
-                          {user.status === 0 ? (
-                            <FaPlay className="mr-2" />
-                          ) : (
-                            <FaPause className="mr-2" />
+                          <button
+                            className={`${
+                              user.status === 0
+                                ? "bg-green-500"
+                                : "bg-yellow-500"
+                            } text-white px-2 py-1 rounded`}
+                            onClick={() =>
+                              handleToggleHoldStatus(
+                                user._id,
+                                user.status === 0
+                              )
+                            }
+                          >
+                            {user.status === 0 ? <FaPlay /> : <FaPause />}
+                          </button>
+
+                          <button
+                            className="bg-red-500 text-white px-2 py-1 rounded"
+                            onClick={() => handleDeleteUser(user._id)}
+                          >
+                            <FaTrash />
+                          </button>
+
+                          {/* Conditionally render the verify button if the user is not verified (status === 2) */}
+                          {user.status === 2 && (
+                            <button
+                              className="bg-indigo-500 text-white px-2 py-1 rounded"
+                              onClick={() => handleVerify(user._id)}
+                            >
+                              <FaCheck /> {/* Verification icon */}
+                            </button>
                           )}
-                          {user.status === 0 ? "Unhold" : "Hold"}
-                        </button>
-                        <button
-                          className="bg-red-500 text-white px-3 py-1 rounded-lg flex items-center"
-                          onClick={() => handleDeleteUser(user._id)}
-                        >
-                          <FaTrash className="mr-2" /> Delete
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
           </div>
@@ -332,20 +356,38 @@ function ManageUser() {
                 <option value="placement-cell">Placement Cell</option>
                 <option value="company-coordinator"> Company</option>
               </select>
-              <select
-                className="w-full p-2 border border-gray-300 rounded-lg"
-                value={modifiedUser.college}
-                onChange={(e) =>
-                  setModifiedUser({ ...modifiedUser, college: e.target.value })
-                }
-              >
-                <option value="">Select College</option>
-                {colleges.map((college) => (
-                  <option key={college._id} value={college._id}>
-                    {college.name}
-                  </option>
-                ))}
-              </select>
+              {newUser.role === "company-coordinator" ? (
+                <select
+                  value={newUser.company}
+                  onChange={(e) =>
+                    setNewUser({ ...newUser, company: e.target.value })
+                  }
+                  className="border border-gray-300 p-2 mb-4 w-full"
+                  required
+                >
+                  <option value="">Select Company</option>
+                  {companies.map((company) => (
+                    <option key={company._id} value={company._id}>
+                      {company.companyname}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <select
+                  className="w-full p-2 border border-gray-300 rounded-lg"
+                  value={newUser.college}
+                  onChange={(e) =>
+                    setNewUser({ ...newUser, college: e.target.value })
+                  }
+                >
+                  <option value="">Select College</option>
+                  {colleges.map((college) => (
+                    <option key={college._id} value={college._id}>
+                      {college.name}
+                    </option>
+                  ))}
+                </select>
+              )}
             </div>
             <div className="mt-6 flex justify-end space-x-4">
               <button
@@ -412,24 +454,42 @@ function ManageUser() {
                 <option value="student">Student</option>
                 <option value="admin">Admin</option>
                 <option value="placementcell-coordinator">
-                  Placement Cell
+                  Placement Cell Coordinator
                 </option>
-                <option value="company-coordinator">Company</option>
+                <option value="company-coordinator">Company Coordinator</option>
               </select>
-              <select
-                className="w-full p-2 border border-gray-300 rounded-lg"
-                value={newUser.college}
-                onChange={(e) =>
-                  setNewUser({ ...newUser, college: e.target.value })
-                }
-              >
-                <option value="">Select College</option>
-                {colleges.map((college) => (
-                  <option key={college._id} value={college._id}>
-                    {college.name}
-                  </option>
-                ))}
-              </select>
+              {newUser.role === "company-coordinator" ? (
+                <select
+                  value={newUser.company}
+                  onChange={(e) =>
+                    setNewUser({ ...newUser, company: e.target.value })
+                  }
+                  className="border border-gray-300 p-2 mb-4 w-full"
+                  required
+                >
+                  <option value="">Select Company</option>
+                  {companies.map((company) => (
+                    <option key={company._id} value={company._id}>
+                      {company.companyname}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <select
+                  className="w-full p-2 border border-gray-300 rounded-lg"
+                  value={newUser.college}
+                  onChange={(e) =>
+                    setNewUser({ ...newUser, college: e.target.value })
+                  }
+                >
+                  <option value="">Select College</option>
+                  {colleges.map((college) => (
+                    <option key={college._id} value={college._id}>
+                      {college.name}
+                    </option>
+                  ))}
+                </select>
+              )}
             </div>
             <div className="mt-6 flex justify-end space-x-4">
               <button

@@ -1,60 +1,49 @@
-const mongoose = require('mongoose');
-const User = require('./User');
-const bcrypt = require('bcryptjs');
+const 
+  mongoose = require('mongoose'); // Import mongoose
+const User = require('./User'); // Import the base User model
 
-// Define the Company schema
-const CompanySchema = new mongoose.Schema({
-  companyname: {
+
+const companyCoordinatorSchema = new mongoose.Schema({
+  phoneNumber: {
     type: String,
-    trim: true,
+    required: false,
   },
-  country: {
+  designation: {
     type: String,
-    trim: true,
+    required: false,
   },
-  state: {
+  company: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Company',
+    required: true,
+  },
+  department: {
     type: String,
-    trim: true,
+    required: false,
   },
   city: {
     type: String,
-    trim: true,
+    required: false,
   },
-  contactno: {
+  state: {
     type: String,
-    trim: true,
-    match: [/^\+?[1-9]\d{1,14}$/, 'Invalid contact number format'], 
+    required: false,
   },
-  website: {
+  country: {
     type: String,
-    trim: true,
+    required: false,
   },
-  aboutme: {
+  pincode: {
     type: String,
-    default: null,
-    trim: true,
+    required: false,
   },
-  logo: {
+  notes: {
     type: String,
-    trim: true,
+    required: false,
   },
-  
-});
+}); // No timestamps option here
 
-// Pre-save hook to hash the password before saving
-CompanySchema.pre('save', async function (next) {
-  if (this.isModified('password')) {
-    try {
-      const salt = await bcrypt.genSalt(10);
-      this.password = await bcrypt.hash(this.password, salt);
-    } catch (error) {
-      return next(error);
-    }
-  }
-  next();
-});
+// Create a discriminator for `company-coordinator`
+const CompanyCoordinator = User.discriminator('company-coordinator', companyCoordinatorSchema);
 
-// Create the Company model as a discriminator of User
-const Company = User.discriminator('Company', CompanySchema);
-
-module.exports = Company;
+module.exports = CompanyCoordinator;

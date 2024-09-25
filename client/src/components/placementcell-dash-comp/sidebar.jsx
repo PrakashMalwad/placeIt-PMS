@@ -1,7 +1,7 @@
 
 import PropTypes from 'prop-types';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { FaUser, FaCalendarCheck, FaSignOutAlt, FaBars, FaTimes, FaGraduationCap, FaCogs, FaUsers } from 'react-icons/fa';
+import { FaUser, FaCalendarCheck, FaSignOutAlt, FaBars, FaTimes, FaGraduationCap, FaCogs, FaUsers,  FaClipboardList } from 'react-icons/fa';
 
 function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
   const navigate = useNavigate();
@@ -64,6 +64,7 @@ function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
                 <span className="text-sm">Manage Students</span>
               </NavLink>
             </li>
+           
             <li>
               <NavLink
                 to="manage-drive"
@@ -73,6 +74,17 @@ function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
               >
                 <FaGraduationCap className="mr-3 text-xl" aria-hidden="true" />
                 <span className="text-sm"> Manage Drive</span>
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                to="view-drive-request"
+                className={({ isActive }) =>
+                  isActive ? `${linkClasses} ${activeLinkClasses}` : linkClasses
+                }
+              >
+                <FaClipboardList className="mr-3 text-xl" aria-hidden="true" />
+                <span className="text-sm">View Drive Request</span>
               </NavLink>
             </li>
             <li>

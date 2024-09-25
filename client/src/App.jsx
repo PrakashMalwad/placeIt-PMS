@@ -34,7 +34,7 @@ import ManageUser from "./components/admin-dash-comp/ManageUser";
 import Reports from "./components/admin-dash-comp/reports";
 import SettingsPage from "./components/admin-dash-comp/settings";
 import ManageCollege from "./components/admin-dash-comp/ManageCollege";
-
+import ManageCompany from "./components/admin-dash-comp/ManageCompany";
 
 // Placement Cell Components
 import ManageStudents from "./components/placementcell-dash-comp/ManageStudents";
@@ -42,7 +42,8 @@ import PManageDrive from "./components/placementcell-dash-comp/ManageDrives";
 import PlacementCellEnquiryForm from "./pages/placementcellequiry";
 import CompanyEnquiryForm from "./pages/companyEnquiry";
 import AdminEnquiries from "./components/admin-dash-comp/showEnquiry";
-
+import ViewDriveRequest from "./components/placementcell-dash-comp/ViewDriveRequest";
+import ShowApplication from "./components/placementcell-dash-comp/ShowApplication";
 
 function App() {
   return (
@@ -52,14 +53,20 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/register" element={<RoleSelection />} />
-        <Route path="/register/studentRegister" element={<StudentRegisterPage />} />
-        <Route path="/register/companyRegister" element={<CompanyEnquiryForm />} />
-        
+        <Route
+          path="/register/studentRegister"
+          element={<StudentRegisterPage />}
+        />
+        <Route
+          path="/register/companyRegister"
+          element={<CompanyEnquiryForm />}
+        />
+
         {/* Placement Cell Enquiry Form */}
-        <Route path="/register/placementCellRegister" element={<PlacementCellEnquiryForm />} />
-
-
-
+        <Route
+          path="/register/placementCellRegister"
+          element={<PlacementCellEnquiryForm />}
+        />
 
         {/* Protected Student Dashboard Routes */}
         <Route
@@ -78,12 +85,11 @@ function App() {
           <Route path="mailbox" element={<Mailbox />} />
           <Route path="interviews" element={<Interviews />} />
           <Route path="settings" element={<Settings />} />
-          
+
           <Route path="profile" element={<StudentProfile />}>
             <Route path="edit-profile" element={<EditProfile />} />
           </Route>
         </Route>
-
 
         {/* Protected Company Dashboard Routes */}
         <Route
@@ -108,7 +114,8 @@ function App() {
           <Route path="manage-users" element={<ManageUser />} />
           <Route path="reports" element={<Reports />} />
           <Route path="settings" element={<SettingsPage />} />
-          <Route path="manage-college" element={<ManageCollege />}/>
+          <Route path="manage-college" element={<ManageCollege />} />
+          <Route path="manage-company" element={<ManageCompany />} />
           <Route path="manage-drive" element={<ManageDrive />}>
             <Route path="create-drive" element={<CreateDrive />} />
           </Route>
@@ -128,8 +135,26 @@ function App() {
           }
         >
           <Route path="manage-students" element={<ManageStudents />} />
+          <Route path="view-drive-request" element={<ViewDriveRequest />} />
           <Route path="manage-drive" element={<PManageDrive />} />
+          <Route
+            path="manage-drive/applications/:id"
+            element={<ShowApplication />}
+          />
+
           <Route path="settings" element={<SettingsPage />} />
+        </Route>
+
+        {/* Protected Company Dashboard Routes */}
+        <Route
+          path="/admin/dashboard"
+          element={
+            <ProtectedRoute>
+              <CompanyDashboard />
+            </ProtectedRoute>
+          }
+        >
+          <Route path="manage-drive" element={<ManageDrive />}></Route>
         </Route>
 
         {/* Error Page Route */}
