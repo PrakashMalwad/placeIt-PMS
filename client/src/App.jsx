@@ -53,6 +53,7 @@ import RequestedDrives from "./components/company-dash-comp/RequestedDrives";
 import ScheduledDrive from "./components/company-dash-comp/ScheduledDrive";
 import ManageInterview from "./components/company-dash-comp/ManageInterview";
 import ScheduleInterview from "./components/company-dash-comp/ScheduledInterview";
+import StudentInterviews from "./components/student-dash-comp/StudentInterview";
 
 function App() {
   return (
@@ -92,11 +93,13 @@ function App() {
           <Route path="my-skills" element={<MySkills />} />
           <Route path="my-applications" element={<MyApplications />} />
           <Route path="mailbox" element={<Mailbox />} />
-          <Route path="interviews" element={<Interviews />} />
+        
           <Route path="settings" element={<Settings />} />
           <Route path="profile" element={<StudentProfile />}>
             <Route path="edit-profile" element={<EditProfile />} />
           </Route>
+          <Route path="interviews" element={<StudentInterviews />} />
+
         </Route>
 
         {/* Protected Company Dashboard Routes */}

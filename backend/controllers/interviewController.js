@@ -102,10 +102,10 @@ const deleteInterview = async (req, res) => {
 //update interview
 const updateInterview = async (req, res) => {
     const { id } = req.params;
-    const { status, feedback,...other } = req.body;
+    const { ...other } = req.body;
 
     try {
-        const interview = await Interview.findByIdAndUpdate(id, { status, feedback ,...other}, { new: true });
+        const interview = await Interview.findByIdAndUpdate(id, { ...other}, { new: true });
 
         if (!interview) {
             return res.status(404).json({ message: 'Interview not found' });
@@ -122,6 +122,7 @@ module.exports = {
     scheduleInterview,
     getInterviews,
     getInterviewByStudent,
+    deleteInterview,
     updateInterview,
     getInterviewByCompany
 };

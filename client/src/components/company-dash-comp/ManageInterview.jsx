@@ -34,11 +34,11 @@ const ManageInterviews = () => {
     // Function to delete an interview
     const deleteInterview = async () => {
         try {
-            await axios.delete(`${apiUrl}/api/interviews/delete${selectedInterview._id}`);
+            await axios.delete(`${apiUrl}/api/interviews/delete/${selectedInterview._id}`);
             setInterviews(interviews.filter((interview) => interview._id !== selectedInterview._id));
             setIsDeleteModalOpen(false);
         } catch (error) {
-            setError('Failed to delete interview');
+            setError('Failed to delete interview',error);
             setIsDeleteModalOpen(false);
         }
     };
@@ -62,7 +62,7 @@ const ManageInterviews = () => {
             fetchInterviews();
             setIsModalOpen(false);
         } catch (error) {
-            setError('Failed to update interview');
+            setError('Failed to update interview',error);
             setIsModalOpen(false);
         }
     };
