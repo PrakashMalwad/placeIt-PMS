@@ -9,6 +9,7 @@ import {
   FaSpinner,
   FaExclamationCircle,
   FaCheck,
+  FaTimes,
 } from "react-icons/fa";
 const apiUrl = import.meta.env.VITE_BACKEND_URL;
 
@@ -111,7 +112,7 @@ function ManageUser() {
     try {
       const response = await axios.post(`${apiUrl}/api/users`, newUser);
       setUsers([...users, response.data]);
-      setIsAddUserModalOpen(false);
+      setIsAddUserModalOpen(false); 
       setNewUser({
         name: "",
         email: "",
@@ -310,7 +311,14 @@ function ManageUser() {
       {isModifyUserModalOpen && (
         <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
           <div className="bg-white p-8 rounded-lg shadow-lg w-1/2">
+          <button
+                className="bg-gray-200 p-4 rounded-full mt-0 mb-2 self-end"
+                onClick={() => setIsModifyUserModalOpen(false)}
+              >
+                <FaTimes />
+              </button>
             <h2 className="text-2xl mb-4">Modify User</h2>
+              
             <div className="space-y-4">
               <input
                 type="text"

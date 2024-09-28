@@ -65,10 +65,13 @@ function ManageStudents() {
   const fetchColleges = async () => {
     try {
       const storedUser = sessionStorage.getItem('user');
+      const token = sessionStorage.getItem("token");
       const user = storedUser ? JSON.parse(storedUser) : null;
       const currentuserId = user ? user.id : null;
       // const user = sessionStorage.getItem("user");
-      const response = await fetch(`${apiUrl}/api/users/mycollege/${currentuserId}`)
+      const response = await fetch(`${apiUrl}/api/users/mycollege/${currentuserId}`,{ headers: {
+        Authorization: `Bearer ${token}`,
+      },})
       ;
       const data = await response.json();
       setColleges(data);
@@ -99,7 +102,7 @@ function ManageStudents() {
   };
 
   const handleAddStudent = async () => {
-    if (!newStudent.name || !newStudent.email || !newStudent.phone || !newStudent.college) {
+    if (!newStudent.name || !newStudent.email || !newStudent.contactno || !newStudent.college) {
       toast.error("Please fill in all required fields");
       return;
     }
@@ -112,17 +115,16 @@ function ManageStudents() {
       });
       setStudents([...students, response.data]);
       setIsAddStudentModalOpen(false);
-      setNewStudent({ name: "", email: "", contactno: "", college: "",role:"student" });
-      setError(null);
+      fetchStudents()
+      setNewStudent({ name: "", email: "", password: "", contactno: "", college: "", role: "student" });
       toast.success("Student added successfully");
     } catch (error) {
-      setError("Error adding student: " + error.message);
-      toast.error("Error adding student");
+      toast.error("Error adding student: " + error.message);
     }
   };
 
   const handleModifyStudent = async () => {
-    if (!modifiedStudent.name || !modifiedStudent.email || !modifiedStudent.phone) {
+    if (!modifiedStudent.name || !modifiedStudent.email || !modifiedStudent.contactno) {
       toast.error("Please fill in all required fields");
       return;
     }
@@ -141,11 +143,9 @@ function ManageStudents() {
         student._id === selectedStudent._id ? response.data : student
       ));
       setIsModifyStudentModalOpen(false);
-      setError(null);
       toast.success("Student modified successfully");
     } catch (error) {
-      setError("Error modifying student: " + error.message);
-      toast.error("Error modifying student");
+      toast.error("Error modifying student: " + error.message);
     }
   };
 
@@ -356,7 +356,7 @@ function ManageStudents() {
               </button>
               <button
                 className="bg-green-500 text-white px-4 py-2 rounded-lg"
-                onClick={handleAddStudent}
+                onClick={handleAddStudent()}
               >
                 Add Student
               </button>

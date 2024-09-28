@@ -1,5 +1,9 @@
 const mongoose = require('mongoose');
 const { GridFSBucket } = require('mongodb');
+const Student = require('../models/Users/Students');
+const Drive = require('../models/JobDrives');
+const Company = require('../models/Company');
+const { updatePlacementStatistics } = require('../services/placementStatisticService');
 
 let gfs, gridfsBucket;
 
@@ -18,6 +22,37 @@ const connectDB = async () => {
 
         // Initialize GridFS Stream
         gfs = gridfsBucket;
+
+        //set watcher 
+
+// Function to start watching for changes in collections
+const startChangeStream = () => {
+    // Watch for changes in the Student collection
+    const studentChangeStream = Student.watch();
+    studentChangeStream.on("change", async (change) => {
+      console.log("Change detected in Student collection:", change);
+      const collegeId = change.fullDocument?.college; // Ensure collegeId is accessible
+      if (collegeId) {
+        await updatePlacementStatistics(collegeId);
+      }
+    });
+  
+    // Watch for changes in the Drive collection
+    const driveChangeStream = Drive.watch();
+    driveChangeStream.on("change", async (change) => {
+      console.log("Change detected in Drive collection:", change);
+      const collegeId = change.fullDocument?.college; // Ensure collegeId is accessible
+      if (collegeId) {
+        await updatePlacementStatistics(collegeId);
+      }
+    });
+  
+    console.log("Started watching for changes in Student and Drive collections...");
+  };
+  
+  // Start watching when the application starts
+  startChangeStream();
+
     } catch (error) {
         console.error('MongoDB connection failed', error);
         process.exit(1);

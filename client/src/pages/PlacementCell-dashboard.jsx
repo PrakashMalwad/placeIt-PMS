@@ -4,6 +4,7 @@ import Footer from '../components/footer';
 import Sidebar from '../components/placementcell-dash-comp/sidebar'; 
 import { useState, useEffect } from 'react';
 import { FaExclamationTriangle } from 'react-icons/fa';
+import { ToastContainer } from 'react-toastify';
 
 const PlacementCellDashBoard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -40,6 +41,18 @@ const PlacementCellDashBoard = () => {
     );
   } else {
     return (
+    <>
+      <ToastContainer
+      position="top-right"
+      autoClose={5000}
+      hideProgressBar={false}
+      newestOnTop={false}
+      closeOnClick
+      rtl={false}
+      pauseOnFocusLoss
+      draggable
+      pauseOnHover
+    />
       <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6 text-center">
         <FaExclamationTriangle className="text-red-600 text-6xl mb-4" aria-hidden="true" />
         <h1 className="text-4xl font-bold text-gray-800 mb-4">Oops! Access Denied</h1>
@@ -51,6 +64,7 @@ const PlacementCellDashBoard = () => {
           Go Back to Home
         </Link>
       </div>
+      </>
     );
   }
 };

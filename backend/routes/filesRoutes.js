@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const multer = require("multer");
-const supabase = require("../subabaseclient");
+const supabase = require("../services/subabaseclient");
 const User = require("../models/Users/User");
 
 // Initialize Multer

@@ -1,7 +1,7 @@
 
 import PropTypes from 'prop-types';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { FaUser, FaTools, FaCalendarCheck, FaGraduationCap, FaSignOutAlt, FaBars, FaTimes, FaClipboardList } from 'react-icons/fa';
+import { FaUser, FaCalendarCheck, FaSignOutAlt, FaBars, FaTimes, FaClipboardList, FaPlane } from 'react-icons/fa';
 
 function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
   
@@ -48,39 +48,30 @@ function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
             </li>
             <li>
               <NavLink
-                to="show-drive"
+                to="request-drive"
                 className={({ isActive }) => isActive ? `${linkClasses} ${activeLinkClasses}` : linkClasses}
               >
-                <FaGraduationCap className="mr-3 text-xl" aria-hidden="true" />
-                <span className="text-sm">Show Active Drive</span>
+                <FaPlane className="mr-3 text-xl" aria-hidden="true" />
+                <span className="text-sm">Request Job Drive</span>
               </NavLink>
             </li>
             <li>
               <NavLink
-                to="my-applications"
+                to="view-drive"
                 className={({ isActive }) => isActive ? `${linkClasses} ${activeLinkClasses}` : linkClasses}
               >
                 <FaClipboardList className="mr-3 text-xl" aria-hidden="true" />
-                <span className="text-sm">My Applications</span>
+                <span className="text-sm">View Drive</span>
               </NavLink>
             </li>
-            
+           
             <li>
               <NavLink
-                to="my-skills"
-                className={({ isActive }) => isActive ? `${linkClasses} ${activeLinkClasses}` : linkClasses}
-              >
-                <FaTools className="mr-3 text-xl" aria-hidden="true" />
-                <span className="text-sm">My Skills</span>
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="interviews"
+                to="manage-interview"
                 className={({ isActive }) => isActive ? `${linkClasses} ${activeLinkClasses}` : linkClasses}
               >
                 <FaCalendarCheck className="mr-3 text-xl" aria-hidden="true" />
-                <span className="text-sm">Interviews</span>
+                <span className="text-sm">Manage Interviews</span>
               </NavLink>
             </li>
             

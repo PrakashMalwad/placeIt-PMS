@@ -78,7 +78,7 @@ const handleCloseModal = () => {
 
       {drive ? (
         <h2 className="text-2xl font-bold text-center my-4 text-gray-800">
-          Applications for {drive.company}
+          Applications for {drive.company.name}
         </h2>
       ) : (
         <h2 className="text-2xl font-bold text-center my-4 text-gray-800">
@@ -99,7 +99,7 @@ const handleCloseModal = () => {
           {applications.map((application) => (
             <tr key={application._id}>
               <td className="border px-4 py-2">
-                {application.student?.name || "N/A"}
+                {application.student.name || "N/A"}
               </td>
               <td className="border px-4 py-2">
                 {new Date(application.appliedDate).toLocaleDateString()}
@@ -109,7 +109,7 @@ const handleCloseModal = () => {
               </td>
               <td className="border px-4 py-2">
                 <button
-                  onClick={() => handleViewResume(application.resumeUrl)}
+                  onClick={() => handleViewResume(application.studentResume)}
                   className="bg-gray-200 p-2 text-blue-500"
                 >
                   View Resume

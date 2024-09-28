@@ -29,6 +29,8 @@ const StudentSchema = new mongoose.Schema({
     skills: { type: String },
     designation: { type: String },
     resume: { type: String },
+    isEligible: { type: Boolean, default: true },
+    isPlaced: { type: Boolean, default: false },
     profileImage: { type: String }, 
     termsAccepted: { type: Boolean, default:false}
 });

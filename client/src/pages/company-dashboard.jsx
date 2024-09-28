@@ -4,13 +4,31 @@ import Footer from '../components/footer';
 import Sidebar from '../components/company-dash-comp/sidebar'; 
 import { useState, useEffect } from 'react';
 import { FaExclamationTriangle } from 'react-icons/fa';
+import axios from 'axios';
+const apiUrl = import.meta.env.VITE_BACKEND_URL;
 
 const CompanyDasboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [userRole, setUserRole] = useState("");
-
+    // Add the Authorization header to axios
+    useEffect(() => {
+      const token = sessionStorage.getItem('token');
+      if (token) {
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`; // Set default header for all Axios requests
+      }
+    }, []);
+  const fetchCompany = async () => {
+    try {
+      const response = await axios.get(`${apiUrl}/api/get/mycompany`);
+      sessionStorage.setItem('mycompany', JSON.stringify(response.data)); 
+    } catch (error) {
+      console.error("Failed to fetch company data:", error);
+    }
+  };
+  
   // Effect to fetch user data from localStorage
   useEffect(() => {
+    fetchCompany()
     const storedUser = sessionStorage.getItem("user");
     if (storedUser) {
       try {
@@ -26,7 +44,7 @@ const CompanyDasboard = () => {
   if (userRole === "company-coordinator") {
     return (
       <div className="flex flex-col h-screen">
-        <Navbar setIsSidebarOpen={setIsSidebarOpen} role='placementcell-coordinator' />
+        <Navbar setIsSidebarOpen={setIsSidebarOpen} role='company-coordinator' />
         <div className="flex flex-1">
           <Sidebar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
           <main className={`flex-1 p-6 lg:p-12 bg-gray-100 transition-transform duration-300 ease-in-out ${isSidebarOpen ? 'ml-64' : 'ml-0'}`}>

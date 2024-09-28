@@ -104,7 +104,7 @@ function ShowDrive() {
               key={drive._id}
               className="bg-white shadow-lg rounded-lg p-4 hover:shadow-2xl transform hover:scale-105 transition duration-300" // Reduced padding for mobile
             >
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">{drive.company}</h3> {/* Adjusted font size */}
+              <h3 className="text-xl font-semibold text-gray-800 mb-2">{drive.company.companyname}</h3> {/* Adjusted font size */}
               <p className="text-gray-500 mb-1">{new Date(drive.date).toLocaleDateString()}</p>
               <p className="text-gray-500 mb-1">{drive.location}</p>
               <p className="text-gray-500 mb-2">{drive.eligibilityCriteria}</p>

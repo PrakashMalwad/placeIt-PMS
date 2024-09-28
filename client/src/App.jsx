@@ -35,6 +35,7 @@ import Reports from "./components/admin-dash-comp/reports";
 import SettingsPage from "./components/admin-dash-comp/settings";
 import ManageCollege from "./components/admin-dash-comp/ManageCollege";
 import ManageCompany from "./components/admin-dash-comp/ManageCompany";
+import AdminProfile from "./components/admin-dash-comp/profile";
 
 // Placement Cell Components
 import ManageStudents from "./components/placementcell-dash-comp/ManageStudents";
@@ -44,6 +45,14 @@ import CompanyEnquiryForm from "./pages/companyEnquiry";
 import AdminEnquiries from "./components/admin-dash-comp/showEnquiry";
 import ViewDriveRequest from "./components/placementcell-dash-comp/ViewDriveRequest";
 import ShowApplication from "./components/placementcell-dash-comp/ShowApplication";
+
+//Company Components
+import RequestDrive from "./components/company-dash-comp/RequestJobDrive";
+import { DriveProvider } from "./components/placementcell-dash-comp/DriveContext";
+import RequestedDrives from "./components/company-dash-comp/RequestedDrives";
+import ScheduledDrive from "./components/company-dash-comp/ScheduledDrive";
+import ManageInterview from "./components/company-dash-comp/ManageInterview";
+import ScheduleInterview from "./components/company-dash-comp/ScheduledInterview";
 
 function App() {
   return (
@@ -85,21 +94,34 @@ function App() {
           <Route path="mailbox" element={<Mailbox />} />
           <Route path="interviews" element={<Interviews />} />
           <Route path="settings" element={<Settings />} />
-
           <Route path="profile" element={<StudentProfile />}>
             <Route path="edit-profile" element={<EditProfile />} />
           </Route>
         </Route>
 
         {/* Protected Company Dashboard Routes */}
+        
+        
         <Route
-          path="/company/dashboard"
+          path="/company-coordinator/dashboard"
           element={
             <ProtectedRoute>
               <CompanyDashboard />
             </ProtectedRoute>
           }
-        />
+        >
+          <Route path="request-drive" element={<RequestDrive />} />
+          <Route path="view-drive" element={<RequestedDrives />} />
+          <Route
+            path="view-drive/scheduled-drive/:applicationId"
+            element={<ScheduledDrive />}
+          />
+          <Route path="manage-interview" element={<ManageInterview />} />
+          <Route
+            path="schedule-interview/:id"
+            element={<ScheduleInterview />}
+          />
+        </Route>
 
         {/* Protected Admin Dashboard Routes */}
         <Route
@@ -110,7 +132,6 @@ function App() {
             </ProtectedRoute>
           }
         >
-          {/* <Route index element={<SystemAnalytics />} /> */}
           <Route path="manage-users" element={<ManageUser />} />
           <Route path="reports" element={<Reports />} />
           <Route path="settings" element={<SettingsPage />} />
@@ -120,6 +141,7 @@ function App() {
             <Route path="create-drive" element={<CreateDrive />} />
           </Route>
           <Route path="showEnquiries" element={<AdminEnquiries />} />
+          <Route path="profile" element={<AdminProfile />} />
         </Route>
 
         {/* Additional Admin Routes */}
@@ -135,26 +157,31 @@ function App() {
           }
         >
           <Route path="manage-students" element={<ManageStudents />} />
-          <Route path="view-drive-request" element={<ViewDriveRequest />} />
-          <Route path="manage-drive" element={<PManageDrive />} />
+
+          {/* DriveProvider to wrap placement cell specific routes */}
+          <Route
+            path="manage-drive"
+            element={
+              <DriveProvider>
+                <PManageDrive />
+              </DriveProvider>
+            }
+          />
+          <Route
+            path="view-drive-request"
+            element={
+              <DriveProvider>
+                <ViewDriveRequest />
+              </DriveProvider>
+            }
+          />
+
           <Route
             path="manage-drive/applications/:id"
             element={<ShowApplication />}
           />
 
           <Route path="settings" element={<SettingsPage />} />
-        </Route>
-
-        {/* Protected Company Dashboard Routes */}
-        <Route
-          path="/admin/dashboard"
-          element={
-            <ProtectedRoute>
-              <CompanyDashboard />
-            </ProtectedRoute>
-          }
-        >
-          <Route path="manage-drive" element={<ManageDrive />}></Route>
         </Route>
 
         {/* Error Page Route */}

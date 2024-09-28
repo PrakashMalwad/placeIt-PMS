@@ -19,6 +19,18 @@ exports.getUserCount = async () => {
     return 0;
   }
 }
+//get my company
+exports.getMyCompany = async (req, res) => {
+  try {
+    const user = await CompanyCoordinator.findById(req.user.id
+      ).populate('company','name contactNumber');
+    if (!user) return res.status(404).json({ message: 'User not found' });
+      
+    res.json(user.company);
+  } catch (err) {
+    res.status(500).json({ message: 'Error retrieving company: ' + err.message });
+  }
+};  
 
 // company coord count 
 exports.getCompanyCoordinatorCount = async () => {

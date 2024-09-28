@@ -20,9 +20,12 @@ const CollegeManagement = () => {
   const [editingId, setEditingId] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1); // For pagination
+  const [logoPreview, setLogoPreview] = useState(null); // For logo previe
+  const collegesPerPage = 6; // Number of colleges per page
 
   useEffect(() => {
-    fetchColleges();
+    fetchColleges(); // Fetch all colleges on mount
   }, []);
 
   const fetchColleges = async () => {
@@ -30,18 +33,28 @@ const CollegeManagement = () => {
       const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/colleges`);
       setColleges(response.data);
     } catch (error) {
-      setError('Error fetching colleges',error);
+      setError(`Error fetching colleges: ${error.message}`);
     }
   };
+
   useEffect(() => {
     const token = sessionStorage.getItem('token');
     if (token) {
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`; // Set default header for all Axios requests
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     }
   }, []);
+
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({ ...prevData, [name]: value }));
+    const { name, value, files } = e.target;
+    if (name === 'logo') {
+      const file = files[0];
+      if (file) {
+        setFormData((prevData) => ({ ...prevData, [name]: file }));
+        setLogoPreview(URL.createObjectURL(file)); // Preview the selected logo
+      }
+    } else {
+      setFormData((prevData) => ({ ...prevData, [name]: value }));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -49,17 +62,33 @@ const CollegeManagement = () => {
     setLoading(true);
     setError(null);
 
-    try {
-      if (editingId) {
-        await axios.put(`${import.meta.env.VITE_BACKEND_URL}/api/colleges/${editingId}`, formData);
-        setEditingId(null); // Reset editing state
-      } else {
-        await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/colleges`, formData);
+    // Form validation
+    const requiredFields = ['name', 'address', 'contactNumber', 'website', 'type', 'state', 'city', 'pincode'];
+    for (const field of requiredFields) {
+      if (!formData[field]) {
+        setError(`Please fill in the ${field} field`);
+        setLoading(false);
+        return;
       }
-      fetchColleges(); // Refresh the college list
+    }
+
+    try {
+      const collegeData = new FormData();
+      for (const key in formData) {
+        collegeData.append(key, formData[key]);
+      }
+
+      if (editingId) {
+        await axios.put(`${import.meta.env.VITE_BACKEND_URL}/api/colleges/${editingId}`, collegeData);
+        setEditingId(null);
+      } else {
+        await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/colleges`, collegeData);
+      }
+
+      fetchColleges(); // Refetch data
       resetForm();
     } catch (error) {
-      setError('Error submitting the form',error);
+      setError(`Error submitting the form: ${error.message}`);
     } finally {
       setLoading(false);
     }
@@ -68,15 +97,16 @@ const CollegeManagement = () => {
   const handleEdit = (college) => {
     setFormData(college);
     setEditingId(college._id);
+    setLogoPreview(college.logo);
   };
 
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this college?')) {
       try {
         await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/api/colleges/${id}`);
-        fetchColleges(); // Refresh the college list
+        fetchColleges(); // Refetch data after deletion
       } catch (error) {
-        setError('Error deleting the college',error);
+        setError(`Error deleting the college: ${error.message}`);
       }
     }
   };
@@ -96,34 +126,29 @@ const CollegeManagement = () => {
       establishmentYear: '',
       affiliation: '',
     });
+    setLogoPreview(null);
   };
 
+  // Pagination Logic
+  const indexOfLastCollege = currentPage * collegesPerPage;
+  const indexOfFirstCollege = indexOfLastCollege - collegesPerPage;
+  const currentColleges = colleges.slice(indexOfFirstCollege, indexOfLastCollege);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  const totalPages = Math.ceil(colleges.length / collegesPerPage);
+
   return (
-    <div className="container mx-auto px-2 py-12">
-     
-      <h3 className="text-2xl font-bold mb-4">Colleges List</h3>
-      <ul className="space-y-4">
-        {colleges.map((college) => (
-          <li key={college._id} className="bg-gray-100 p-4 rounded-lg flex justify-between">
-            <div>
-              <h4 className="font-bold">{college.name}</h4>
-              <p>{college.address}</p>
-              <p>{college.contactNumber}</p>
-              {/* Add any other fields you want to display */}
-            </div>
-            <div className="flex space-x-2">
-              <button onClick={() => handleEdit(college)} className="text-blue-500">Edit</button>
-              <button onClick={() => handleDelete(college._id)} className="text-red-500">Delete</button>
-            </div>
-          </li>
-        ))}
-      </ul>
-      <h2 className="text-3xl pt-6 font-bold text-center mb-6"> Manage College</h2>
-      {error && <p className="text-red-500 text-center">{error}</p>}
-      <form onSubmit={handleSubmit} className="bg-white rounded-lg md:p-4 ">
-        <div className="grid md:grid-cols-2 gap-4">
+    <div className="container mx-auto py-12 px-4">
+      <h2 className="text-4xl font-extrabold text-center text-gray-800 mb-6">Manage Colleges</h2>
+
+      {error && <p className="text-red-600 bg-red-100 p-3 rounded-lg text-center mb-4">{error}</p>}
+
+
+      <form onSubmit={handleSubmit} className="bg-white shadow-md rounded-lg p-6 mb-8">
+        <div className="grid md:grid-cols-2 gap-6">
           <div className="mb-4">
-            <label className="block text-gray-700 mb-2" htmlFor="name">Name</label>
+            <label className="block text-gray-700 font-semibold" htmlFor="name">College Name</label>
             <input
               type="text"
               id="name"
@@ -131,12 +156,13 @@ const CollegeManagement = () => {
               value={formData.name}
               onChange={handleChange}
               required
-              className="border border-gray-300 rounded-lg p-2 w-full"
+              className="border border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring focus:ring-blue-300"
+              placeholder="Enter college name"
             />
           </div>
 
           <div className="mb-4">
-            <label className="block text-gray-700 mb-2" htmlFor="address">Address</label>
+            <label className="block text-gray-700 font-semibold" htmlFor="address">Address</label>
             <input
               type="text"
               id="address"
@@ -144,12 +170,13 @@ const CollegeManagement = () => {
               value={formData.address}
               onChange={handleChange}
               required
-              className="border border-gray-300 rounded-lg p-2 w-full"
+              className="border border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring focus:ring-blue-300"
+              placeholder="Enter college address"
             />
           </div>
 
           <div className="mb-4">
-            <label className="block text-gray-700 mb-2" htmlFor="contactNumber">Contact Number</label>
+            <label className="block text-gray-700 font-semibold" htmlFor="contactNumber">Contact Number</label>
             <input
               type="tel"
               id="contactNumber"
@@ -157,13 +184,13 @@ const CollegeManagement = () => {
               value={formData.contactNumber}
               onChange={handleChange}
               required
-              className="border border-gray-300 rounded-lg p-2 w-full"
-              
+              className="border border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring focus:ring-blue-300"
+              placeholder="Enter contact number"
             />
           </div>
 
           <div className="mb-4">
-            <label className="block text-gray-700 mb-2" htmlFor="website">Website</label>
+            <label className="block text-gray-700 font-semibold" htmlFor="website">Website</label>
             <input
               type="url"
               id="website"
@@ -171,12 +198,13 @@ const CollegeManagement = () => {
               value={formData.website}
               onChange={handleChange}
               required
-              className="border border-gray-300 rounded-lg p-2 w-full"
+              className="border border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring focus:ring-blue-300"
+              placeholder="Enter website URL"
             />
           </div>
 
           <div className="mb-4">
-            <label className="block text-gray-700 mb-2" htmlFor="logo">Logo URL</label>
+            <label className="block text-gray-700 font-semibold" htmlFor="logo">Logo URL</label>
             <input
               type="text"
               id="logo"
@@ -184,19 +212,20 @@ const CollegeManagement = () => {
               value={formData.logo}
               onChange={handleChange}
               required
-              className="border border-gray-300 rounded-lg p-2 w-full"
+              className="border border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring focus:ring-blue-300"
+              placeholder="Enter logo URL"
             />
           </div>
 
           <div className="mb-4">
-            <label className="block text-gray-700 mb-2" htmlFor="type">Type</label>
+            <label className="block text-gray-700 font-semibold" htmlFor="type">Type</label>
             <select
               id="type"
               name="type"
               value={formData.type}
               onChange={handleChange}
               required
-              className="border border-gray-300 rounded-lg p-2 w-full"
+              className="border border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring focus:ring-blue-300"
             >
               <option value="">Select Type</option>
               <option value="Public">Public</option>
@@ -205,21 +234,10 @@ const CollegeManagement = () => {
             </select>
           </div>
 
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2" htmlFor="university">University</label>
-            <input
-              type="text"
-              id="university"
-              name="university"
-              value={formData.university}
-              onChange={handleChange}
-              required
-              className="border border-gray-300 rounded-lg p-2 w-full"
-            />
-          </div>
+          {/* Additional Form Fields */}
 
           <div className="mb-4">
-            <label className="block text-gray-700 mb-2" htmlFor="state">State</label>
+            <label className="block text-gray-700 font-semibold" htmlFor="state">State</label>
             <input
               type="text"
               id="state"
@@ -227,76 +245,71 @@ const CollegeManagement = () => {
               value={formData.state}
               onChange={handleChange}
               required
-              className="border border-gray-300 rounded-lg p-2 w-full"
-            />
-          </div>
-
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2" htmlFor="city">City</label>
-            <input
-              type="text"
-              id="city"
-              name="city"
-              value={formData.city}
-              onChange={handleChange}
-              required
-              className="border border-gray-300 rounded-lg p-2 w-full"
-            />
-          </div>
-
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2" htmlFor="pincode">Pincode</label>
-            <input
-              type="text"
-              id="pincode"
-              name="pincode"
-              value={formData.pincode}
-              onChange={handleChange}
-              required
-              className="border border-gray-300 rounded-lg p-2 w-full"
-              pattern="[0-9]{6}" // Basic validation for a 6-digit pincode
-              title="Please enter a valid 6-digit pincode"
-            />
-          </div>
-
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2" htmlFor="establishmentYear">Establishment Year</label>
-            <input
-              type="number"
-              id="establishmentYear"
-              name="establishmentYear"
-              value={formData.establishmentYear}
-              onChange={handleChange}
-              required
-              className="border border-gray-300 rounded-lg p-2 w-full"
-              min="1800" // Reasonable lower bound for establishment year
-              max={new Date().getFullYear()} // Current year as upper bound
-            />
-          </div>
-
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2" htmlFor="affiliation">Affiliation</label>
-            <input
-              type="text"
-              id="affiliation"
-              name="affiliation"
-              value={formData.affiliation}
-              onChange={handleChange}
-              required
-              className="border border-gray-300 rounded-lg p-2 w-full"
+              className="border border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring focus:ring-blue-300"
+              placeholder="Enter state"
             />
           </div>
         </div>
         <button
           type="submit"
-          className={`bg-blue-500 text-white rounded-lg py-2 px-4 hover:bg-blue-700 transition duration-200 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+          className={`w-full py-3 mt-4 bg-blue-500 text-white rounded-lg shadow-lg font-semibold hover:bg-blue-700 transition-colors duration-300 ${
+            loading ? 'opacity-50 cursor-not-allowed' : ''
+          }`}
           disabled={loading}
         >
-          {loading ? 'Submitting...' : (editingId ? 'Update College' : 'Add College')}
+          {loading ? 'Submitting...' : editingId ? 'Update College' : 'Add College'}
         </button>
       </form>
 
-      
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {currentColleges.map((college) => (
+          <div key={college._id} className="bg-white shadow-md rounded-lg p-6 hover:shadow-xl transition-shadow duration-300">
+            <h3 className="text-lg font-bold mb-2">{college.name}</h3>
+            <p className="text-gray-600 mb-4">{college.address}</p>
+            <p className="text-gray-600">{college.contactNumber}</p>
+
+            {college.logo && (
+              <img src={college.logo} alt={`${college.name} Logo`} className="w-24 h-24 object-cover mt-4" />
+            )}
+
+            <div className="flex justify-between mt-4">
+              <button
+                onClick={() => handleEdit(college)}
+                className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors"
+              >
+                Edit
+              </button>
+              <button
+                onClick={() => handleDelete(college._id)}
+                className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition-colors"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Pagination Controls */}
+      <div className="flex justify-center mt-6">
+        <ul className="flex list-none">
+          {[...Array(totalPages).keys()].map((page) => (
+            <li key={page} className="mx-1">
+              <button
+                onClick={() => paginate(page + 1)}
+                className={`px-3 py-2 rounded ${
+                  currentPage === page + 1
+                    ? 'bg-blue-500 text-white'
+                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                }`}
+              >
+                {page + 1}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };

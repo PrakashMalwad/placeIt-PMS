@@ -1,12 +1,11 @@
-
 import PropTypes from 'prop-types';
 
 const ResumeModal = ({ isOpen, onClose, resumeUrl }) => {
     if (!isOpen) return null; // Don't render if the modal is closed
 
     return (
-        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-            <div className="bg-white rounded-lg p-5 max-w-md w-full">
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 overflow-y-auto">
+            <div className="bg-white rounded-lg p-5 max-w-screen-md w-full h-auto max-h-screen overflow-y-auto">
                 <h2 className="text-xl font-semibold mb-4">Resume</h2>
                 <iframe
                     src={resumeUrl}
@@ -26,6 +25,7 @@ const ResumeModal = ({ isOpen, onClose, resumeUrl }) => {
         </div>
     );
 };
+
 ResumeModal.propTypes = {
     isOpen: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
@@ -33,4 +33,3 @@ ResumeModal.propTypes = {
 };
 
 export default ResumeModal;
-

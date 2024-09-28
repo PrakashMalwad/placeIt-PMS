@@ -1,24 +1,29 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { toast } from 'react-toastify'; // For success/error messages
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import {FaEdit} from 
+'react-icons/fa';
+import { AiTwotoneEdit } from "react-icons/ai";
+
 const apiUrl = import.meta.env.VITE_BACKEND_URL;
 
-const Profile = () => {
+const AdminProfile = () => {
   const [profile, setProfile] = useState('');
-  const [isEditing, setIsEditing] = useState(false); // Toggle between view and edit modes
+  const [isEditing, setIsEditing] = useState(false);
   const [updatedProfile, setUpdatedProfile] = useState({});
   const [file, setFile] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
-  const [loading, setLoading] = useState(false); // Loading state for profile fetch
-  const [uploading, setUploading] = useState(false); // Uploading state for image
+  const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     setLoading(true);
     axios.get(`${apiUrl}/api/myprofile`)
       .then(response => {
         setProfile(response.data);
-        setUpdatedProfile(response.data); // Initialize the updated profile with current data
+        setUpdatedProfile(response.data);
+        console.log(response.data)
         setLoading(false);
       })
       .catch(error => {
@@ -30,37 +35,30 @@ const Profile = () => {
   const handleInputChange = (e) => {
     setUpdatedProfile({ ...updatedProfile, [e.target.name]: e.target.value });
   };
-
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setUploading(true);
 
     try {
       let imageUrl = updatedProfile.profileImg;
-      
-      // If a new file is uploaded, upload it to the server first
+
       if (file) {
         const formData = new FormData();
         formData.append('file', file);
-        
+
         const uploadResponse = await axios.post(`${apiUrl}/api/file/upload-profile`, formData, {
           headers: { 'Content-Type': 'multipart/form-data' }
         });
         imageUrl = uploadResponse.data.url;
       }
 
-      // Submit updated profile data
-      const updatedData = {
-        ...updatedProfile,
-        profileImg: imageUrl
-      };
+      const updatedData = { ...updatedProfile, profileImg: imageUrl };
 
       await axios.put(`${apiUrl}/api/myprofile`, updatedData);
-      setProfile(updatedData); // Update profile
+      setProfile(updatedData);
       setIsEditing(false);
       toast.success('Profile updated successfully!');
     } catch (error) {
@@ -77,7 +75,7 @@ const Profile = () => {
 
   return (
     <div className="max-w-4xl mx-auto my-10 bg-white p-6 rounded-lg shadow-md">
-      <h2 className="text-2xl font-semibold mb-4 text-gray-800">My Profile</h2>
+      <h2 className="text-2xl font-semibold mb-4 text-gray-800">Admin Profile</h2>
 
       {errorMessage && (
         <div className="bg-red-100 text-red-800 p-3 rounded-md mb-4">
@@ -88,6 +86,10 @@ const Profile = () => {
       {!isEditing ? (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="text-center">
+            <div>
+              <FaEdit />
+              
+            </div>
             <img
               src={profile.profileImg || 'default-profile.png'}
               alt="Profile"
@@ -99,13 +101,10 @@ const Profile = () => {
               <span className="text-gray-500">Name:</span> {profile.name}
             </p>
             <p className="text-lg font-semibold">
-              <span className="text-gray-500">About Me:</span> {profile.aboutme}
+              <span className="text-gray-500">Subrole:</span> {profile.subrole}
             </p>
             <p className="text-lg font-semibold">
-              <span className="text-gray-500">DOB:</span> {new Date(profile.dob).toLocaleDateString()}
-            </p>
-            <p className="text-lg font-semibold">
-              <span className="text-gray-500">Age:</span> {profile.age}
+              <span className="text-gray-500">Permissions:</span> {profile.permissions||'N/A'}
             </p>
             <p className="text-lg font-semibold">
               <span className="text-gray-500">Contact No:</span> {profile.contactno}
@@ -116,46 +115,38 @@ const Profile = () => {
             <p className="text-lg font-semibold">
               <span className="text-gray-500">State:</span> {profile.state}
             </p>
-            <p className="text-lg font-semibold">
-              <span className="text-gray-500">Skills:</span> {profile.skills}
-            </p>
-            <p className="text-lg font-semibold">
-              <span className="text-gray-500">Designation:</span> {profile.designation}
-            </p>
             <button
-              className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-200"
+              className="mt-4 flex item-center justify-center bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-200"
               onClick={() => setIsEditing(true)}
             >
-              Edit Profile
+             <AiTwotoneEdit/> Edit Profile
             </button>
           </div>
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-6">
-           <div>
-            <label className="block text-gray-700">Name:</label>
-            <input
-              name="aboutme"
-              value={updatedProfile.name}
+          {/* Include other fields similar to the User Profile component */}
+          <div>
+            <label className="block text-gray-700">Subrole:</label>
+            <select
+              name="subrole"
+              value={updatedProfile.subrole}
               onChange={handleInputChange}
               className="w-full p-2 border border-gray-300 rounded-md"
-            />
+            >
+              <option value="superadmin">Super Admin</option>
+              <option value="admin">Admin</option>
+              <option value="placementcelladmin">Placement Cell Admin</option>
+              <option value="companyadmin">Company Admin</option>
+            </select>
           </div>
+
           <div>
-            <label className="block text-gray-700">About Me:</label>
-            <textarea
-              name="aboutme"
-              value={updatedProfile.aboutme}
-              onChange={handleInputChange}
-              className="w-full p-2 border border-gray-300 rounded-md"
-            />
-          </div>
-          <div>
-            <label className="block text-gray-700">DOB:</label>
+            <label className="block text-gray-700">Permissions:</label>
             <input
-              type="date"
-              name="dob"
-              value={updatedProfile.dob ? new Date(updatedProfile.dob).toISOString().substr(0, 10) : ''}
+              type="text"
+              name="permissions"
+              value={updatedProfile.permissions}
               onChange={handleInputChange}
               className="w-full p-2 border border-gray-300 rounded-md"
             />
@@ -189,29 +180,8 @@ const Profile = () => {
               onChange={handleInputChange}
               className="w-full p-2 border border-gray-300 rounded-md"
             />
-          </div>
-          <div>
-            <label className="block text-gray-700">Skills:</label>
-            <input
-              type="text"
-              name="skills"
-              value={updatedProfile.skills}
-              onChange={handleInputChange}
-              className="w-full p-2 border border-gray-300 rounded-md"
-            />
-          </div>
-          <div>
-            <label className="block text-gray-700">Designation:</label>
-            <input
-              type="text"
-              name="designation"
-              value={updatedProfile.designation}
-              onChange={handleInputChange}
-              className="w-full p-2 border border-gray-300 rounded-md"
-            />
-          </div>
-        
-          <div>
+</div>
+<div>
             <label className="block text-gray-700">Upload Profile Image:</label>
             <input
               type="file"
@@ -220,6 +190,7 @@ const Profile = () => {
               className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
             />
           </div>
+          {/* Include additional fields like Contact No, City, State */}
           <div className="flex justify-between">
             <button
               type="button"
@@ -242,4 +213,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default AdminProfile;

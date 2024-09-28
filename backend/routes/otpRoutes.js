@@ -1,18 +1,8 @@
-// In your routes file
 const express = require('express');
 const router = express.Router();
-const { sendOTP, verifyOTP } = require('../controllers/otpController');
+const otpController = require('../controllers/otpController'); // Make sure the path is correct
 
-router.post('/send-otp', async (req, res) => {
-  const { email } = req.body;
-  await sendOTP(email);
-  res.json({ message: 'OTP sent to your email.' });
-});
-
-router.post('/verify-otp', (req, res) => {
-  const { email, otp } = req.body;
-  const result = verifyOTP(email, otp);
-  res.json(result);
-});
+router.post('/send-otp', otpController.sendOTP); // Ensure this function is defined
+router.post('/verify-otp', otpController.verifyOTP); // Ensure this function is defined
 
 module.exports = router;

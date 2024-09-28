@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../components/navbar";
 import { Oval } from "react-loader-spinner";
 import Footer from "../components/footer";
+// import useAutoLogout from "../components/useAutoLogout"; 
 const apiUrl = import.meta.env.VITE_BACKEND_URL;
 function SignIn() {
   const [email, setEmail] = useState("");
@@ -41,6 +42,7 @@ function SignIn() {
 
             setSuccessMessage("Login successful!");
             setErrorMessage("");
+          
 
             switch (user.role) {
                 case "student":
@@ -51,7 +53,7 @@ function SignIn() {
                     navigate("/admin/dashboard");
                     break;
                 case "company-coordinator":
-                    navigate("/company/dashboard");
+                    navigate("/company-coordinator/dashboard");
                     break;
                 case "placementcell-coordinator":
                     navigate("/placementcell-coordinator/dashboard");

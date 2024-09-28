@@ -20,6 +20,7 @@ const countApplicationByUser = async (req, res) => {
     }
   };
   
+  
 // Get a job application by student ID
 const getApplicationByStudentId = async (req, res) => {
     try {
@@ -37,8 +38,6 @@ const getApplicationByStudentId = async (req, res) => {
 
 
 // Get a job application by drive ID
-// Get applications by drive ID
-// Get applications by drive ID
 const getApplicationByDriveId = async (req, res) => {
     try {
         const { id } = req.params;

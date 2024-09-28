@@ -2,6 +2,12 @@ const mongoose = require("mongoose");
 
 const driveSchema = new mongoose.Schema({
   company: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref:"Company",
+    required: true,
+    trim: true,
+  },
+  jobtitle:{
     type: String,
     required: true,
     trim: true,

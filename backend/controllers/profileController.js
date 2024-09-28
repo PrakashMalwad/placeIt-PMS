@@ -1,45 +1,52 @@
-// controllers/profileController.js
-const multer = require('multer');
-const { storage } = require('../config/cloudinary');
+
 const User = require('../models/Users/User');
+const Student = require('../models/Users/Students');
 
-const upload = multer({ storage }).single('profileImage');
+// Get the logged-in user's profile
+exports.getProfile = async (req, res) => {
+  try {
+    const userId = req.user.id; // Assuming you're storing the user ID in `req.user` after authentication
+    // Fetch the user profile (assumes you're using a Student model, adjust as needed)
+    const profile = await User.findById(userId).populate('college'); // Populate any relations like 'college'
 
-
-// Upload profile image to Cloudinary
-exports.uploadProfileImage = (req, res) => {
-  const userId = req.params.id; // Get user ID from the route parameter
-
-  upload(req, res, (err) => {
-    if (err) {
-      return res.status(400).json({ success: false, message: 'File upload failed', error: err });
+    if (!profile) {
+      return res.status(404).json({ message: 'Profile not found' });
     }
 
-    // Save the Cloudinary URL in MongoDB with user ID
-    User.findById(userId)
-      .then(user => {
-        if (!user) {
-          return res.status(404).json({ success: false, message: 'User not found' });
-        }
-        user.profileImage = req.file.path;  // Store the Cloudinary URL
-        user.save()
-          .then(() => res.json({ success: true, profileImage: user.profileImage }))
-          .catch(err => res.status(500).json({ success: false, message: 'Error saving profile image', error: err }));
-      })
-      .catch(err => res.status(500).json({ success: false, message: 'Error finding user', error: err }));
-  });
+    res.json(profile);
+  } catch (error) {
+    console.error('Error fetching profile:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
 };
 
-// Get User Profile Image
-exports.getProfileImage = (req, res) => {
-  const userId = req.params.id; // Get user ID from the route parameter
+// Update the logged-in user's profile
+exports.updateProfile = async (req, res) => {
+  try {
+    const userId = req.user.id; // Assuming you're storing the user ID in `req.user`
+    const {
+      ...other
+    } = req.body;
 
-  User.findById(userId)
-    .then(user => {
-      if (!user || !user.profileImage) {
-        return res.status(404).json({ success: false, message: 'User or profile image not found' });
-      }
-      res.json({ success: true, profileImage: user.profileImage });
-    })
-    .catch(err => res.status(500).json({ success: false, message: 'Error fetching user', error: err }));
+    // Find and update the user's profile
+    const updatedProfile = await User.findByIdAndUpdate(
+      userId,
+      {
+        ...other
+      },
+      { new: true, runValidators: true } // Return the updated document and validate input
+    );
+
+    if (!updatedProfile) {
+      return res.status(404).json({ message: 'Profile not found' });
+    }
+
+    res.json(updatedProfile);
+  } catch (error) {
+    console.error('Error updating profile:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
 };
+
+
+

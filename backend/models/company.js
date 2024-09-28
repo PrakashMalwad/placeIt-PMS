@@ -59,7 +59,7 @@ CompanySchema.pre('save', function (next) {
 });
 
 // Create the Company model
-const Company = mongoose.model('Company', CompanySchema);
+const Company = mongoose.models.Company || mongoose.model('Company', CompanySchema);
 
 // Export the Company model
 module.exports = Company;

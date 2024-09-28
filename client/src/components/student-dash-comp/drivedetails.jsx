@@ -107,7 +107,7 @@ function DriveDetails() {
       >
         Back
       </button>
-      <h2 className="text-2xl font-bold text-center my-4 text-gray-800">{drive.company}</h2>
+      <h2 className="text-2xl font-bold text-center my-4 text-gray-800">{drive.company.companyname}</h2>
       <p><strong>Date:</strong> {new Date(drive.date).toLocaleDateString()}</p>
       <p><strong>Location:</strong> {drive.location}</p>
       <p><strong>Eligibility Criteria:</strong> {drive.eligibilityCriteria}</p>

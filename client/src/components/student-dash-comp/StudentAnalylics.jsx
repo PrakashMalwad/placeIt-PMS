@@ -1,27 +1,52 @@
-import { useState } from 'react';
-
+import { useState, useEffect } from 'react';
 import { FaBell, FaChartBar, FaFileAlt, FaCalendarAlt } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
+
+const apiUrl = import.meta.env.VITE_BACKEND_URL;
 
 function StudentAnalytics() {
-  const [performance] = useState({
-    appliedJobs: 10,
-    interviewsScheduled: 2,
-    offersReceived: 1,
+  const [performance, setPerformance] = useState({
+    appliedJobs: 0,
+    interviewsScheduled: 0,
+    offersReceived: 0,
   });
 
-  const upcomingDrives = [
-    { _id: '1', company: 'TechCorp', date: '2024-09-20' },
-    { _id: '2', company: 'Innova Solutions', date: '2024-09-25' },
-    { _id: '3', company: 'Alpha Industries', date: '2024-10-05' },
-  ];
-
-  
-
-  const notifications = [
+  const [upcomingDrives, setUpcomingDrives] = useState([]);
+  const [notifications, setNotifications] = useState([
     { id: '1', message: 'New interview scheduled with TechCorp', timestamp: '2024-09-14T10:30:00' },
     { id: '2', message: 'Job application received by Alpha Industries', timestamp: '2024-09-13T08:00:00' },
-  ];
+  ]);
+
+  // Fetch upcoming drives and performance data
+  useEffect(() => {
+    const fetchUpcomingDrives = async () => {
+      try {
+        const response = await axios.get(`${apiUrl}/api/drives/`);
+        setUpcomingDrives(response.data.drives || []); // Set drives from API response
+      } catch (error) {
+        console.error("Error fetching upcoming drives:", error);
+      }
+    };
+
+    const fetchPerformanceData = async () => {
+      try {
+        const currentUser = JSON.parse(sessionStorage.getItem('user'));
+        const response = await axios.get(`${apiUrl}/api/applications/student/${currentUser.id}`);
+        const applications = response.data.applications || []; // Update according to your API response structure
+        setPerformance((prev) => ({
+          ...prev,
+          appliedJobs: applications.length,
+          // You can further process applications to get interviewsScheduled and offersReceived if available
+        }));
+      } catch (error) {
+        console.error("Error fetching student applications:", error);
+      }
+    };
+
+    fetchUpcomingDrives();
+    fetchPerformanceData();
+  }, []);
 
   return (
     <div className="p-4 sm:p-6 bg-white shadow-lg rounded-lg">
@@ -35,10 +60,14 @@ function StudentAnalytics() {
             {upcomingDrives.map((drive) => (
               <li key={drive._id} className="mb-3">
                 <Link
-                  to={`/drive/${drive._id}`}
+                  to={`show-drive/drive/${drive._id}`}
                   className="flex justify-between items-center p-3 sm:p-4 bg-blue-100 rounded-lg hover:bg-blue-200 transition"
                 >
-                  <span className="text-sm sm:text-base">{drive.company}</span>
+                  <div>
+                    <span className="text-sm sm:text-base font-bold">{drive.company.companyname}</span>
+                    <p className="text-xs sm:text-sm">{drive.location}</p>
+                    <p className="text-xs sm:text-sm text-gray-500">Eligibility: {drive.eligibilityCriteria}</p>
+                  </div>
                   <span className="text-sm sm:text-base">{new Date(drive.date).toLocaleDateString()}</span>
                 </Link>
               </li>
