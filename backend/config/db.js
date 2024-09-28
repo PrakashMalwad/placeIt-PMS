@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const { GridFSBucket } = require('mongodb');
 const Student = require('../models/Users/Students');
 const Drive = require('../models/JobDrives');
-const Company = require('../models/Company');
+const Company = require('../models/company');
 const { updatePlacementStatistics } = require('../services/placementStatisticService');
 
 let gfs, gridfsBucket;
