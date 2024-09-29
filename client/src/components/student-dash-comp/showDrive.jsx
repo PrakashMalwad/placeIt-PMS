@@ -25,16 +25,16 @@ function ShowDrive() {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.get(`${apiUrl}/api/drives`, {
-        params: { page, limit: 10, search }
+      const response = await axios.get(`${apiUrl}/api/drives/byCollege`, {
+        // params: { page, limit: 10, search }
       });
 
       console.log('API Response:', response.data);
-      setDrives(response.data.drives || []);
+      setDrives(response.data || []);
       setTotalPages(response.data.totalPages || 1);
     } catch (err) {
       console.error('Error fetching drives:', err.response || err);
-      setError('Failed to fetch job drives. Please try again later.');
+      
       setDrives([]);
     } finally {
       setLoading(false);

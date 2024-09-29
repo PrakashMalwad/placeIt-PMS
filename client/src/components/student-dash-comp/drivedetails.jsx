@@ -25,7 +25,7 @@ function DriveDetails() {
       setLoading(true);
       setError(null);
       try {
-        const response = await axios.get(`${apiUrl}/api/drives/${id}`);
+        const response = await axios.get(`${apiUrl}/api/drives/get/${id}`);
         setDrive(response.data);
       } catch (err) {
         console.error('Failed to fetch drive details:', err);

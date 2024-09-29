@@ -17,7 +17,7 @@ const ScheduledDrive = () => {
   const fetchDriveData = async () => {
     try {
       const [driveRes, appsRes] = await Promise.all([
-        axios.get(`${apiUrl}/api/drives/${id}`),
+        axios.get(`${apiUrl}/api/drives/get/${id}`),
         axios.get(`${apiUrl}/api/applications/drive/${id}`)
       ]);
       setDriveDetails(driveRes.data);

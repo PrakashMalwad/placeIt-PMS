@@ -2,11 +2,13 @@
 const Drive = require("../models/JobDrives");
 const winston = require("winston");
 const Student = require("../models/Users/Students");
+const User = require("../models/Users/User");
 
 // Logger setup
 const logger = winston.createLogger({
   transports: [new winston.transports.Console()],
 });
+const PlacementCoordinator = require("../models/Users/PlacementCoordinator");
 
 // Get drive posted by me
 const getDrivePostedByMe = async (req, res) => {
@@ -21,12 +23,26 @@ const getDrivePostedByMe = async (req, res) => {
 };
 
 const getDriveByCollege = async (req, res) => {
-  const { id } = req.params;
-  const drive = await Drive.findOne({ where: { college_id: id } });
-  if (!drive) {
-    return res.status(404).json({ message: "Drive not found" });
+  try {
+    const userId = req.user.id; // Get user ID directly
+    const user = await User.findById(userId); // Find user by ID
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    const collegeId = user.college; 
+    const drives = await Drive.find({ 
+      postedBy: { $in: await PlacementCoordinator.find({ college: collegeId }).select('_id') } 
+    }).populate('postedBy','name company').populate('company','companyname'); 
+    if (!drives.length) {
+      return res.status(404).json({ message: "No drives found for this college" });
+    }
+
+    res.json(drives); // Return the list of drives
+  } catch (error) {
+    console.error("Error fetching drives:", error);
+    res.status(500).json({ message: "Server error" });
   }
-  res.json(drive);
 };
 
 const getDriveByStudentCollege = async (req, res) => {

@@ -22,8 +22,8 @@ function StudentAnalytics() {
   useEffect(() => {
     const fetchUpcomingDrives = async () => {
       try {
-        const response = await axios.get(`${apiUrl}/api/drives/`);
-        setUpcomingDrives(response.data.drives || []); // Set drives from API response
+        const response = await axios.get(`${apiUrl}/api/drives/byCollege`);
+        setUpcomingDrives(response.data || []); // Set drives from API response
       } catch (error) {
         console.error("Error fetching upcoming drives:", error);
       }
@@ -64,7 +64,8 @@ function StudentAnalytics() {
                   className="flex justify-between items-center p-3 sm:p-4 bg-blue-100 rounded-lg hover:bg-blue-200 transition"
                 >
                   <div>
-                    <span className="text-sm sm:text-base font-bold">{drive.company.companyname}</span>
+                    <span className="text-sm sm:text-base font-bold">{drive.company.companyname} </span>
+                    <span className="text-xs sm:text-sm text-gray-500">({drive.jobtitle})</span>
                     <p className="text-xs sm:text-sm">{drive.location}</p>
                     <p className="text-xs sm:text-sm text-gray-500">Eligibility: {drive.eligibilityCriteria}</p>
                   </div>

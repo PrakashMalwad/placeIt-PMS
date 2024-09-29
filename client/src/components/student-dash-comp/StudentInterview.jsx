@@ -17,7 +17,6 @@ const StudentInterviews = () => {
             setLoading(false);
         } catch (error) {
             console.error('Error fetching interviews:', error);
-            setError('Failed to load your interviews.');
             setLoading(false);
         }
     };

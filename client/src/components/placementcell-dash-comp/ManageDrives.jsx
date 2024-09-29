@@ -58,10 +58,9 @@ function ManageJobDrives() {
   const fetchDrives = async () => {
     setLoading(true);
     try {
-      const currentUser = sessionStorage.getItem("user");
-      const userId = JSON.parse(currentUser).id;
+      
       const response = await axios.get(
-        `${apiUrl}/api/drives/byuser/${userId}`,
+        `${apiUrl}/api/drives/byCollege/`,
         {
           headers: {
             Authorization: `Bearer ${sessionStorage.getItem("token")}`,
@@ -70,7 +69,7 @@ function ManageJobDrives() {
         }
       );
 
-      setDrives(response.data.drives);
+      setDrives(response.data);
       setTotalPages(response.data.totalPages);
     } catch (error) {
       console.error("Error fetching drives:", error);
