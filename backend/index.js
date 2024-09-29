@@ -32,10 +32,12 @@ const testRoute = require("./routes/testRoute");
 const enquireRoutes = require("./routes/enquireRoutes");
 const homeRoutes = require("./routes/homeRoutes");
 const fileRoutes = require("./routes/filesRoutes");
-const otpRoutes = require("./routes/otpRoutes");
 const ReqDriveRoutes = require("./routes/ReqDriveRoutes");
 const statisticsRoutes = require("./routes/statsRoutes");
 const profileRoutes = require("./routes/profileRoutes");
+const CollegeCode= require("./routes/CollegeCodeRoute");
+const skillRoute = require("./routes/skillRoute");
+
 
 const interviewRoutes = require("./routes/interviewRoutes");
 // Setting up all routes
@@ -53,9 +55,10 @@ app.use("/api/notifications", notifyRoutes);
 app.use("/api/applications", auth.auth, applicationRoutes);
 app.use("/api/students", auth.auth, studentRoutes);
 app.use("/api/test-results", testRoute);
-app.use("/api/otp", otpRoutes);
 app.use("/api/users", auth.auth, userRoutes);
 app.use("/api/reqDrive/", auth.auth, ReqDriveRoutes);
+app.use("/api/college-code",auth.auth, CollegeCode);
+app.use("/api/my/", auth.auth, skillRoute);
 
 // Error Handling Middleware
 app.use((err, req, res, next) => {

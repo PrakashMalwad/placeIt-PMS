@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { toast } from 'react-toastify'; // For success/error messages
+import { toast } from 'react-toastify'; 
+import { useNavigate } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 const apiUrl = import.meta.env.VITE_BACKEND_URL;
 
@@ -12,6 +13,7 @@ const Profile = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false); // Loading state for profile fetch
   const [uploading, setUploading] = useState(false); // Uploading state for image
+  const navigate = useNavigate(); // Move useNavigate hook here
 
   useEffect(() => {
     setLoading(true);
@@ -34,6 +36,17 @@ const Profile = () => {
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
   };
+
+
+const addNewSkill = () => {
+  const confirmed = window.confirm('Are you sure you want to add a new skill, if yes this will direct to my skill and your profile is saved till the data you filled?');
+  if (confirmed) {
+    handleSubmit()
+    navigate('../my-skills');
+  }
+}
+
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -102,7 +115,7 @@ const Profile = () => {
               <span className="text-gray-500">About Me:</span> {profile.aboutme}
             </p>
             <p className="text-lg font-semibold">
-              <span className="text-gray-500">DOB:</span> {new Date(profile.dob).toLocaleDateString()}
+              <span className="text-gray-500">DOB:</span> {profile.dob ? new Date(profile.dob).toISOString().substr(0, 10) : ''}
             </p>
             <p className="text-lg font-semibold">
               <span className="text-gray-500">Age:</span> {profile.age}
@@ -117,8 +130,20 @@ const Profile = () => {
               <span className="text-gray-500">State:</span> {profile.state}
             </p>
             <p className="text-lg font-semibold">
-              <span className="text-gray-500">Skills:</span> {profile.skills}
-            </p>
+  <span className="text-gray-500">Skills:</span>
+  {profile.skills && profile.skills.length > 0 ? (
+    <ul className="inline-flex space-x-4">
+      {profile.skills.map((skill, index) => (
+        <li key={index} className="text-gray-700">
+          {skill.skillName} <span className="text-sm text-gray-500">({skill.proficiency}%)</span>
+        </li>
+      ))}
+    </ul>
+  ) : (
+    <span className="text-gray-700">No skills added</span>
+  )}
+</p>
+
             <p className="text-lg font-semibold">
               <span className="text-gray-500">Designation:</span> {profile.designation}
             </p>
@@ -191,15 +216,41 @@ const Profile = () => {
             />
           </div>
           <div>
-            <label className="block text-gray-700">Skills:</label>
-            <input
-              type="text"
-              name="skills"
-              value={updatedProfile.skills}
-              onChange={handleInputChange}
-              className="w-full p-2 border border-gray-300 rounded-md"
-            />
-          </div>
+  <label className="block text-gray-700">Skills:</label>
+
+  {/* Mapping over the skills array and displaying each skill with proficiency */}
+  {updatedProfile.skills.map((skill, index) => (
+    <div key={index} className="flex items-center space-x-4 mb-2">
+      <input
+        type="text"
+        name="skillName"
+        disabled
+        value={skill.skillName}
+        placeholder="Skill Name"
+        className="w-1/2 p-2 border border-gray-300 rounded-md"
+      />
+      <input
+        type="number"
+        name="proficiency"
+        disabled
+        value={skill.proficiency}
+        placeholder="Proficiency (%)"
+        className="w-1/4 p-2 border border-gray-300 rounded-md"
+      />
+     
+    </div>
+  ))}
+
+  {/* Button to add new skill */}
+  <button
+    type="button"
+    onClick={addNewSkill}
+    className="mt-2 p-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+  >
+    Add Skill
+  </button>
+</div>
+
           <div>
             <label className="block text-gray-700">Designation:</label>
             <input

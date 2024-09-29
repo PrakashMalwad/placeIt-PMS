@@ -19,7 +19,6 @@ import StudentRegisterPage from "./pages/StudentRegisterPage";
 import CreateDrive from "./components/company-dash-comp/createDrive";
 import EditProfile from "./components/student-dash-comp/EditProfile";
 import DriveDetails from "./components/student-dash-comp/drivedetails";
-import Interviews from "./components/student-dash-comp/Interviews";
 import Mailbox from "./components/student-dash-comp/Mailbox";
 import MyApplications from "./components/student-dash-comp/MyApplications";
 import MySkills from "./components/student-dash-comp/Myskills";
@@ -45,6 +44,7 @@ import CompanyEnquiryForm from "./pages/companyEnquiry";
 import AdminEnquiries from "./components/admin-dash-comp/showEnquiry";
 import ViewDriveRequest from "./components/placementcell-dash-comp/ViewDriveRequest";
 import ShowApplication from "./components/placementcell-dash-comp/ShowApplication";
+import GenerateCollegeCode from "./components/placementcell-dash-comp/GenerateCollegeCode";
 
 //Company Components
 import RequestDrive from "./components/company-dash-comp/RequestJobDrive";
@@ -183,6 +183,7 @@ function App() {
             path="manage-drive/applications/:id"
             element={<ShowApplication />}
           />
+          <Route path="get-college-code" element={<GenerateCollegeCode />} />
 
           <Route path="settings" element={<SettingsPage />} />
         </Route>

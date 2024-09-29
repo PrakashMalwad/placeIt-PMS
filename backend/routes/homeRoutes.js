@@ -2,12 +2,47 @@ const express = require('express');
 
 const College = require('../models/college');
 const router = express.Router();
+const Student = require('../models/Users/Students');
+const CollegeCode = require('../models/CollegeCodes');
 
 const { getTotalDrives } = require('../controllers/DriveController');
 const { getUserCount } = require('../controllers/userController');
 const { getCompanyCoordinatorCount } = require('../controllers/userController');
 
 const { getPlacementCoordinatorCount } = require('../controllers/userController');
+
+
+const bcrypt = require('bcryptjs');
+
+
+router.post('/register-student', async (req, res) => {
+  try {
+    const { password, college,collegeCode, ...studentData } = req.body;
+
+    // Check if the college code exists
+    const validCollegeCode = await CollegeCode.findOne({ code: collegeCode });
+
+    if (!validCollegeCode) {
+      return res.status(400).json({ message: 'Invalid college code' });
+    }
+
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
+console.log(college)
+    // Create student with hashed password and associate it with the college
+    const student = new Student({
+      ...studentData,
+      password: hashedPassword,
+      college: college, // Associate student with the college
+    });
+
+    await student.save();
+    res.status(201).json({ message: 'Student registered successfully', student });
+  } catch (error) {
+    res.status(400).json({ message: 'Error registering student'+" "+ error });
+  }
+});
+
 // Home route
 router.get('/', async (req, res) => {
     res.json({

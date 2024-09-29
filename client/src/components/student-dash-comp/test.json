@@ -1,0 +1,566 @@
+{
+    "questions": [
+      {
+        
+        "subject": "Linux",
+        "questionsList": [
+          {
+            "question": "What is Linux?",
+            "options": [
+              "A closed-source operating system",
+              "A Unix-like open-source operating system",
+              "A web server",
+              "A programming language"
+            ],
+            "correctAnswer": "A Unix-like open-source operating system"
+          },
+          {
+            "question": "Which command is used to list files and directories in Linux?",
+            "options": [
+              "ls",
+              "cd",
+              "mkdir",
+              "rm"
+            ],
+            "correctAnswer": "ls"
+          },
+          {
+            "question": "Which command is used to change the current directory?",
+            "options": [
+              "pwd",
+              "cd",
+              "mv",
+              "cp"
+            ],
+            "correctAnswer": "cd"
+          },
+          {
+            "question": "Which command shows the current working directory?",
+            "options": [
+              "pwd",
+              "ls",
+              "cd",
+              "whoami"
+            ],
+            "correctAnswer": "pwd"
+          },
+          {
+            "question": "Which package manager is used in Ubuntu?",
+            "options": [
+              "apt",
+              "yum",
+              "pacman",
+              "zypper"
+            ],
+            "correctAnswer": "apt"
+          },
+          {
+            "question": "Which command is used to change file permissions?",
+            "options": [
+              "chmod",
+              "chown",
+              "mv",
+              "rm"
+            ],
+            "correctAnswer": "chmod"
+          },
+          {
+            "question": "Which command checks disk usage?",
+            "options": [
+              "df",
+              "du",
+              "free",
+              "top"
+            ],
+            "correctAnswer": "df"
+          },
+          {
+            "question": "Which command is used to search for text patterns in files?",
+            "options": [
+              "find",
+              "grep",
+              "locate",
+              "cat"
+            ],
+            "correctAnswer": "grep"
+          },
+          {
+            "question": "Which command displays the contents of a file?",
+            "options": [
+              "cat",
+              "ls",
+              "echo",
+              "chmod"
+            ],
+            "correctAnswer": "cat"
+          },
+          {
+            "question": "Which command shows memory usage?",
+            "options": [
+              "free",
+              "df",
+              "top",
+              "ps"
+            ],
+            "correctAnswer": "free"
+          }
+        ]
+      },{
+        "subject": "Docker",
+        "questionsList": [
+          {
+            "question": "What is Docker primarily used for?",
+            "options": [
+              "Virtualization",
+              "Application containerization",
+              "Networking",
+              "Security"
+            ],
+            "correctAnswer": "Application containerization"
+          },
+          {
+            "question": "Which of the following is a Docker command to list all running containers?",
+            "options": [
+              "docker run",
+              "docker ps",
+              "docker build",
+              "docker images"
+            ],
+            "correctAnswer": "docker ps"
+          },
+          {
+            "question": "What is the default Docker network driver?",
+            "options": [
+              "host",
+              "bridge",
+              "none",
+              "overlay"
+            ],
+            "correctAnswer": "bridge"
+          },
+          {
+            "question": "Which command is used to build a Docker image from a Dockerfile?",
+            "options": [
+              "docker create",
+              "docker build",
+              "docker compose",
+              "docker run"
+            ],
+            "correctAnswer": "docker build"
+          },
+          {
+            "question": "What is a Docker image?",
+            "options": [
+              "A running instance of a Docker container",
+              "A snapshot of a container",
+              "A read-only template used to create containers",
+              "A Dockerfile"
+            ],
+            "correctAnswer": "A read-only template used to create containers"
+          },
+          {
+            "question": "How do you remove a stopped container in Docker?",
+            "options": [
+              "docker kill",
+              "docker rm",
+              "docker stop",
+              "docker rmi"
+            ],
+            "correctAnswer": "docker rm"
+          },
+          {
+            "question": "What is the purpose of the Dockerfile?",
+            "options": [
+              "To run Docker containers",
+              "To define how to build a Docker image",
+              "To connect Docker containers",
+              "To list running containers"
+            ],
+            "correctAnswer": "To define how to build a Docker image"
+          },
+          {
+            "question": "Which of the following commands is used to stop a running container?",
+            "options": [
+              "docker kill",
+              "docker halt",
+              "docker stop",
+              "docker pause"
+            ],
+            "correctAnswer": "docker stop"
+          },
+          {
+            "question": "Which command is used to create a new container from an image?",
+            "options": [
+              "docker build",
+              "docker start",
+              "docker run",
+              "docker exec"
+            ],
+            "correctAnswer": "docker run"
+          },
+          {
+            "question": "What is a Docker Volume used for?",
+            "options": [
+              "Persistent storage for Docker containers",
+              "Memory allocation",
+              "Virtual network creation",
+              "Container orchestration"
+            ],
+            "correctAnswer": "Persistent storage for Docker containers"
+          },
+          {
+            "question": "What does the Docker command 'docker-compose up' do?",
+            "options": [
+              "Runs multiple containers defined in a docker-compose.yml file",
+              "Builds a Docker image",
+              "Stops running containers",
+              "Pulls a Docker image from Docker Hub"
+            ],
+            "correctAnswer": "Runs multiple containers defined in a docker-compose.yml file"
+          },
+          {
+            "question": "How do you view the logs of a running Docker container?",
+            "options": [
+              "docker log",
+              "docker show logs",
+              "docker logs",
+              "docker container logs"
+            ],
+            "correctAnswer": "docker logs"
+          },
+          {
+            "question": "What is the Docker Hub?",
+            "options": [
+              "A private repository for Docker images",
+              "A cloud service for running Docker containers",
+              "A central repository for Docker images",
+              "An operating system for Docker"
+            ],
+            "correctAnswer": "A central repository for Docker images"
+          },
+          {
+            "question": "Which of the following is used to pull an image from Docker Hub?",
+            "options": [
+              "docker pull",
+              "docker fetch",
+              "docker download",
+              "docker import"
+            ],
+            "correctAnswer": "docker pull"
+          },
+          {
+            "question": "Which Docker command is used to remove an image?",
+            "options": [
+              "docker delete",
+              "docker rmi",
+              "docker prune",
+              "docker rm"
+            ],
+            "correctAnswer": "docker rmi"
+          },
+          {
+            "question": "What does the '-d' option do in the 'docker run' command?",
+            "options": [
+              "Runs the container in detached mode",
+              "Runs the container in debug mode",
+              "Deletes the container after it stops",
+              "Downloads the container image"
+            ],
+            "correctAnswer": "Runs the container in detached mode"
+          },
+          {
+            "question": "Which command will list all Docker images on your system?",
+            "options": [
+              "docker images",
+              "docker ps -a",
+              "docker run images",
+              "docker list images"
+            ],
+            "correctAnswer": "docker images"
+          },
+          {
+            "question": "How do you restart a running container in Docker?",
+            "options": [
+              "docker stop",
+              "docker restart",
+              "docker rm",
+              "docker exec"
+            ],
+            "correctAnswer": "docker restart"
+          },
+          {
+            "question": "What is the main difference between a Docker container and a Docker image?",
+            "options": [
+              "A container is the read-only template, and an image is the running instance",
+              "A container is a running instance of an image",
+              "A container is a read-only template, and an image is persistent storage",
+              "An image is a running instance of a container"
+            ],
+            "correctAnswer": "A container is a running instance of an image"
+          },
+          {
+            "question": "What is the purpose of Docker Swarm?",
+            "options": [
+              "To create isolated networks for containers",
+              "To orchestrate and manage clusters of Docker containers",
+              "To build Docker images",
+              "To automate Docker container updates"
+            ],
+            "correctAnswer": "To orchestrate and manage clusters of Docker containers"
+          }
+        ]
+      }
+      ,
+      {
+        "subject": "BASH",
+        "questionsList": [
+          {
+            "question": "What does BASH stand for?",
+            "options": [
+              "Bourne Again SHell",
+              "Binary Access SHell",
+              "Basic Authentication SHell",
+              "Backup And Sync Helper"
+            ],
+            "correctAnswer": "Bourne Again SHell"
+          },
+          {
+            "question": "How do you declare a variable in BASH?",
+            "options": [
+              "VAR: value",
+              "VAR = value",
+              "VAR=value",
+              "var->value"
+            ],
+            "correctAnswer": "VAR=value"
+          },
+          {
+            "question": "Which command is used to make a script executable?",
+            "options": [
+              "chmod +x",
+              "chmod -e",
+              "chmod +s",
+              "chmod -r"
+            ],
+            "correctAnswer": "chmod +x"
+          },
+          {
+            "question": "Which command prints text or variables to the terminal?",
+            "options": [
+              "echo",
+              "cat",
+              "print",
+              "show"
+            ],
+            "correctAnswer": "echo"
+          },
+          {
+            "question": "How do you capture user input in a BASH script?",
+            "options": [
+              "input",
+              "read",
+              "capture",
+              "echo"
+            ],
+            "correctAnswer": "read"
+          },
+          {
+            "question": "What is a function in BASH?",
+            "options": [
+              "A block of code used to organize scripts",
+              "A loop structure",
+              "A conditional statement",
+              "A command for input handling"
+            ],
+            "correctAnswer": "A block of code used to organize scripts"
+          },
+          {
+            "question": "Which command is used to exit a script?",
+            "options": [
+              "terminate",
+              "stop",
+              "exit",
+              "end"
+            ],
+            "correctAnswer": "exit"
+          },
+          {
+            "question": "Which command is used to loop through a list of values?",
+            "options": [
+              "while",
+              "for",
+              "do-while",
+              "foreach"
+            ],
+            "correctAnswer": "for"
+          },
+          {
+            "question": "What does '||' represent in BASH?",
+            "options": [
+              "Logical AND",
+              "Logical OR",
+              "Equal to",
+              "Not equal to"
+            ],
+            "correctAnswer": "Logical OR"
+          },
+          {
+            "question": "How do you check the exit status of the last executed command?",
+            "options": [
+              "$$",
+              "$!",
+              "$@",
+              "$?"
+            ],
+            "correctAnswer": "$?"
+          }
+        ]
+      },
+      {
+        "subject": "PHP",
+        "questionsList": [
+          {
+            "question": "What does PHP stand for?",
+            "options": [
+              "Personal Home Page",
+              "PHP: Hypertext Preprocessor",
+              "Programming Home Page",
+              "Private Home Page"
+            ],
+            "correctAnswer": "PHP: Hypertext Preprocessor"
+          },
+          {
+            "question": "Which symbol is used to declare variables in PHP?",
+            "options": [
+              "&",
+              "$",
+              "#",
+              "%"
+            ],
+            "correctAnswer": "$"
+          },
+          {
+            "question": "Which function is used to output text in PHP?",
+            "options": [
+              "echo",
+              "print",
+              "output",
+              "display"
+            ],
+            "correctAnswer": "echo"
+          },
+          {
+            "question": "Which of the following is a PHP loop?",
+            "options": [
+              "for",
+              "if",
+              "switch",
+              "case"
+            ],
+            "correctAnswer": "for"
+          },
+          {
+            "question": "How do you add comments in PHP?",
+            "options": [
+              "// comment",
+              "/* comment */",
+              "# comment",
+              "All of the above"
+            ],
+            "correctAnswer": "All of the above"
+          }
+        ]
+      },
+      {
+        "subject": "Docker",
+        "questionsList": [
+          {
+            "question": "What is Docker?",
+            "options": [
+              "A containerization platform",
+              "A programming language",
+              "A virtual machine",
+              "A web server"
+            ],
+            "correctAnswer": "A containerization platform"
+          },
+          {
+            "question": "Which command is used to list all Docker containers?",
+            "options": [
+              "docker ps",
+              "docker ls",
+              "docker images",
+              "docker run"
+            ],
+            "correctAnswer": "docker ps"
+          },
+          {
+            "question": "What does the 'docker run' command do?",
+            "options": [
+              "Starts a new container",
+              "Lists all containers",
+              "Builds a new image",
+              "Removes a container"
+            ],
+            "correctAnswer": "Starts a new container"
+          }
+        ]
+      },
+      {
+        "subject": "HTML",
+        "questionsList": [
+          {
+            "question": "What does HTML stand for?",
+            "options": [
+              "HyperText Markup Language",
+              "Hyperlinks and Text Markup Language",
+              "Home Tool Markup Language",
+              "HyperTool Markup Language"
+            ],
+            "correctAnswer": "HyperText Markup Language"
+          },
+          {
+            "question": "Which tag is used to create a hyperlink in HTML?",
+            "options": [
+              "<link>",
+              "<a>",
+              "<href>",
+              "<url>"
+            ],
+            "correctAnswer": "<a>"
+          },
+          {
+            "question": "Which tag is used for the largest heading in HTML?",
+            "options": [
+              "<h1>",
+              "<heading>",
+              "<h6>",
+              "<header>"
+            ],
+            "correctAnswer": "<h1>"
+          },
+          {
+            "question": "Which attribute specifies an image source in HTML?",
+            "options": [
+              "src",
+              "href",
+              "alt",
+              "link"
+            ],
+            "correctAnswer": "src"
+          },
+          {
+            "question": "How do you create an ordered list in HTML?",
+            "options": [
+              "<ul>",
+              "<ol>",
+              "<li>",
+              "<order>"
+            ],
+            "correctAnswer": "<ol>"
+          }
+        ]
+      }
+    ]
+  }
+  

@@ -33,7 +33,7 @@ function StudentAnalytics() {
       try {
         const currentUser = JSON.parse(sessionStorage.getItem('user'));
         const response = await axios.get(`${apiUrl}/api/applications/student/${currentUser.id}`);
-        const applications = response.data.applications || []; // Update according to your API response structure
+        const applications = response.data.counts || []; // Update according to your API response structure
         setPerformance((prev) => ({
           ...prev,
           appliedJobs: applications.length,

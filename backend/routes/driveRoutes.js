@@ -4,7 +4,7 @@ const driveController = require('../controllers/DriveController');
 
 // Job Drive Routes
 router.get('/', driveController.getAllDrives);
-router.get('/:id', driveController.getDriveById);
+// router.get('/:id', driveController.getDriveById);
 router.get('/byme', driveController.getDrivePostedByMe);
 router.get('/student/',driveController.getDriveByStudentCollege);
 router.get('/bycollege/:id',driveController.getDriveByCollege);

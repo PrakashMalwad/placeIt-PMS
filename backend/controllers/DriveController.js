@@ -29,16 +29,34 @@ const getDriveByCollege = async (req, res) => {
   res.json(drive);
 };
 
-//get drive by students college
 const getDriveByStudentCollege = async (req, res) => {
   const { id: userId } = req.user;
-const studentCollegeId=await Student.findOne({where:{id:userId}});
-const drive = await Drive.find({ where: { college_id: studentCollegeId } });
-  if (!drive) {
-    return res.status(404).json({ message: "Drive not found" });
+
+  try {
+    // Find the student by userId to get their college
+    const student = await Student.findOne({ _id: userId });
+
+    if (!student) {
+      return res.status(404).json({ message: "Student not found" });
+    }
+
+    const studentCollegeId = student.college;
+console.log(studentCollegeId)
+    // Find drives where the postedBy's college matches the student's college
+    const drives = await Drive.find({ 'postedBy.college': studentCollegeId }).populate('postedBy', 'college');
+    console.log(drives)
+
+    if (!drives || drives.length === 0) {
+      return res.status(404).json({ message: "Drives not found for this college" });
+    }
+
+    res.json(drives);
+  } catch (error) {
+    console.error("Error fetching drives:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
-  res.json(drive);
 }
+
 
 
 // get total drive

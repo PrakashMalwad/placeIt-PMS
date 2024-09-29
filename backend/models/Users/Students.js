@@ -3,10 +3,10 @@ const User = require('./User');
 const College = require('../college'); 
 // Define the Student schema
 const StudentSchema = new mongoose.Schema({
-    aboutme: { type: String },
+    aboutme: { type: String 
+    },
     dob: { 
         type: Date,
-        
     },
     college: {
         type: mongoose.Schema.Types.ObjectId,
@@ -26,7 +26,10 @@ const StudentSchema = new mongoose.Schema({
     address: { type: String },
     city: { type: String },
     state: { type: String },
-    skills: { type: String },
+    skills: [{
+        skillName: { type: String,  },
+        proficiency: { type: Number, min: 0, max: 100, } 
+    }],
     designation: { type: String },
     resume: { type: String },
     isEligible: { type: Boolean, default: true },
@@ -50,6 +53,6 @@ StudentSchema.set('toJSON', { virtuals: true });
 StudentSchema.set('toObject', { virtuals: true });
 
 // Using the discriminator to extend the User model
-const Student = User.discriminator('Student', StudentSchema);
+const Student =  mongoose.models.Student ||User.discriminator('Student', StudentSchema);
 
 module.exports = Student;

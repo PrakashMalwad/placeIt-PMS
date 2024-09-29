@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Navbar from "../components/navbar";
 import axios from "axios";
+
 const apiUrl = import.meta.env.VITE_BACKEND_URL;
 
 const StudentRegisterPage = () => {
@@ -9,13 +10,17 @@ const StudentRegisterPage = () => {
     email: "",
     password: "",
     confirmPassword: "",
+    role: "student",
     college: "",
+    collegeCode: "",
   });
 
   const [colleges, setColleges] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false); // Loading state
 
+  // Fetch college list from API
   useEffect(() => {
     const fetchColleges = async () => {
       try {
@@ -30,6 +35,7 @@ const StudentRegisterPage = () => {
     fetchColleges();
   }, []);
 
+  // Handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -47,48 +53,58 @@ const StudentRegisterPage = () => {
     }
   };
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrorMessage(""); // Reset error message
+    setSuccessMessage(""); // Reset success message
 
-    // Final validation before submission
-    setErrorMessage("");
-    setSuccessMessage("");
+    // Final validation
+    if (formData.password !== formData.confirmPassword) {
+      setErrorMessage("Passwords do not match");
+      return;
+    }
 
-    // Logic to submit registration data
+    setIsLoading(true); // Start loading
+
     try {
       const registrationData = {
         name: formData.name,
         email: formData.email,
         password: formData.password,
         college: formData.college,
+        collegeCode: formData.collegeCode,
+        role: formData.role,
       };
+      console.log("Registration Data: ", registrationData);
 
       const response = await axios.post(
-        `${apiUrl}/api/auth/register`,
+        `${apiUrl}/api/home/register-student`,
         registrationData
       );
 
-      if (response) {
-        setSuccessMessage("Registration successful! You can now log in.");
-      }
-
-      // Optionally reset form data
+      setSuccessMessage("Registration successful! You can now log in.");
+      setTimeout(() => {
+        window.location.href = "/signin";
+      }, 2000);
+      
+      // Reset form data only on successful registration
       setFormData({
         name: "",
         email: "",
         password: "",
         confirmPassword: "",
+        role: "student",
         college: "",
+        collegeCode: "",
       });
     } catch (error) {
       console.error("Registration error:", error);
-      if (error.response && error.response.data) {
-        setErrorMessage(
-          error.response.data.message || "An error occurred while registering"
-        );
-      } else {
-        setErrorMessage("An error occurred while registering");
-      }
+      setErrorMessage(
+        error.response?.data?.message || "An error occurred while registering"
+      );
+    } finally {
+      setIsLoading(false); // Stop loading
     }
   };
 
@@ -107,11 +123,13 @@ const StudentRegisterPage = () => {
             <p className="text-green-500 text-sm mb-4">{successMessage}</p>
           )}
           <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Name Input */}
             <div>
-              <label className="block text-gray-700">Name:</label>
+              <label className="block text-gray-700" htmlFor="name">Name:</label>
               <input
                 type="text"
                 name="name"
+                id="name" // Added id for accessibility
                 value={formData.name}
                 onChange={handleChange}
                 className="w-full p-2 border border-gray-300 rounded-md"
@@ -119,11 +137,13 @@ const StudentRegisterPage = () => {
               />
             </div>
 
+            {/* Email Input */}
             <div>
-              <label className="block text-gray-700">Email:</label>
+              <label className="block text-gray-700" htmlFor="email">Email:</label>
               <input
                 type="email"
                 name="email"
+                id="email" // Added id for accessibility
                 value={formData.email}
                 onChange={handleChange}
                 className="w-full p-2 border border-gray-300 rounded-md"
@@ -131,10 +151,12 @@ const StudentRegisterPage = () => {
               />
             </div>
 
+            {/* College Dropdown */}
             <div>
-              <label className="block text-gray-700">College:</label>
+              <label className="block text-gray-700" htmlFor="college">College:</label>
               <select
                 name="college"
+                id="college" // Added id for accessibility
                 value={formData.college}
                 onChange={handleChange}
                 className="w-full p-2 border border-gray-300 rounded-md"
@@ -142,18 +164,34 @@ const StudentRegisterPage = () => {
               >
                 <option value="">Select your college</option>
                 {colleges.map((college) => (
-                  <option key={college.id} value={college.name}>
+                  <option key={college._id} value={college._id}>
                     {college.name}
                   </option>
                 ))}
               </select>
             </div>
 
+            {/* College Code Input */}
             <div>
-              <label className="block text-gray-700">Password:</label>
+              <label className="block text-gray-700" htmlFor="collegeCode">College Code:</label>
+              <input
+                type="text"
+                name="collegeCode"
+                id="collegeCode" // Added id for accessibility
+                value={formData.collegeCode}
+                onChange={handleChange}
+                className="w-full p-2 border border-gray-300 rounded-md"
+                required
+              />
+            </div>
+
+            {/* Password Input */}
+            <div>
+              <label className="block text-gray-700" htmlFor="password">Password:</label>
               <input
                 type="password"
                 name="password"
+                id="password" // Added id for accessibility
                 value={formData.password}
                 onChange={handleChange}
                 className="w-full p-2 border border-gray-300 rounded-md"
@@ -161,26 +199,27 @@ const StudentRegisterPage = () => {
               />
             </div>
 
+            {/* Confirm Password Input */}
             <div>
-              <label className="block text-gray-700">Confirm Password:</label>
+              <label className="block text-gray-700" htmlFor="confirmPassword">Confirm Password:</label>
               <input
                 type="password"
                 name="confirmPassword"
+                id="confirmPassword" // Added id for accessibility
                 value={formData.confirmPassword}
                 onChange={handleChange}
                 className="w-full p-2 border border-gray-300 rounded-md"
                 required
               />
-              {formData.confirmPassword && formData.password !== formData.confirmPassword && (
-                <p className="text-red-500 text-sm">Passwords do not match</p>
-              )}
             </div>
 
+            {/* Submit Button */}
             <button
               type="submit"
-              className="w-full py-2 px-4 bg-green-500 text-white font-bold rounded-md hover:bg-green-700 transition duration-300"
+              className={`w-full py-2 px-4 bg-green-500 text-white font-bold rounded-md hover:bg-green-700 transition duration-300 ${isLoading ? "opacity-50 cursor-not-allowed" : ""}`}
+              disabled={isLoading} // Disable button when loading
             >
-              Register
+              {isLoading ? "Registering..." : "Register"}
             </button>
           </form>
         </div>

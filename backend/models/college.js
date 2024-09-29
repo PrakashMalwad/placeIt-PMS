@@ -46,11 +46,11 @@ const CollegeSchema = new mongoose.Schema({
     },
     establishmentYear: {
         type: Number, 
-        required: true
+        
     },
     affiliation: {
         type: String,
-        required: true
+       
     }
 });
 

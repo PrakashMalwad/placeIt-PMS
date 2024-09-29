@@ -1,3 +1,4 @@
+const { countDocuments } = require("../models/college");
 const JobApplication = require("../models/JobApplication");
 
 // Get all job applications
@@ -12,9 +13,11 @@ const getAllApplications = async (req, res) => {
 
 const countApplicationByUser = async (req, res) => {
     try {
-      const { userId } = req.params;
-      const count = await JobApplication    .countDocuments({ postedBy: userId });
-      res.json({ count });
+      const id  = req.user.id;
+      const count = await JobApplication.countDocuments(
+         { student:id } 
+       );
+      res.json({count});
     } catch (error) {
       res.status(500).json({ message: 'Error counting job drives: ' + error.message });
     }
@@ -24,7 +27,12 @@ const countApplicationByUser = async (req, res) => {
 // Get a job application by student ID
 const getApplicationByStudentId = async (req, res) => {
     try {
-        const { id } = req.params;
+        let id = '';
+        if(!req.params){
+         id = req.user.id;}
+        else{
+            id = req.params.id;
+        }
         const applications = await JobApplication.find({ student: id }).populate({ 
             path: 'student', // Adjust to match your schema
             select: 'name resume' // Populate only name and resume

@@ -89,13 +89,13 @@ function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
             </li>
             <li>
               <NavLink
-                to="reports"
+                to="get-college-code"
                 className={({ isActive }) =>
                   isActive ? `${linkClasses} ${activeLinkClasses}` : linkClasses
                 }
               >
                 <FaCalendarCheck className="mr-3 text-xl" aria-hidden="true" />
-                <span className="text-sm">Reports</span>
+                <span className="text-sm">College Code</span>
               </NavLink>
             </li>
             <li>

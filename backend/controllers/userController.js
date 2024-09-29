@@ -100,9 +100,10 @@ exports.getUserById = async (req, res) => {
   }
 };
 
+
 // Create a new user
 exports.createUser = async (req, res) => {
-  const { name, email, password, role, college } = req.body; // Ensure you extract all necessary fields
+  const { name, email, password, role,  } = req.body; // Ensure you extract all necessary fields
 
   try {
     let UserModel;
