@@ -45,13 +45,13 @@ const StudentInterviews = () => {
                             <h3 className="text-xl font-bold mb-2">Interview with <span className='text-blue-900'>{interview.interviewerName}</span></h3>
                             <div className="mb-4  text-sm">
                                 <span className="block"><strong>Candidate Name:</strong> {interview.candidateName}</span>
-                                <span className="block flex items-center mt-1">
+                                <span className=" flex items-center mt-1">
                                     <FaCalendarAlt className="mr-2" /> {new Date(interview.date).toLocaleDateString()}
                                 </span>
-                                <span className="block flex items-center mt-1">
+                                <span className=" flex items-center mt-1">
                                     <FaClock className="mr-2" /> {interview.time}
                                 </span>
-                                <span className="block flex items-center mt-1">
+                                <span className=" flex items-center mt-1">
                                     <FaMapMarkerAlt className="mr-2" /> {interview.location}
                                 </span>
                             </div>

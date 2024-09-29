@@ -39,7 +39,7 @@ function ShowDrive() {
     } finally {
       setLoading(false);
     }
-  }, [page, search]);
+  }, []);
 
   useEffect(() => {
     fetchDrives();
