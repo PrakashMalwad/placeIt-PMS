@@ -39,14 +39,14 @@ const RoleSelection = () => {
             onClick={() => handleRoleSelection('company')}
             className="cursor-pointer bg-white p-4 sm:p-6 rounded-lg shadow-lg text-center hover:bg-blue-50 transform transition duration-300 hover:scale-105"
           >
-            <img src="./src/assets/img/company-image.png" alt="Company" className="mb-4 h-16 sm:h-20 mx-auto" />
+            <img src="company-image.png" alt="Company" className="mb-4 h-16 sm:h-20 mx-auto" />
             <p className="text-base sm:text-lg font-semibold">Company</p>
           </div>
           <div
             onClick={() => handleRoleSelection('placement-cell')}
             className="cursor-pointer bg-white p-4 sm:p-6 rounded-lg shadow-lg text-center hover:bg-blue-50 transform transition duration-300 hover:scale-105"
           >
-            <img src="./src/assets/img/placement-cell-image.png" alt="Placement Cell" className="mb-4 h-16 sm:h-20 mx-auto" />
+            <img src="placement-cell-image.png" alt="Placement Cell" className="mb-4 h-16 sm:h-20 mx-auto" />
             <p className="text-base sm:text-lg font-semibold">Placement Cell</p>
           </div>
           
