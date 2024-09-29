@@ -51,7 +51,7 @@ const RoleSelection = () => {
           </div>
           
         </div>
-        <div className="flex center p-9 text-red-600 justify-center"><span>I am Admin</span></div>
+       
       </div>
       
     </>
