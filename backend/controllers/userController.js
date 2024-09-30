@@ -313,3 +313,32 @@ exports.getProfileImage = (req, res) => {
     });
 };
 
+
+exports.changePassword = async (req, res) => {
+  const { currentPassword, newPassword } = req.body;
+  const userId = req.user.id; 
+
+  try {
+    // Find user by ID
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Compare the current password
+    const isMatch = await bcrypt.compare(currentPassword, user.password); // Note: currentPassword first, user.password second
+    if (!isMatch) {
+      return res.status(400).json({ message: 'Current password is incorrect' });
+    }
+
+    // Hash and save the new password
+    const hashedPassword = await bcrypt.hash(newPassword, 10); // Hash new password
+    user.password = hashedPassword; // Assign new hashed password
+    await user.save(); // Save the user instance with the updated password
+
+    res.status(200).json({ message: 'Password changed successfully' });
+  } catch (error) {
+    console.error('Error changing password:', error);
+    res.status(500).json({ message: 'Internal server error', error });
+  }
+};

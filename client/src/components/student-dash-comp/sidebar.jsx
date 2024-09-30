@@ -44,6 +44,7 @@ function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
               >
                 <FaUser className="mr-3 text-xl" aria-hidden="true" />
                 <span className="text-sm">Dashboard</span>
+                
               </NavLink>
             </li>
             <li>
@@ -81,6 +82,15 @@ function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
               >
                 <FaCalendarCheck className="mr-3 text-xl" aria-hidden="true" />
                 <span className="text-sm">Interviews</span>
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                to="settings"
+                className={({ isActive }) => isActive ? `${linkClasses} ${activeLinkClasses}` : linkClasses}
+              >
+                <FaCalendarCheck className="mr-3 text-xl" aria-hidden="true" />
+                <span className="text-sm">Settings</span>
               </NavLink>
             </li>
             

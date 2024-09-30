@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { FaBell, FaChartBar, FaFileAlt, FaCalendarAlt } from 'react-icons/fa';
+import { FaBell, FaFileAlt, FaCalendarAlt } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
@@ -9,7 +9,7 @@ function StudentAnalytics() {
   const [performance, setPerformance] = useState({
     appliedJobs: 0,
     interviewsScheduled: 0,
-    offersReceived: 0,
+    // offersReceived: 0, // Uncomment if offersReceived is needed later
   });
 
   const [upcomingDrives, setUpcomingDrives] = useState([]);
@@ -25,24 +25,37 @@ function StudentAnalytics() {
         const response = await axios.get(`${apiUrl}/api/drives/byCollege`);
         setUpcomingDrives(response.data || []); // Set drives from API response
       } catch (error) {
-        console.error("Error fetching upcoming drives:", error);
+        console.error('Error fetching upcoming drives:', error);
       }
     };
 
     const fetchPerformanceData = async () => {
       try {
-        const currentUser = JSON.parse(sessionStorage.getItem('user'));
-        const response = await axios.get(`${apiUrl}/api/applications/student/${currentUser.id}`);
-        const applications = response.data.counts || []; // Update according to your API response structure
+        // Assuming these are your endpoints for fetching applications, interviews, and offers
+        const applicationsUrl = `${apiUrl}/api/applications/student-count`;
+        const interviewsUrl = `${apiUrl}/api/interviews/student-count`;
+    
+        // Use Promise.all to fetch all data concurrently
+        const [applicationsResponse, interviewsResponse] = await Promise.all([
+          axios.get(applicationsUrl),
+          axios.get(interviewsUrl),
+        ]);
+    
+        // Extract counts from API responses
+        const applicationsCount = applicationsResponse.data.count || 0;
+        const interviewsCount = interviewsResponse.data.count ;
+    console.log(interviewsResponse.data.count   )
+        // Update state with the counts
         setPerformance((prev) => ({
           ...prev,
-          appliedJobs: applications.length,
-          // You can further process applications to get interviewsScheduled and offersReceived if available
+          appliedJobs: applicationsCount,     
+          interviewsScheduled: interviewsCount, 
         }));
       } catch (error) {
-        console.error("Error fetching student applications:", error);
+        console.error('Error fetching performance data:', error);
       }
     };
+       
 
     fetchUpcomingDrives();
     fetchPerformanceData();
@@ -64,8 +77,8 @@ function StudentAnalytics() {
                   className="flex justify-between items-center p-3 sm:p-4 bg-blue-100 rounded-lg hover:bg-blue-200 transition"
                 >
                   <div>
-                    <span className="text-sm sm:text-base font-bold">{drive.company.companyname} </span>
-                    <span className="text-xs sm:text-sm text-gray-500">({drive.jobtitle})</span>
+                    <span className="text-sm sm:text-base font-bold">{drive.jobtitle} </span>
+                    <span className="text-xs sm:text-sm text-gray-500">({drive.company.companyname})</span>
                     <p className="text-xs sm:text-sm">{drive.location}</p>
                     <p className="text-xs sm:text-sm text-gray-500">Eligibility: {drive.eligibilityCriteria}</p>
                   </div>
@@ -92,11 +105,6 @@ function StudentAnalytics() {
             <FaCalendarAlt className="text-blue-500 text-2xl sm:text-3xl mb-2 mx-auto" />
             <p className="font-bold text-sm sm:text-lg">{performance.interviewsScheduled}</p>
             <p className="text-xs sm:text-sm">Interviews Scheduled</p>
-          </div>
-          <div className="bg-yellow-100 p-3 sm:p-4 rounded-lg shadow-sm text-center">
-            <FaChartBar className="text-yellow-500 text-2xl sm:text-3xl mb-2 mx-auto" />
-            <p className="font-bold text-sm sm:text-lg">{performance.offersReceived}</p>
-            <p className="text-xs sm:text-sm">Offers Received</p>
           </div>
         </div>
       </section>

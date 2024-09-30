@@ -82,22 +82,21 @@ const StudentRegisterPage = () => {
         `${apiUrl}/api/home/register-student`,
         registrationData
       );
+      if (response) {
+        setSuccessMessage("Registration successful");
+        setIsLoading(false);
 
-      setSuccessMessage("Registration successful! You can now log in.");
-      setTimeout(() => {
-        window.location.href = "/signin";
-      }, 2000);
-      
-      // Reset form data only on successful registration
-      setFormData({
-        name: "",
-        email: "",
-        password: "",
-        confirmPassword: "",
-        role: "student",
-        college: "",
-        collegeCode: "",
-      });
+        // Reset form data only on successful registration
+        setFormData({
+          name: "",
+          email: "",
+          password: "",
+          confirmPassword: "",
+          role: "student",
+          college: "",
+          collegeCode: "",
+        });
+      }
     } catch (error) {
       console.error("Registration error:", error);
       setErrorMessage(
@@ -111,8 +110,8 @@ const StudentRegisterPage = () => {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen flex items-center justify-center bg-gray-100">
-        <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+      <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4 sm:p-6 lg:p-8">
+        <div className="bg-white p-8 rounded-lg shadow-lg m-3 max-w">
           <h2 className="text-2xl font-bold text-center mb-6">
             Student Registration
           </h2>
@@ -125,7 +124,9 @@ const StudentRegisterPage = () => {
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Name Input */}
             <div>
-              <label className="block text-gray-700" htmlFor="name">Name:</label>
+              <label className="block text-gray-700" htmlFor="name">
+                Name:
+              </label>
               <input
                 type="text"
                 name="name"
@@ -139,11 +140,13 @@ const StudentRegisterPage = () => {
 
             {/* Email Input */}
             <div>
-              <label className="block text-gray-700" htmlFor="email">Email:</label>
+              <label className="block text-gray-700" htmlFor="email">
+                Email:
+              </label>
               <input
                 type="email"
                 name="email"
-                id="email" // Added id for accessibility
+                id="email"
                 value={formData.email}
                 onChange={handleChange}
                 className="w-full p-2 border border-gray-300 rounded-md"
@@ -153,10 +156,12 @@ const StudentRegisterPage = () => {
 
             {/* College Dropdown */}
             <div>
-              <label className="block text-gray-700" htmlFor="college">College:</label>
+              <label className="block text-gray-700" htmlFor="college">
+                College:
+              </label>
               <select
                 name="college"
-                id="college" // Added id for accessibility
+                id="college"
                 value={formData.college}
                 onChange={handleChange}
                 className="w-full p-2 border border-gray-300 rounded-md"
@@ -173,11 +178,13 @@ const StudentRegisterPage = () => {
 
             {/* College Code Input */}
             <div>
-              <label className="block text-gray-700" htmlFor="collegeCode">College Code:</label>
+              <label className="block text-gray-700" htmlFor="collegeCode">
+                College Code:
+              </label>
               <input
                 type="text"
                 name="collegeCode"
-                id="collegeCode" // Added id for accessibility
+                id="collegeCode"
                 value={formData.collegeCode}
                 onChange={handleChange}
                 className="w-full p-2 border border-gray-300 rounded-md"
@@ -187,11 +194,13 @@ const StudentRegisterPage = () => {
 
             {/* Password Input */}
             <div>
-              <label className="block text-gray-700" htmlFor="password">Password:</label>
+              <label className="block text-gray-700" htmlFor="password">
+                Password:
+              </label>
               <input
                 type="password"
                 name="password"
-                id="password" // Added id for accessibility
+                id="password"
                 value={formData.password}
                 onChange={handleChange}
                 className="w-full p-2 border border-gray-300 rounded-md"
@@ -201,11 +210,13 @@ const StudentRegisterPage = () => {
 
             {/* Confirm Password Input */}
             <div>
-              <label className="block text-gray-700" htmlFor="confirmPassword">Confirm Password:</label>
+              <label className="block text-gray-700" htmlFor="confirmPassword">
+                Confirm Password:
+              </label>
               <input
                 type="password"
                 name="confirmPassword"
-                id="confirmPassword" // Added id for accessibility
+                id="confirmPassword"
                 value={formData.confirmPassword}
                 onChange={handleChange}
                 className="w-full p-2 border border-gray-300 rounded-md"
@@ -216,7 +227,9 @@ const StudentRegisterPage = () => {
             {/* Submit Button */}
             <button
               type="submit"
-              className={`w-full py-2 px-4 bg-green-500 text-white font-bold rounded-md hover:bg-green-700 transition duration-300 ${isLoading ? "opacity-50 cursor-not-allowed" : ""}`}
+              className={`w-full py-2 px-4 bg-blue-500 text-white font-bold rounded-md hover:bg-green-700 transition duration-300 ${
+                isLoading ? "opacity-50 cursor-not-allowed" : ""
+              }`}
               disabled={isLoading} // Disable button when loading
             >
               {isLoading ? "Registering..." : "Register"}

@@ -15,7 +15,7 @@ const router = express.Router();
 router.get('/', getAllApplications);
 
 // Route to get application by student id
-router.get('/student-count/:id', countApplicationByUser);
+router.get('/student-count/', countApplicationByUser);
 // Route to get applications by student ID
 router.get('/c/', getApplicationByStudentId);
 router.get('/student/:id', getApplicationByStudentId);

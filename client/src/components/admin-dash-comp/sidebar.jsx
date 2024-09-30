@@ -1,24 +1,9 @@
-import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { FaUser, FaCalendarCheck, FaSignOutAlt, FaBars, FaTimes, FaGraduationCap, FaCogs, FaUsers, FaAccusoft, FaCampground, FaBuilding } from 'react-icons/fa';
 
 function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
-  const [adminName, setAdminName] = useState('');
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const storedAdmin = sessionStorage.getItem('user');
-    if (storedAdmin) {
-      try {
-        const user = JSON.parse(storedAdmin);
-        setAdminName(user.name || 'user');
-      } catch (error) {
-        console.error('Failed to parse admin data from localStorage:', error);
-      }
-    }
-  }, []);
-
   const handleLogout = () => {
     sessionStorage.removeItem('token');
     sessionStorage.removeItem('user');
@@ -50,11 +35,7 @@ function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
       {/* Sidebar */}
       <aside className={`fixed top-0 left-0 w-64 h-full bg-gray-100 p-6 shadow-lg transition-transform duration-300 ease-in-out ${isSidebarOpen ? 'translate-y-12 ' : '-translate-x-64'} md:translate-x-0 md:static`}>
 
-        <div className="mb-6">
-          <h3 className="text-lg font-semibold">
-            Welcome, <span className="font-bold">{adminName}</span>
-          </h3>
-        </div>
+        
         <nav>
           <ul className="space-y-4">
             <li>

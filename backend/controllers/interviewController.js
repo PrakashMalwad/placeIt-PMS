@@ -14,6 +14,29 @@ const getInterviews = async (req, res) => {
         res.status(500).json({ message: 'Failed to fetch interviews', error });
     }
 }
+//count interview
+const countInterviewStudent = async (req, res) => {
+ 
+    const studentId = req.user.id;
+    try {
+        const interviews = await Interview.find()
+            .populate({
+                path: 'jobApplication',
+                match: { student: studentId },
+                select: 'student',
+            });
+
+        const filteredInterviews = interviews.filter(interview => interview.jobApplication);
+
+        if (filteredInterviews.length === 0) {
+            return res.status(404).json({ message: 'No interviews found for this student.' });
+        }
+
+        res.status(200).json({ count: filteredInterviews.length });
+    } catch (error) {
+        res.status(500).json({ message: 'Error counting interviews: ' + error.message });
+    }
+};
 const scheduleInterview = async (req, res) => {
     console.log(req.params)
     const {id: applicationId } = req.params; // Extract the application ID from the request params
@@ -138,5 +161,6 @@ module.exports = {
     getInterviewByStudent,
     deleteInterview,
     updateInterview,
+    countInterviewStudent,
     getInterviewByCompany
 };

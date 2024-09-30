@@ -36,7 +36,7 @@ const getApplicationByStudentId = async (req, res) => {
         const applications = await JobApplication.find({ student: id }).populate({ 
             path: 'student', // Adjust to match your schema
             select: 'name resume' // Populate only name and resume
-        });
+        }) 
          // Populate student name
         res.status(200).json(applications);
     } catch (error) {
@@ -50,9 +50,10 @@ const getApplicationByDriveId = async (req, res) => {
     try {
         const { id } = req.params;
         const applications = await JobApplication.find({ drive: id })
+       
             .populate({ 
                 path: 'student', // Adjust to match your schema
-                select: 'name resume' // Populate only name and resume
+                select: 'name resume skills' // Populate only name and resume
             })
             
         res.status(200).json(applications);

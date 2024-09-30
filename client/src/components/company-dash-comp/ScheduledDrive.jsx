@@ -108,6 +108,22 @@ const ScheduledDrive = () => {
               <p className="mt-3 text-gray-700">
                 <strong>Student:</strong> {application.student.name}
               </p>
+              <p className="mt-3 text-gray-700">
+  <strong>Skills:</strong>
+</p>
+<div className="flex flex-wrap mt-2">
+  {application.student.skills && application.student.skills.length > 0 ? (
+    application.student.skills.map((skill, index) => (
+      <div key={index} className="bg-blue-100 text-blue-800 px-3 py-1 rounded-lg m-1">
+        {skill.skillName}
+      </div>
+    ))
+  ) : (
+    <p className="text-gray-500">No skills listed.</p>
+  )}
+</div>
+
+
               <p className="mt-2 text-gray-700">
                 <strong>Status:</strong> {application.status}
               </p>
