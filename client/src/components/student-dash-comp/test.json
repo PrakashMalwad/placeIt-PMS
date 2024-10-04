@@ -470,7 +470,212 @@
             "correctAnswer": "All of the above"
           }
         ]
-      },
+      },{
+  "subject": "MySQL",
+  "questionsList": [
+    {
+      "question": "What is MySQL?",
+      "options": [
+        "A relational database management system",
+        "A programming language",
+        "A web server",
+        "An operating system"
+      ],
+      "correctAnswer": "A relational database management system"
+    },
+    {
+      "question": "Which command is used to show all databases in MySQL?",
+      "options": [
+        "SHOW DATABASES",
+        "LIST DATABASES",
+        "DISPLAY DATABASES",
+        "GET DATABASES"
+      ],
+      "correctAnswer": "SHOW DATABASES"
+    },
+    {
+      "question": "Which statement is used to select data from a MySQL database?",
+      "options": [
+        "SELECT",
+        "CHOOSE",
+        "GET",
+        "SHOW"
+      ],
+      "correctAnswer": "SELECT"
+    },
+    {
+      "question": "What is the default port for MySQL?",
+      "options": [
+        "3306",
+        "5432",
+        "1521",
+        "8080"
+      ],
+      "correctAnswer": "3306"
+    },
+    {
+      "question": "Which SQL clause is used to filter records?",
+      "options": [
+        "WHERE",
+        "HAVING",
+        "FILTER",
+        "ORDER BY"
+      ],
+      "correctAnswer": "WHERE"
+    },
+    {
+      "question": "How do you delete a table in MySQL?",
+      "options": [
+        "DROP TABLE table_name",
+        "DELETE TABLE table_name",
+        "REMOVE TABLE table_name",
+        "CLEAR TABLE table_name"
+      ],
+      "correctAnswer": "DROP TABLE table_name"
+    },
+    {
+      "question": "Which function is used to count the number of rows?",
+      "options": [
+        "COUNT()",
+        "SUM()",
+        "ROW_COUNT()",
+        "NUMBER()"
+      ],
+      "correctAnswer": "COUNT()"
+    },
+    {
+      "question": "What type of join returns all rows from both tables?",
+      "options": [
+        "FULL OUTER JOIN",
+        "INNER JOIN",
+        "LEFT JOIN",
+        "RIGHT JOIN"
+      ],
+      "correctAnswer": "FULL OUTER JOIN"
+    },
+    {
+      "question": "Which MySQL function is used to return the current date?",
+      "options": [
+        "CURDATE()",
+        "GETDATE()",
+        "NOW()",
+        "SYSDATE()"
+      ],
+      "correctAnswer": "CURDATE()"
+    },
+    {
+      "question": "Which command is used to create a new user in MySQL?",
+      "options": [
+        "CREATE USER",
+        "ADD USER",
+        "NEW USER",
+        "INSERT USER"
+      ],
+      "correctAnswer": "CREATE USER"
+    },
+    {
+      "question": "What is the maximum length of a VARCHAR column in MySQL?",
+      "options": [
+        "65535 characters",
+        "255 characters",
+        "1024 characters",
+        "32767 characters"
+      ],
+      "correctAnswer": "65535 characters"
+    },
+    {
+      "question": "Which storage engine does MySQL use by default?",
+      "options": [
+        "InnoDB",
+        "MyISAM",
+        "MEMORY",
+        "CSV"
+      ],
+      "correctAnswer": "InnoDB"
+    },
+    {
+      "question": "What is the use of the LIMIT clause in MySQL?",
+      "options": [
+        "To limit the number of rows returned",
+        "To limit the size of the database",
+        "To limit the number of columns",
+        "To limit the number of tables"
+      ],
+      "correctAnswer": "To limit the number of rows returned"
+    },
+    {
+      "question": "Which command is used to update an existing record in a table?",
+      "options": [
+        "UPDATE",
+        "MODIFY",
+        "CHANGE",
+        "ALTER"
+      ],
+      "correctAnswer": "UPDATE"
+    },
+    {
+      "question": "How do you remove duplicate rows in the result set?",
+      "options": [
+        "DISTINCT",
+        "UNIQUE",
+        "EXCLUDE",
+        "REMOVE"
+      ],
+      "correctAnswer": "DISTINCT"
+    },
+    {
+      "question": "Which clause is used to sort the result-set?",
+      "options": [
+        "ORDER BY",
+        "GROUP BY",
+        "SORT BY",
+        "FILTER BY"
+      ],
+      "correctAnswer": "ORDER BY"
+    },
+    {
+      "question": "Which keyword is used to give a temporary name to a table or column?",
+      "options": [
+        "AS",
+        "IS",
+        "LIKE",
+        "TEMP"
+      ],
+      "correctAnswer": "AS"
+    },
+    {
+      "question": "Which command is used to backup a MySQL database?",
+      "options": [
+        "mysqldump",
+        "mysqlbackup",
+        "mysqlsave",
+        "mysqlcopy"
+      ],
+      "correctAnswer": "mysqldump"
+    },
+    {
+      "question": "What is a foreign key in MySQL?",
+      "options": [
+        "A key used to link two tables",
+        "A key used to encrypt data",
+        "A key used for indexing",
+        "A key used for sorting data"
+      ],
+      "correctAnswer": "A key used to link two tables"
+    },
+    {
+      "question": "Which function is used to concatenate two or more strings in MySQL?",
+      "options": [
+        "CONCAT()",
+        "JOIN()",
+        "MERGE()",
+        "COMBINE()"
+      ],
+      "correctAnswer": "CONCAT()"
+    }
+  ]
+}
+,
       {
         "subject": "Docker",
         "questionsList": [
@@ -561,6 +766,1354 @@
           }
         ]
       }
+      ,{
+        "subject": "WordPress",
+        "questionsList": [
+          {
+            "question": "What is WordPress?",
+            "options": [
+              "A content management system (CMS)",
+              "A web server",
+              "A programming language",
+              "A database management system"
+            ],
+            "correctAnswer": "A content management system (CMS)"
+          },
+          {
+            "question": "What language is WordPress primarily written in?",
+            "options": [
+              "PHP",
+              "JavaScript",
+              "Python",
+              "Ruby"
+            ],
+            "correctAnswer": "PHP"
+          },
+          {
+            "question": "Which file is the main configuration file for a WordPress site?",
+            "options": [
+              "wp-config.php",
+              "index.php",
+              "functions.php",
+              "style.css"
+            ],
+            "correctAnswer": "wp-config.php"
+          },
+          {
+            "question": "What is a theme in WordPress?",
+            "options": [
+              "A collection of files that define the layout and design of a site",
+              "A plugin that adds functionality",
+              "A database backup tool",
+              "A type of post"
+            ],
+            "correctAnswer": "A collection of files that define the layout and design of a site"
+          },
+          {
+            "question": "What are plugins in WordPress?",
+            "options": [
+              "Tools that add features and functionality to a site",
+              "Themes that change the design",
+              "Database management tools",
+              "Backup solutions"
+            ],
+            "correctAnswer": "Tools that add features and functionality to a site"
+          },
+          {
+            "question": "Which is the default post type in WordPress?",
+            "options": [
+              "Post",
+              "Page",
+              "Media",
+              "Comment"
+            ],
+            "correctAnswer": "Post"
+          },
+          {
+            "question": "What is the purpose of a child theme?",
+            "options": [
+              "To allow customizations without affecting the parent theme",
+              "To change the WordPress database structure",
+              "To optimize performance",
+              "To enhance security"
+            ],
+            "correctAnswer": "To allow customizations without affecting the parent theme"
+          },
+          {
+            "question": "What does the term 'taxonomy' refer to in WordPress?",
+            "options": [
+              "A way to group content",
+              "A type of post",
+              "A theme feature",
+              "A plugin type"
+            ],
+            "correctAnswer": "A way to group content"
+          },
+          {
+            "question": "What is the WordPress dashboard?",
+            "options": [
+              "The admin interface for managing the site",
+              "A type of plugin",
+              "A theme setting",
+              "A database management tool"
+            ],
+            "correctAnswer": "The admin interface for managing the site"
+          },
+          {
+            "question": "Which database system does WordPress use?",
+            "options": [
+              "MySQL",
+              "PostgreSQL",
+              "MongoDB",
+              "SQLite"
+            ],
+            "correctAnswer": "MySQL"
+          },
+          {
+            "question": "What is a permalink?",
+            "options": [
+              "A permanent link to a specific post or page",
+              "A temporary URL",
+              "A plugin link",
+              "A type of theme"
+            ],
+            "correctAnswer": "A permanent link to a specific post or page"
+          },
+          {
+            "question": "What is a widget in WordPress?",
+            "options": [
+              "A small block that adds content and functionality to sidebars",
+              "A type of post",
+              "A theme feature",
+              "A database table"
+            ],
+            "correctAnswer": "A small block that adds content and functionality to sidebars"
+          },
+          {
+            "question": "What is the role of the functions.php file?",
+            "options": [
+              "To define custom functions and features for a theme",
+              "To store database configurations",
+              "To manage plugin settings",
+              "To handle user permissions"
+            ],
+            "correctAnswer": "To define custom functions and features for a theme"
+          },
+          {
+            "question": "What is the Gutenberg editor?",
+            "options": [
+              "A block-based editor for creating content in WordPress",
+              "A type of theme",
+              "A plugin for SEO",
+              "A database optimization tool"
+            ],
+            "correctAnswer": "A block-based editor for creating content in WordPress"
+          },
+          {
+            "question": "What does 'wp-admin' refer to?",
+            "options": [
+              "The administrative area of a WordPress site",
+              "A type of theme",
+              "A plugin for site management",
+              "A database backup tool"
+            ],
+            "correctAnswer": "The administrative area of a WordPress site"
+          },
+          {
+            "question": "What is a custom post type?",
+            "options": [
+              "A type of content that extends beyond posts and pages",
+              "A unique permalink structure",
+              "A theme customization",
+              "A database table"
+            ],
+            "correctAnswer": "A type of content that extends beyond posts and pages"
+          },
+          {
+            "question": "Which of the following is NOT a default user role in WordPress?",
+            "options": [
+              "Editor",
+              "Subscriber",
+              "Developer",
+              "Administrator"
+            ],
+            "correctAnswer": "Developer"
+          },
+          {
+            "question": "What is a shortcode in WordPress?",
+            "options": [
+              "A shortcut to add dynamic content in posts and pages",
+              "A type of plugin",
+              "A theme setting",
+              "A database query"
+            ],
+            "correctAnswer": "A shortcut to add dynamic content in posts and pages"
+          },
+          {
+            "question": "How can you optimize a WordPress site for performance?",
+            "options": [
+              "By using caching plugins and optimizing images",
+              "By adding more plugins",
+              "By increasing the database size",
+              "By changing the theme frequently"
+            ],
+            "correctAnswer": "By using caching plugins and optimizing images"
+          }
+        ]
+      },
+      {
+        "subject": "Laravel",
+        "questionsList": [
+          {
+            "question": "What is Laravel?",
+            "options": [
+              "A PHP framework for web application development",
+              "A database management system",
+              "A JavaScript library",
+              "An HTML template engine"
+            ],
+            "correctAnswer": "A PHP framework for web application development"
+          },
+          {
+            "question": "Which command is used to create a new Laravel project?",
+            "options": [
+              "laravel new project-name",
+              "php artisan new project-name",
+              "composer create-project --prefer-dist laravel/laravel project-name",
+              "php new project-name"
+            ],
+            "correctAnswer": "composer create-project --prefer-dist laravel/laravel project-name"
+          },
+          {
+            "question": "What is the purpose of routes in Laravel?",
+            "options": [
+              "To define the application’s URL structure and behavior",
+              "To connect to the database",
+              "To manage user authentication",
+              "To store application settings"
+            ],
+            "correctAnswer": "To define the application’s URL structure and behavior"
+          },
+          {
+            "question": "Which file is used to configure database connections in Laravel?",
+            "options": [
+              ".env",
+              "config/database.php",
+              "config/app.php",
+              "database/config.php"
+            ],
+            "correctAnswer": ".env"
+          },
+          {
+            "question": "What is Eloquent in Laravel?",
+            "options": [
+              "The ORM (Object-Relational Mapping) implementation for Laravel",
+              "A middleware for authentication",
+              "A routing system",
+              "A type of caching"
+            ],
+            "correctAnswer": "The ORM (Object-Relational Mapping) implementation for Laravel"
+          },
+          {
+            "question": "What is the command to run database migrations in Laravel?",
+            "options": [
+              "php artisan migrate",
+              "php migrate",
+              "composer migrate",
+              "php artisan db:migrate"
+            ],
+            "correctAnswer": "php artisan migrate"
+          },
+          {
+            "question": "What does the artisan command do in Laravel?",
+            "options": [
+              "Provides a command-line interface for common tasks",
+              "Creates a new database",
+              "Starts a local server",
+              "Handles user authentication"
+            ],
+            "correctAnswer": "Provides a command-line interface for common tasks"
+          },
+          {
+            "question": "Which templating engine does Laravel use?",
+            "options": [
+              "Blade",
+              "Smarty",
+              "Twig",
+              "HTML"
+            ],
+            "correctAnswer": "Blade"
+          },
+          {
+            "question": "What is a middleware in Laravel?",
+            "options": [
+              "A way to filter HTTP requests entering your application",
+              "A type of database",
+              "A method for managing sessions",
+              "An external library"
+            ],
+            "correctAnswer": "A way to filter HTTP requests entering your application"
+          },
+          {
+            "question": "What is the purpose of the .env file in Laravel?",
+            "options": [
+              "To store environment variables and application settings",
+              "To manage database connections",
+              "To define routes",
+              "To configure middleware"
+            ],
+            "correctAnswer": "To store environment variables and application settings"
+          },
+          {
+            "question": "What is a seed in Laravel?",
+            "options": [
+              "A way to populate the database with test data",
+              "A type of middleware",
+              "An ORM method",
+              "A command to clear the cache"
+            ],
+            "correctAnswer": "A way to populate the database with test data"
+          },
+          {
+            "question": "What does the `php artisan serve` command do?",
+            "options": [
+              "Starts the local development server",
+              "Migrate the database",
+              "Install dependencies",
+              "Clear the cache"
+            ],
+            "correctAnswer": "Starts the local development server"
+          },
+          {
+            "question": "What are routes/web.php used for in Laravel?",
+            "options": [
+              "To define web routes for the application",
+              "To manage API routes",
+              "To configure middleware",
+              "To connect to the database"
+            ],
+            "correctAnswer": "To define web routes for the application"
+          },
+          {
+            "question": "What is a controller in Laravel?",
+            "options": [
+              "A class that handles the request and returns a response",
+              "A database model",
+              "A type of middleware",
+              "A route definition"
+            ],
+            "correctAnswer": "A class that handles the request and returns a response"
+          },
+          {
+            "question": "What is the purpose of Laravel's validation?",
+            "options": [
+              "To ensure data integrity and correctness",
+              "To handle user authentication",
+              "To connect to external APIs",
+              "To manage database connections"
+            ],
+            "correctAnswer": "To ensure data integrity and correctness"
+          },
+          {
+            "question": "Which command is used to create a new controller in Laravel?",
+            "options": [
+              "php artisan make:controller ControllerName",
+              "php make:controller ControllerName",
+              "create controller ControllerName",
+              "new controller ControllerName"
+            ],
+            "correctAnswer": "php artisan make:controller ControllerName"
+          },
+          {
+            "question": "What is a resource route in Laravel?",
+            "options": [
+              "A route that automatically maps to a controller's actions",
+              "A special middleware",
+              "A database configuration",
+              "A type of view"
+            ],
+            "correctAnswer": "A route that automatically maps to a controller's actions"
+          },
+          {
+            "question": "What is a model in Laravel?",
+            "options": [
+              "A representation of a database table in an application",
+              "A type of route",
+              "A middleware component",
+              "A view helper"
+            ],
+            "correctAnswer": "A representation of a database table in an application"
+          }
+        ]
+      },{
+        "subject": "Marketing",
+        "questionsList": [
+          {
+            "question": "What is marketing?",
+            "options": [
+              "The process of promoting, selling, and distributing a product or service",
+              "A type of advertising",
+              "Market research",
+              "A financial strategy"
+            ],
+            "correctAnswer": "The process of promoting, selling, and distributing a product or service"
+          },
+          {
+            "question": "What is the marketing mix?",
+            "options": [
+              "The combination of product, price, place, and promotion strategies",
+              "A marketing strategy for social media",
+              "A type of advertisement",
+              "Market research techniques"
+            ],
+            "correctAnswer": "The combination of product, price, place, and promotion strategies"
+          },
+          {
+            "question": "What does SEO stand for?",
+            "options": [
+              "Search Engine Optimization",
+              "Social Engagement Operations",
+              "Sales and Event Organization",
+              "Strategic Email Outreach"
+            ],
+            "correctAnswer": "Search Engine Optimization"
+          },
+          {
+            "question": "What is a target audience?",
+            "options": [
+              "A specific group of consumers identified as the intended recipients of a marketing message",
+              "All consumers in a market",
+              "A marketing strategy",
+              "A type of advertisement"
+            ],
+            "correctAnswer": "A specific group of consumers identified as the intended recipients of a marketing message"
+          },
+          {
+            "question": "What is content marketing?",
+            "options": [
+              "Creating and sharing valuable content to attract and engage an audience",
+              "Advertising a product",
+              "Conducting market research",
+              "A form of social media marketing"
+            ],
+            "correctAnswer": "Creating and sharing valuable content to attract and engage an audience"
+          },
+          {
+            "question": "What is a brand?",
+            "options": [
+              "A name, term, design, or symbol that identifies a product and distinguishes it from competitors",
+              "A type of advertising",
+              "A marketing strategy",
+              "A consumer group"
+            ],
+            "correctAnswer": "A name, term, design, or symbol that identifies a product and distinguishes it from competitors"
+          },
+          {
+            "question": "What is market research?",
+            "options": [
+              "The process of gathering, analyzing, and interpreting information about a market",
+              "Creating advertisements",
+              "Developing a product",
+              "A sales strategy"
+            ],
+            "correctAnswer": "The process of gathering, analyzing, and interpreting information about a market"
+          },
+          {
+            "question": "What does PPC stand for?",
+            "options": [
+              "Pay-Per-Click",
+              "Promotional Product Campaign",
+              "Price Per Customer",
+              "Personalized Product Communication"
+            ],
+            "correctAnswer": "Pay-Per-Click"
+          },
+          {
+            "question": "What is the purpose of advertising?",
+            "options": [
+              "To inform consumers about products and persuade them to purchase",
+              "To conduct market research",
+              "To improve customer service",
+              "To increase production"
+            ],
+            "correctAnswer": "To inform consumers about products and persuade them to purchase"
+          },
+          {
+            "question": "What is a marketing strategy?",
+            "options": [
+              "A plan to achieve marketing objectives and reach a target audience",
+              "A financial plan",
+              "An advertising technique",
+              "A sales strategy"
+            ],
+            "correctAnswer": "A plan to achieve marketing objectives and reach a target audience"
+          },
+          {
+            "question": "What is social media marketing?",
+            "options": [
+              "Using social media platforms to promote products or services",
+              "A type of advertising",
+              "Conducting market research",
+              "Creating content for a website"
+            ],
+            "correctAnswer": "Using social media platforms to promote products or services"
+          },
+          {
+            "question": "What is a value proposition?",
+            "options": [
+              "A statement that explains how a product solves a customer's problem or fulfills a need",
+              "A marketing strategy",
+              "A type of advertisement",
+              "A brand name"
+            ],
+            "correctAnswer": "A statement that explains how a product solves a customer's problem or fulfills a need"
+          },
+          {
+            "question": "What is customer segmentation?",
+            "options": [
+              "Dividing a customer base into groups based on shared characteristics",
+              "Creating advertisements",
+              "A sales technique",
+              "A marketing strategy"
+            ],
+            "correctAnswer": "Dividing a customer base into groups based on shared characteristics"
+          },
+          {
+            "question": "What is influencer marketing?",
+            "options": [
+              "Collaborating with influential individuals to promote products or services",
+              "Advertising through social media",
+              "Creating content for a brand",
+              "Conducting market research"
+            ],
+            "correctAnswer": "Collaborating with influential individuals to promote products or services"
+          },
+          {
+            "question": "What is a sales funnel?",
+            "options": [
+              "A model that represents the customer journey from awareness to purchase",
+              "A type of advertisement",
+              "A marketing strategy",
+              "A sales technique"
+            ],
+            "correctAnswer": "A model that represents the customer journey from awareness to purchase"
+          }
+        ]
+      }
+,{
+  "subject": "Public Relations",
+  "questionsList": [
+    {
+      "question": "What is public relations (PR)?",
+      "options": [
+        "The practice of managing communication between an organization and its public",
+        "A form of advertising",
+        "The art of public speaking",
+        "A type of marketing strategy"
+      ],
+      "correctAnswer": "The practice of managing communication between an organization and its public"
+    },
+    {
+      "question": "What is a press release?",
+      "options": [
+        "An official statement issued to the media",
+        "A type of advertisement",
+        "A social media post",
+        "A newsletter"
+      ],
+      "correctAnswer": "An official statement issued to the media"
+    },
+    {
+      "question": "What is the role of a PR professional?",
+      "options": [
+        "To create and maintain a positive public image for clients",
+        "To manage social media accounts",
+        "To conduct market research",
+        "To create advertisements"
+      ],
+      "correctAnswer": "To create and maintain a positive public image for clients"
+    },
+    {
+      "question": "What is crisis communication?",
+      "options": [
+        "Managing communication during a crisis to mitigate damage to an organization's reputation",
+        "Planning a marketing campaign",
+        "Conducting surveys",
+        "A type of public speaking"
+      ],
+      "correctAnswer": "Managing communication during a crisis to mitigate damage to an organization's reputation"
+    },
+    {
+      "question": "What is media training?",
+      "options": [
+        "Preparing individuals to effectively communicate with the media",
+        "Training on how to use media software",
+        "Teaching individuals how to write press releases",
+        "A type of public speaking course"
+      ],
+      "correctAnswer": "Preparing individuals to effectively communicate with the media"
+    },
+    {
+      "question": "What does the term 'stakeholders' refer to?",
+      "options": [
+        "Individuals or groups that have an interest in an organization's success",
+        "Employees of a company",
+        "Customers only",
+        "Investors only"
+      ],
+      "correctAnswer": "Individuals or groups that have an interest in an organization's success"
+    },
+    {
+      "question": "What is a media kit?",
+      "options": [
+        "A collection of materials providing information about an organization for media use",
+        "A type of marketing tool",
+        "A press release",
+        "A social media strategy"
+      ],
+      "correctAnswer": "A collection of materials providing information about an organization for media use"
+    },
+    {
+      "question": "What is reputation management?",
+      "options": [
+        "The practice of influencing and controlling an organization's reputation",
+        "Managing finances",
+        "Conducting market research",
+        "Advertising"
+      ],
+      "correctAnswer": "The practice of influencing and controlling an organization's reputation"
+    },
+    {
+      "question": "What is social media monitoring?",
+      "options": [
+        "Tracking and analyzing conversations about an organization on social media",
+        "Managing social media accounts",
+        "Creating social media content",
+        "Conducting surveys"
+      ],
+      "correctAnswer": "Tracking and analyzing conversations about an organization on social media"
+    },
+    {
+      "question": "What is the purpose of a public relations campaign?",
+      "options": [
+        "To promote a positive image and build relationships with target audiences",
+        "To sell products",
+        "To conduct market research",
+        "To create advertisements"
+      ],
+      "correctAnswer": "To promote a positive image and build relationships with target audiences"
+    },
+    {
+      "question": "What is a spokesperson?",
+      "options": [
+        "An individual designated to speak on behalf of an organization",
+        "A type of marketing tool",
+        "A social media manager",
+        "An advertising representative"
+      ],
+      "correctAnswer": "An individual designated to speak on behalf of an organization"
+    },
+    {
+      "question": "What does 'earned media' refer to?",
+      "options": [
+        "Publicity gained through promotional efforts other than paid media",
+        "Advertisements",
+        "Sponsored posts",
+        "Paid endorsements"
+      ],
+      "correctAnswer": "Publicity gained through promotional efforts other than paid media"
+    },
+    {
+      "question": "What is the purpose of a pitch?",
+      "options": [
+        "To persuade the media to cover a story or event",
+        "To sell products",
+        "To conduct market research",
+        "To create advertisements"
+      ],
+      "correctAnswer": "To persuade the media to cover a story or event"
+    },
+    {
+      "question": "What is brand storytelling?",
+      "options": [
+        "Using narrative to connect with audiences and convey a brand's message",
+        "Creating advertisements",
+        "Conducting surveys",
+        "Managing social media"
+      ],
+      "correctAnswer": "Using narrative to connect with audiences and convey a brand's message"
+    }
+  ]
+}
+,
+  {
+      
+      "subject": "Kubernetes",
+      "questionsList": [
+          {
+              "question": "What is Kubernetes?",
+              "options": [
+                  "A container orchestration platform",
+                  "A programming language",
+                  "A database management system",
+                  "A web server"
+              ],
+              "correctAnswer": "A container orchestration platform"
+          },
+          {
+              "question": "Which command is used to create a new deployment in Kubernetes?",
+              "options": [
+                  "kubectl create deployment",
+                  "kubectl new deployment",
+                  "kubectl launch deployment",
+                  "kubectl run deployment"
+              ],
+              "correctAnswer": "kubectl create deployment"
+          },
+          {
+              "question": "What does a Pod in Kubernetes represent?",
+              "options": [
+                  "The smallest deployable unit",
+                  "A service",
+                  "A type of deployment",
+                  "A storage volume"
+              ],
+              "correctAnswer": "The smallest deployable unit"
+          },
+          {
+              "question": "What is the purpose of a Service in Kubernetes?",
+              "options": [
+                  "To expose applications running on Pods",
+                  "To manage storage",
+                  "To define security policies",
+                  "To create ConfigMaps"
+              ],
+              "correctAnswer": "To expose applications running on Pods"
+          },
+          {
+              "question": "Which file format is commonly used for Kubernetes resource definitions?",
+              "options": [
+                  "YAML",
+                  "JSON",
+                  "XML",
+                  "HTML"
+              ],
+              "correctAnswer": "YAML"
+          },
+          {
+              "question": "What command is used to scale a deployment in Kubernetes?",
+              "options": [
+                  "kubectl scale",
+                  "kubectl resize",
+                  "kubectl change",
+                  "kubectl update"
+              ],
+              "correctAnswer": "kubectl scale"
+          },
+          {
+              "question": "What is a Namespace in Kubernetes?",
+              "options": [
+                  "A virtual cluster within a cluster",
+                  "A type of Pod",
+                  "A storage mechanism",
+                  "A networking policy"
+              ],
+              "correctAnswer": "A virtual cluster within a cluster"
+          },
+          {
+              "question": "Which component of Kubernetes is responsible for maintaining the desired state of the cluster?",
+              "options": [
+                  "Kube Controller Manager",
+                  "Kube Scheduler",
+                  "Kubelet",
+                  "kubectl"
+              ],
+              "correctAnswer": "Kube Controller Manager"
+          },
+          {
+              "question": "What does Helm do in Kubernetes?",
+              "options": [
+                  "Package manager for Kubernetes applications",
+                  "Orchestrates container deployment",
+                  "Manages cluster resources",
+                  "Provides monitoring solutions"
+              ],
+              "correctAnswer": "Package manager for Kubernetes applications"
+          },
+          {
+              "question": "Which command is used to view the logs of a Pod?",
+              "options": [
+                  "kubectl logs",
+                  "kubectl view logs",
+                  "kubectl show logs",
+                  "kubectl get logs"
+              ],
+              "correctAnswer": "kubectl logs"
+          },
+          {
+              "question": "What is a ConfigMap in Kubernetes?",
+              "options": [
+                  "A way to inject configuration data into applications",
+                  "A type of storage",
+                  "A method for scaling applications",
+                  "A network policy"
+              ],
+              "correctAnswer": "A way to inject configuration data into applications"
+          },
+          {
+              "question": "Which of the following is not a type of Service in Kubernetes?",
+              "options": [
+                  "ClusterIP",
+                  "NodePort",
+                  "LoadBalancer",
+                  "Endpoint"
+              ],
+              "correctAnswer": "Endpoint"
+          },
+          {
+              "question": "What does 'kubectl apply' do?",
+              "options": [
+                  "Applies changes to resources",
+                  "Creates new resources",
+                  "Deletes resources",
+                  "Lists resources"
+              ],
+              "correctAnswer": "Applies changes to resources"
+          },
+          {
+              "question": "Which Kubernetes object is used to define the desired state for a containerized application?",
+              "options": [
+                  "Deployment",
+                  "Service",
+                  "Pod",
+                  "ReplicaSet"
+              ],
+              "correctAnswer": "Deployment"
+          },
+          {
+              "question": "What is the purpose of a Volume in Kubernetes?",
+              "options": [
+                  "To provide persistent storage for Pods",
+                  "To define network policies",
+                  "To configure security",
+                  "To manage service discovery"
+              ],
+              "correctAnswer": "To provide persistent storage for Pods"
+          },
+          {
+              "question": "What is the purpose of the Kubelet?",
+              "options": [
+                  "To manage the state of Pods on a node",
+                  "To expose services",
+                  "To schedule Pods",
+                  "To provide logging"
+              ],
+              "correctAnswer": "To manage the state of Pods on a node"
+          },
+          {
+              "question": "What does the term 'rolling update' mean in Kubernetes?",
+              "options": [
+                  "Updating applications with zero downtime",
+                  "Deleting old applications",
+                  "Scaling applications up",
+                  "Creating new deployments"
+              ],
+              "correctAnswer": "Updating applications with zero downtime"
+          },
+          {
+              "question": "Which Kubernetes resource is used to define policies for accessing the cluster?",
+              "options": [
+                  "Role",
+                  "Service",
+                  "ConfigMap",
+                  "Deployment"
+              ],
+              "correctAnswer": "Role"
+          }
+      ]
+  },
+  {
+      
+      "subject": "JavaScript",
+      "questionsList": [
+          {
+              "question": "What is JavaScript?",
+              "options": [
+                  "A programming language",
+                  "A database",
+                  "A markup language",
+                  "A styling language"
+              ],
+              "correctAnswer": "A programming language"
+          },
+          {
+              "question": "Which of the following is a JavaScript data type?",
+              "options": [
+                  "String",
+                  "Number",
+                  "Boolean",
+                  "All of the above"
+              ],
+              "correctAnswer": "All of the above"
+          },
+          {
+              "question": "What does the 'console.log()' function do?",
+              "options": [
+                  "Logs output to the console",
+                  "Creates an alert box",
+                  "Prints output to the webpage",
+                  "Saves output to a file"
+              ],
+              "correctAnswer": "Logs output to the console"
+          },
+          {
+              "question": "Which operator is used for strict equality in JavaScript?",
+              "options": [
+                  "===",
+                  "==",
+                  "!=",
+                  "!=="
+              ],
+              "correctAnswer": "==="
+          },
+          {
+              "question": "What is the purpose of the 'this' keyword in JavaScript?",
+              "options": [
+                  "Refers to the current object",
+                  "Creates a new object",
+                  "Calls a function",
+                  "Accesses the global object"
+              ],
+              "correctAnswer": "Refers to the current object"
+          },
+          {
+              "question": "Which of the following methods can be used to convert a string to a number?",
+              "options": [
+                  "parseInt()",
+                  "Number()",
+                  "parseFloat()",
+                  "All of the above"
+              ],
+              "correctAnswer": "All of the above"
+          },
+          {
+              "question": "What is an array in JavaScript?",
+              "options": [
+                  "A collection of values",
+                  "A function",
+                  "An object",
+                  "All of the above"
+              ],
+              "correctAnswer": "All of the above"
+          },
+          {
+              "question": "Which function is used to add an element to the end of an array?",
+              "options": [
+                  "push()",
+                  "pop()",
+                  "shift()",
+                  "unshift()"
+              ],
+              "correctAnswer": "push()"
+          },
+          {
+              "question": "What is a closure in JavaScript?",
+              "options": [
+                  "A function with access to its own scope",
+                  "A variable scoped to the function",
+                  "A method that prevents memory leaks",
+                  "An error handling mechanism"
+              ],
+              "correctAnswer": "A function with access to its own scope"
+          },
+          {
+              "question": "Which keyword is used to declare a variable in JavaScript?",
+              "options": [
+                  "var",
+                  "let",
+                  "const",
+                  "All of the above"
+              ],
+              "correctAnswer": "All of the above"
+          },
+          {
+              "question": "What is the purpose of the 'setTimeout()' function?",
+              "options": [
+                  "Executes a function after a specified delay",
+                  "Stops code execution",
+                  "Creates a new function",
+                  "Sets a timeout for a promise"
+              ],
+              "correctAnswer": "Executes a function after a specified delay"
+          },
+          {
+              "question": "What does JSON stand for?",
+              "options": [
+                  "JavaScript Object Notation",
+                  "JavaScript Online Notation",
+                  "Java Source Object Notation",
+                  "Java Standard Object Notation"
+              ],
+              "correctAnswer": "JavaScript Object Notation"
+          },
+          {
+              "question": "What is the purpose of the 'map()' method in JavaScript?",
+              "options": [
+                  "To create a new array by applying a function to each element",
+                  "To filter elements from an array",
+                  "To find an element in an array",
+                  "To sort an array"
+              ],
+              "correctAnswer": "To create a new array by applying a function to each element"
+          },
+          {
+              "question": "Which of the following is used to handle errors in JavaScript?",
+              "options": [
+                  "try-catch",
+                  "if-else",
+                  "switch-case",
+                  "for loop"
+              ],
+              "correctAnswer": "try-catch"
+          },
+          {
+              "question": "What is the difference between 'null' and 'undefined' in JavaScript?",
+              "options": [
+                  "'null' is an assigned value, 'undefined' means a variable has been declared but not assigned a value",
+                  "'null' means a variable has been declared, 'undefined' is an assigned value",
+                  "'null' and 'undefined' are the same",
+                  "'null' is a number, 'undefined' is a string"
+              ],
+              "correctAnswer": "'null' is an assigned value, 'undefined' means a variable has been declared but not assigned a value"
+          },
+          {
+              "question": "What does 'document.getElementById()' do?",
+              "options": [
+                  "Finds an element by its ID",
+                  "Creates a new element",
+                  "Deletes an element",
+                  "Changes an element's ID"
+              ],
+              "correctAnswer": "Finds an element by its ID"
+          },
+          {
+              "question": "What is an object in JavaScript?",
+              "options": [
+                  "A collection of key-value pairs",
+                  "A variable that stores a value",
+                  "A function definition",
+                  "An array of values"
+              ],
+              "correctAnswer": "A collection of key-value pairs"
+          },
+          {
+              "question": "What is the purpose of the 'async' keyword in JavaScript?",
+              "options": [
+                  "Defines an asynchronous function",
+                  "Creates a promise",
+                  "Delays execution",
+                  "Handles errors"
+              ],
+              "correctAnswer": "Defines an asynchronous function"
+          }
+      ]
+  },
+  {
+      
+      "subject": "DevOps",
+      "questionsList": [
+          {
+              "question": "What does DevOps stand for?",
+              "options": [
+                  "Development and Operations",
+                  "Development of Operations",
+                  "Dev and Ops",
+                  "Development Operations"
+              ],
+              "correctAnswer": "Development and Operations"
+          },
+          {
+              "question": "What is Continuous Integration?",
+              "options": [
+                  "Frequent merging of code changes into a shared repository",
+                  "A deployment strategy",
+                  "A testing methodology",
+                  "A project management framework"
+              ],
+              "correctAnswer": "Frequent merging of code changes into a shared repository"
+          },
+          {
+              "question": "Which tool is commonly used for CI/CD?",
+              "options": [
+                  "Jenkins",
+                  "Photoshop",
+                  "PowerPoint",
+                  "Word"
+              ],
+              "correctAnswer": "Jenkins"
+          },
+          {
+              "question": "What is Infrastructure as Code (IaC)?",
+              "options": [
+                  "Managing infrastructure through code",
+                  "A programming language for infrastructure",
+                  "A database management technique",
+                  "A form of manual configuration"
+              ],
+              "correctAnswer": "Managing infrastructure through code"
+          },
+          {
+              "question": "What is a Container in DevOps?",
+              "options": [
+                  "A lightweight, portable, and self-sufficient environment for applications",
+                  "A type of virtual machine",
+                  "A physical server",
+                  "A network protocol"
+              ],
+              "correctAnswer": "A lightweight, portable, and self-sufficient environment for applications"
+          },
+          {
+              "question": "Which of the following is a version control system?",
+              "options": [
+                  "Git",
+                  "Docker",
+                  "Kubernetes",
+                  "Jenkins"
+              ],
+              "correctAnswer": "Git"
+          },
+          {
+              "question": "What is the purpose of configuration management tools like Ansible?",
+              "options": [
+                  "To automate and manage configurations",
+                  "To monitor system performance",
+                  "To manage version control",
+                  "To deploy applications"
+              ],
+              "correctAnswer": "To automate and manage configurations"
+          },
+          {
+              "question": "What is the main benefit of using a microservices architecture?",
+              "options": [
+                  "Scalability and flexibility",
+                  "Simplicity",
+                  "Lower costs",
+                  "Fewer servers"
+              ],
+              "correctAnswer": "Scalability and flexibility"
+          },
+          {
+              "question": "What does the term 'shift-left' mean in DevOps?",
+              "options": [
+                  "Involving testing earlier in the development process",
+                  "Shifting the release date to the left",
+                  "Reducing the size of code",
+                  "Moving operations to the development team"
+              ],
+              "correctAnswer": "Involving testing earlier in the development process"
+          },
+          {
+              "question": "What is a Service Mesh?",
+              "options": [
+                  "A dedicated infrastructure layer to manage service-to-service communication",
+                  "A container orchestration tool",
+                  "A type of network protocol",
+                  "A monitoring tool"
+              ],
+              "correctAnswer": "A dedicated infrastructure layer to manage service-to-service communication"
+          },
+          {
+              "question": "Which of the following is an essential practice in DevOps?",
+              "options": [
+                  "Collaboration and communication",
+                  "Isolation of teams",
+                  "Manual deployments",
+                  "Single points of failure"
+              ],
+              "correctAnswer": "Collaboration and communication"
+          },
+          {
+              "question": "What is a Blue-Green Deployment?",
+              "options": [
+                  "A technique for reducing downtime during deployments",
+                  "A method for monitoring applications",
+                  "A type of container orchestration",
+                  "A version control strategy"
+              ],
+              "correctAnswer": "A technique for reducing downtime during deployments"
+          },
+          {
+              "question": "What is the main goal of DevOps?",
+              "options": [
+                  "To improve collaboration between development and operations teams",
+                  "To reduce costs",
+                  "To create more documentation",
+                  "To increase the size of the team"
+              ],
+              "correctAnswer": "To improve collaboration between development and operations teams"
+          },
+          {
+              "question": "What is Monitoring in the context of DevOps?",
+              "options": [
+                  "The continuous observation of application performance and system health",
+                  "The process of creating applications",
+                  "The documentation of code changes",
+                  "The management of servers"
+              ],
+              "correctAnswer": "The continuous observation of application performance and system health"
+          },
+          {
+              "question": "What does CI/CD stand for?",
+              "options": [
+                  "Continuous Integration and Continuous Deployment",
+                  "Code Integration and Code Delivery",
+                  "Constant Improvement and Constant Development",
+                  "Continuous Improvement and Continuous Deployment"
+              ],
+              "correctAnswer": "Continuous Integration and Continuous Deployment"
+          },
+          {
+              "question": "What is a Feature Flag?",
+              "options": [
+                  "A technique to enable or disable features without deploying new code",
+                  "A type of deployment strategy",
+                  "A monitoring tool",
+                  "A version control method"
+              ],
+              "correctAnswer": "A technique to enable or disable features without deploying new code"
+          }
+      ]
+  },
+  {
+    
+      "subject": "Python",
+      "questionsList": [
+          {
+              "question": "What is Python?",
+              "options": [
+                  "A high-level programming language",
+                  "A type of database",
+                  "A web framework",
+                  "A markup language"
+              ],
+              "correctAnswer": "A high-level programming language"
+          },
+          {
+              "question": "Which of the following is a valid way to declare a variable in Python?",
+              "options": [
+                  "x = 10",
+                  "var x = 10",
+                  "let x = 10",
+                  "int x = 10"
+              ],
+              "correctAnswer": "x = 10"
+          },
+          {
+              "question": "What is a list in Python?",
+              "options": [
+                  "A collection of ordered elements",
+                  "A type of loop",
+                  "A conditional statement",
+                  "A function"
+              ],
+              "correctAnswer": "A collection of ordered elements"
+          },
+          {
+              "question": "Which keyword is used to define a function in Python?",
+              "options": [
+                  "def",
+                  "function",
+                  "define",
+                  "fun"
+              ],
+              "correctAnswer": "def"
+          },
+          {
+              "question": "What is the output of the following code: print(2 ** 3)?",
+              "options": [
+                  "6",
+                  "8",
+                  "9",
+                  "3"
+              ],
+              "correctAnswer": "8"
+          },
+          {
+              "question": "What does the 'len()' function do in Python?",
+              "options": [
+                  "Returns the number of items in an object",
+                  "Calculates the length of a string",
+                  "Creates a new list",
+                  "None of the above"
+              ],
+              "correctAnswer": "Returns the number of items in an object"
+          },
+          {
+              "question": "What is the purpose of the 'if __name__ == \"__main__\":' statement?",
+              "options": [
+                  "To check if the script is being run directly",
+                  "To import modules",
+                  "To define a function",
+                  "To create a class"
+              ],
+              "correctAnswer": "To check if the script is being run directly"
+          },
+          {
+              "question": "Which of the following is used to handle exceptions in Python?",
+              "options": [
+                  "try-except",
+                  "if-else",
+                  "while loop",
+                  "for loop"
+              ],
+              "correctAnswer": "try-except"
+          },
+          {
+              "question": "What is a dictionary in Python?",
+              "options": [
+                  "A collection of key-value pairs",
+                  "A type of list",
+                  "A function definition",
+                  "A type of loop"
+              ],
+              "correctAnswer": "A collection of key-value pairs"
+          },
+          {
+              "question": "What is the output of the following code: print(type(3.14))?",
+              "options": [
+                  "<class 'float'>",
+                  "<class 'int'>",
+                  "<class 'str'>",
+                  "<class 'list'>"
+              ],
+              "correctAnswer": "<class 'float'>"
+          },
+          {
+              "question": "Which library is commonly used for data analysis in Python?",
+              "options": [
+                  "Pandas",
+                  "NumPy",
+                  "SciPy",
+                  "Matplotlib"
+              ],
+              "correctAnswer": "Pandas"
+          },
+          {
+              "question": "What is the purpose of the 'with' statement in Python?",
+              "options": [
+                  "To simplify exception handling",
+                  "To create a context manager",
+                  "To define a function",
+                  "To create a loop"
+              ],
+              "correctAnswer": "To create a context manager"
+          }
+      ]
+  }
+
+
+      
+      
     ]
   }
   

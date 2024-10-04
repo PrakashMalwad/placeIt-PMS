@@ -42,6 +42,7 @@ const ScheduledDrive = () => {
 
   const openResumeModal = (resumeUrl) => {
     setSelectedResumeUrl(resumeUrl);
+    console.log(applications.student);
     setIsModalOpen(true);
   };
 
@@ -131,7 +132,7 @@ const ScheduledDrive = () => {
                 <strong>Resume:</strong> 
                 <button
                   className="text-blue-500 underline"
-                  onClick={() => openResumeModal(application.studentResume)}
+                  onClick={() => openResumeModal(application.student.resume)}
                 >
                   View Resume
                 </button>

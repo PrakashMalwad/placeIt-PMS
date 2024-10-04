@@ -224,6 +224,25 @@ const CollegeManagement = () => {
               placeholder="Enter contact number"
             />
           </div>
+          
+          <div className="mb-4">
+            <label
+              className="block text-gray-700 font-semibold"
+              htmlFor="University"
+            >
+              University
+            </label>
+            <input
+              type="  "
+              id="university"
+              name="university"
+              value={formData.university}
+              onChange={handleChange}
+              required
+              className="border border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring focus:ring-blue-300"
+              placeholder="Enter University Name"
+            />
+          </div>
 
           <div className="mb-4">
             <label

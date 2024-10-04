@@ -7,11 +7,14 @@ const User = require('../models/Users/User');
 // Create a new college
 exports.createCollege = async (req, res) => {
     try {
-        const college = new College(req.body);
+      const collegeData
+      = req.body;
+        const college = new College(collegeData);
         await college.save();
+        
         res.status(201).json({ message: 'College created successfully', college });
     } catch (error) {
-        res.status(400).json({ message: 'Error creating college', error });
+        res.status(400).json({ message: 'Error creating college', error});
     }
 };
 
@@ -55,10 +58,7 @@ exports.updateCollege = async (req, res) => {
 // Delete a college by ID
 exports.deleteCollege = async (req, res) => {
     try {
-        const college = await CollegeCoordinator.findByIdAndDelete(req.params.id);
-        if (!college) {
-            return res.status(404).json({ message: 'College not found' });
-        }
+        const college = await College.findByIdAndDelete(req.params.id);
         res.status(200).json({ message: 'College deleted successfully' });
     } catch (error) {
         res.status(500).json({ message: 'Error deleting college', error });

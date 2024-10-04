@@ -37,9 +37,9 @@ const statisticsRoutes = require("./routes/statsRoutes");
 const profileRoutes = require("./routes/profileRoutes");
 const CollegeCode= require("./routes/CollegeCodeRoute");
 const skillRoute = require("./routes/skillRoute");
-
-
 const interviewRoutes = require("./routes/interviewRoutes");
+app.use("/api/stats/",homeRoutes);
+
 // Setting up all routes
 app.use("/api/home", homeRoutes);
 app.use("/api/interviews", auth.auth,interviewRoutes);

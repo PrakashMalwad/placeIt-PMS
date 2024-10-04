@@ -77,13 +77,15 @@ router.get("/my-profile", async (req, res) => {
       message: "User retrieved successfully",
       user: {
         id: user._id,
-        profileImage: user.profileImg, // Ensure you're accessing the correct field
+        profileImage: user.profileImg, 
       },
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
+
+
 // Upload Resume Route
 router.post("/upload-resume", upload.single("file"), async (req, res) => {
   try {
@@ -113,6 +115,7 @@ router.post("/upload-resume", upload.single("file"), async (req, res) => {
       }
 
       const publicURL = publicUrlData.publicUrl;
+
       if (!publicURL) {
           return res.status(500).json({ error: "Failed to retrieve public URL" });
       }
@@ -142,7 +145,6 @@ router.post("/upload-resume", upload.single("file"), async (req, res) => {
 router.post("/upload-logo", upload.single("file"), async (req, res) => {
   try {
       const file = req.file;
-      console.log(file)
       if (!file) {
           return res.status(400).json({ message: "No file uploaded" });
       }

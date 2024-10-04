@@ -62,7 +62,6 @@ function ManageUser() {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log(response.data);
       setCompanies(response.data);
     } catch (error) {
       setError("Error fetching companies: " + error.message);
@@ -95,7 +94,7 @@ function ManageUser() {
   };
   const handleOpenModifyModal = (user) => {
     setSelectedUser(user);
-    setModifiedUser(user); // Pre-fill form with user data
+    setModifiedUser(selectedUser); // Pre-fill form with user data
     setIsModifyUserModalOpen(true);
   };
 
@@ -296,7 +295,7 @@ function ManageUser() {
                               className="bg-indigo-500 text-white px-2 py-1 rounded"
                               onClick={() => handleVerify(user._id)}
                             >
-                              <FaCheck /> {/* Verification icon */}
+                              <FaCheck /> 
                             </button>
                           )}
                         </div>

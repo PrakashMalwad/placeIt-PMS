@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { FaPlus, FaTrash, FaEdit, FaSpinner, FaExclamationCircle } from "react-icons/fa";
+import { FaPlus, FaTrash, FaEdit, FaSpinner, FaExclamationCircle, FaCheck, FaPause, FaTimes, FaPlay } from "react-icons/fa";
 import { toast } from "react-toastify"; // Import toast for notifications
 
 const apiUrl = import.meta.env.VITE_BACKEND_URL;
@@ -148,6 +148,51 @@ function ManageStudents() {
       toast.error("Error modifying student: " + error.message);
     }
   };
+  const handleToggleHoldStatus = async (id, isCurrentlyOnHold) => {
+    try {
+      const endpoint = isCurrentlyOnHold
+        ? `${apiUrl}/api/users/${id}`
+        : `${apiUrl}/api/users/${id}`; // Adjusted endpoints for hold/unhold
+
+      const response = await axios.patch(endpoint, null, {
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        },
+      });
+      setStudents(
+        students.map((student) => (student._id === id ? response.data.user : student))
+      );
+      alert(response.data.message);
+    } catch (error) {
+      setError(`Error toggling hold status: ${error.message}`);
+    }
+  };
+  const handleVerify = async (id) => {
+    try {
+      const response = await axios.patch(`${apiUrl}/api/users/v/${id}`, null, {
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        },
+      });
+      setStudents(
+        students.map((student) => (student._id === id ? response.data.user : student))
+      );
+    } catch (error) {
+      setError("Error verifying user: " + error.message);
+    }
+  };
+  const getStatusText = (status) => {
+    switch (status) {
+      case 0:
+        return "On Hold";
+      case 1:
+        return "Active";
+      case 2:
+        return "Not Verified";
+      default:
+        return "Unknown";
+    }
+  };
 
   const handleDeleteStudent = async (id) => {
     try {
@@ -199,6 +244,7 @@ function ManageStudents() {
                 <tr className="bg-gray-200">
                   <th className="border px-4 py-2">Name</th>
                   <th className="border px-4 py-2">Email</th>
+                  <th className="border px-4 py-2">Status</th>
                   <th className="border px-4 py-2">Phone</th>
                   <th className="border px-4 py-2">Actions</th>
                 </tr>
@@ -208,6 +254,7 @@ function ManageStudents() {
                   <tr key={student._id} className={index % 2 === 0 ? "bg-gray-50" : "bg-white"}>
                     <td className="border px-4 py-2">{student.name}</td>
                     <td className="border px-4 py-2">{student.email}</td>
+                    <td className="border px-4 py-2">{getStatusText(student.status)}</td>
                     <td className="border px-4 py-2">{student.contactno}</td>
                     <td className="border px-4 py-2">
                       <div className="flex space-x-2">
@@ -218,11 +265,36 @@ function ManageStudents() {
                           <FaEdit className="mr-2" /> Modify
                         </button>
                         <button
+                            className={`${
+                              student.status === 0
+                                ? "bg-green-500"
+                                : "bg-yellow-500"
+                            } text-white px-2 py-1 rounded`}
+                            onClick={() =>
+                              handleToggleHoldStatus(
+                                student._id,
+                                student.status === 0
+                              )
+                            }
+                          >
+                            {student.status === 0 ? <FaPlay /> : <FaPause />}
+                          </button>
+                        <button
                           className="bg-red-500 text-white px-4 py-2 rounded-lg flex items-center transition-transform transform hover:scale-105"
                           onClick={() => handleDeleteStudent(student._id)}
                         >
                           <FaTrash className="mr-2" /> Delete
                         </button>
+                       
+                          {/* Conditionally render the verify button if the user is not verified (status === 2) */}
+                         
+                            <button
+                              className="bg-green-500 text-white px-2 py-1 rounded"
+                              onClick={() => handleVerify(student._id)}
+                            >
+                              {student.status === 2 ? <div className="flex row-span-1 justify-center items-center"><FaCheck className="mr-2"/>Verify</div> : <div className="flex row-span-1 justify-center items-center "><FaTimes className="mr-2"/>UnVerify</div> }
+                            </button>
+                          
                       </div>
                     </td>
                   </tr>

@@ -95,29 +95,16 @@ const getStudentsFromSameCollege = async (req, res) => {
 // Update an existing student
 const updateStudent = async (req, res) => {
   const { id } = req.params;
-  const { aboutme, dob, college, passingyear, qualification, stream, contactno, address, city, state, skills, designation, resume, profileImage, termsAccepted } = req.body;
+  const { ...other } = req.body;
 
   try {
     const updatedStudent = await Student.findByIdAndUpdate(
       id,
+      { $set: { ...other } }, // Use $set to update only the provided fields
       {
-        aboutme,
-        dob,
-        college,
-        passingyear,
-        qualification,
-        stream,
-        contactno,
-        address,
-        city,
-        state,
-        skills,
-        designation,
-        resume,
-        profileImage,
-        termsAccepted
-      },
-      { new: true } // Return the updated student
+        new: true, // Return the updated student
+        runValidators: true, // Ensure validations are run
+      }
     );
 
     if (!updatedStudent) {
@@ -130,6 +117,7 @@ const updateStudent = async (req, res) => {
     res.status(500).json({ message: 'Error updating student' });
   }
 };
+
 
 // Delete a student
 const deleteStudent = async (req, res) => {

@@ -10,20 +10,8 @@ const PlacementCoordinatorSchema = new mongoose.Schema({
     },
     department: {
         type: String,
-        
     },
-    contactPerson: {
-        type: String,
-        trim: true},
-    contactEmail: {
-        type: String,
-        trim: true,
-        match: [/^\S+@\S+\.\S+$/, 'Please enter a valid email address.'],
-    },
-    contactNumber: {
-        type: String,
-    },
-    officeAddress: {
+    contactno: {
         type: String,
     },
     roleDescription: {

@@ -1,4 +1,5 @@
 import "./App.css";
+import "react-toastify/dist/ReactToastify.css";
 // External Libraries
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 // Protected Routes
@@ -45,6 +46,7 @@ import AdminEnquiries from "./components/admin-dash-comp/showEnquiry";
 import ViewDriveRequest from "./components/placementcell-dash-comp/ViewDriveRequest";
 import ShowApplication from "./components/placementcell-dash-comp/ShowApplication";
 import GenerateCollegeCode from "./components/placementcell-dash-comp/GenerateCollegeCode";
+import PlacementCellProfile from "./components/placementcell-dash-comp/profile";
 
 //Company Components
 import RequestDrive from "./components/company-dash-comp/RequestJobDrive";
@@ -183,6 +185,7 @@ function App() {
             path="manage-drive/applications/:id"
             element={<ShowApplication />}
           />
+          <Route path="profile" element={<PlacementCellProfile />} />
           <Route path="get-college-code" element={<GenerateCollegeCode />} />
 
           <Route path="settings" element={<SettingsPage />} />

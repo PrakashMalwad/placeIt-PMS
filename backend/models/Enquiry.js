@@ -11,7 +11,7 @@ const enquirySchema = new mongoose.Schema({
   },
   enquiryType: {
     type: String,
-    enum: ["college", "company", "General", "Collaboration", "Job Posting", "Feedback"],
+    enum: ["college", "company", "General", "Collaboration", "Job Posting", "Connect","Feedback"],
     default: "General",
     required: true,
   },
