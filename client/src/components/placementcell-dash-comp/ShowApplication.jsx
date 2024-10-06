@@ -43,10 +43,7 @@ const handleCloseModal = () => {
           `${apiUrl}/api/applications/drive/${id}`
         );
         setApplications(applicationsResponse.data);
-
-        // Optionally, fetch drive details
-        const driveResponse = await axios.get(`${apiUrl}/api/drives/${id}`);
-        setDrive(driveResponse.data);
+          
       } catch (err) {
         console.error("Failed to fetch applications:", err);
         setError("Failed to fetch applications. Please try again later.");

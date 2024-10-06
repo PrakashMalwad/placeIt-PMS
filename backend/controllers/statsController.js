@@ -1,5 +1,5 @@
 // controllers/placementStatisticController.js
-
+const User = require('../models/Users/User');
 const PlacementStatistic = require('../models/PlacementStatistic');
 
 // Create a new placement statistic
@@ -22,7 +22,19 @@ const getAllPlacementStatistics = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
+// get PlacementStatistic by collegeId 
+const getPlacementStatisticByCollegeId = async (req, res) => {
+  try {
+    const userId = req.user.id;   
+    //get collegeId from user
+    const user = await User.findById  (userId);
+    const collegeId = user.college;
+    const statistics = await PlacementStatistic.find({collegeId:collegeId}).populate('collegeId', 'name'); // Populate college name
+    res.status(200).json(statistics);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 // Get a single placement statistic by ID
 const getPlacementStatisticById = async (req, res) => {
   try {
@@ -62,10 +74,13 @@ const deletePlacementStatistic = async (req, res) => {
   }
 };
 
+
+
 module.exports = {
   createPlacementStatistic,
   getAllPlacementStatistics,
   getPlacementStatisticById,
+  getPlacementStatisticByCollegeId,
   updatePlacementStatistic,
   deletePlacementStatistic,
 };

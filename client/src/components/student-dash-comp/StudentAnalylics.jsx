@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { FaBell, FaFileAlt, FaCalendarAlt } from 'react-icons/fa';
+import { FaBriefcase, FaMoneyBillWave, FaMapMarkerAlt, FaComments } from 'react-icons/fa';
+
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
@@ -13,10 +15,7 @@ function StudentAnalytics() {
   });
 
   const [upcomingDrives, setUpcomingDrives] = useState([]);
-  const [notifications, setNotifications] = useState([
-    { id: '1', message: 'New interview scheduled with TechCorp', timestamp: '2024-09-14T10:30:00' },
-    { id: '2', message: 'Job application received by Alpha Industries', timestamp: '2024-09-13T08:00:00' },
-  ]);
+ const [studentPlacement, setStudentPlacement] = useState(null);
 
   // Fetch upcoming drives and performance data
   useEffect(() => {
@@ -34,23 +33,30 @@ function StudentAnalytics() {
         // Assuming these are your endpoints for fetching applications, interviews, and offers
         const applicationsUrl = `${apiUrl}/api/applications/student-count`;
         const interviewsUrl = `${apiUrl}/api/interviews/student-count`;
+        const placedUrl = `${apiUrl}/api/placedJob`; 
     
         // Use Promise.all to fetch all data concurrently
-        const [applicationsResponse, interviewsResponse] = await Promise.all([
+        const [applicationsResponse, interviewsResponse,
+          placedResponse
+        ] = await Promise.all([
           axios.get(applicationsUrl),
           axios.get(interviewsUrl),
+          axios.get(placedUrl),
         ]);
     
         // Extract counts from API responses
         const applicationsCount = applicationsResponse.data.count || 0;
         const interviewsCount = interviewsResponse.data.count ;
-    console.log(interviewsResponse.data.count   )
+        console.log(placedResponse.data)
+        const offersReceived = placedResponse.data || 0;
         // Update state with the counts
         setPerformance((prev) => ({
           ...prev,
           appliedJobs: applicationsCount,     
           interviewsScheduled: interviewsCount, 
+         
         }));
+        setStudentPlacement(offersReceived.studentPlacement);
       } catch (error) {
         console.error('Error fetching performance data:', error);
       }
@@ -78,7 +84,7 @@ function StudentAnalytics() {
                 >
                   <div>
                     <span className="text-sm sm:text-base font-bold">{drive.jobtitle} </span>
-                    <span className="text-xs sm:text-sm text-gray-500">({drive.company.companyname})</span>
+                    <span className="text-xs sm:text-sm text-gray-500">({drive.companyname})</span>
                     <p className="text-xs sm:text-sm">{drive.location}</p>
                     <p className="text-xs sm:text-sm text-gray-500">Eligibility: {drive.eligibilityCriteria}</p>
                   </div>
@@ -109,29 +115,50 @@ function StudentAnalytics() {
         </div>
       </section>
 
-      {/* Notifications */}
-      <section>
-        <h3 className="text-xl sm:text-2xl font-semibold mb-2">Recent Notifications</h3>
-        <ul>
-          {notifications.length > 0 ? (
-            notifications.map((notification) => (
-              <li key={notification.id} className="mb-3">
-                <div className="flex items-center p-3 sm:p-4 bg-gray-100 rounded-lg">
-                  <FaBell className="text-gray-600 text-xl sm:text-2xl mr-3" />
-                  <div>
-                    <p className="text-sm sm:text-base">{notification.message}</p>
-                    <p className="text-gray-500 text-xs sm:text-sm">
-                      {new Date(notification.timestamp).toLocaleString()}
-                    </p>
-                  </div>
-                </div>
-              </li>
-            ))
-          ) : (
-            <p>No recent notifications.</p>
-          )}
-        </ul>
-      </section>
+
+{studentPlacement ? (
+  <section className="mb-6">
+    <h3 className="text-xl sm:text-2xl font-semibold mb-2">Placed Job Details</h3>
+    <div className="bg-yellow-100 p-4 rounded-lg shadow-sm">
+      <p className="font-bold text-sm sm:text-lg flex items-center">
+        <FaBriefcase className="mr-2 text-blue-500" />
+        Company:
+        <span className="font-normal ml-2">{studentPlacement.placedCompany.name}</span>
+      </p>
+      <p className="font-bold text-sm sm:text-lg flex items-center">
+        <FaBriefcase className="mr-2 text-blue-500" />
+        Job Title: 
+        <span className="font-normal ml-2">{studentPlacement.jobTitle}</span>
+      </p>
+      <p className="font-bold text-sm sm:text-lg flex items-center">
+        <FaMoneyBillWave className="mr-2 text-blue-500" />
+        Package: 
+        <span className="font-normal ml-2">{studentPlacement.package}</span>
+      </p>
+      <p className="font-bold text-sm sm:text-lg flex items-center">
+        <FaMapMarkerAlt className="mr-2 text-blue-500" />
+        Location: 
+        <span className="font-normal ml-2">{studentPlacement.location}</span>
+      </p>
+      <p className="font-bold text-sm sm:text-lg flex items-center">
+        <FaCalendarAlt className="mr-2 text-blue-500" />
+        Joining Date: 
+        <span className="font-normal ml-2">{new Date(studentPlacement.joiningDate).toLocaleDateString()}</span>
+      </p>
+      <p className="font-bold text-sm sm:text-lg flex items-center">
+        <FaComments className="mr-2 text-blue-500" />
+        Message: 
+        <span className="font-normal ml-2">{studentPlacement.message}</span>
+      </p>
+    </div>
+  </section>
+) : (
+  <p>No placement data available</p>
+)}
+
+
+
+
     </div>
   );
 }

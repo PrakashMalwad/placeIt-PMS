@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import Modal from '../GeneralModal'; // Import your modal component
+import Modal from "../GeneralModal"; // Import your modal component
 
 const RequestDrive = () => {
   const apiUrl = import.meta.env.VITE_BACKEND_URL;
@@ -40,6 +40,11 @@ const RequestDrive = () => {
       setLoading(true);
       const response = await axios.get(`${apiUrl}/api/statistics/`);
       setCollegeStats(response.data);
+
+      // Fetch additional stats for each college
+      collegeStats.map((stat) =>
+        axios.get(`${apiUrl}/api/stats/${stat.collegeId._id}`)
+      );
     } catch (error) {
       setError(`Error fetching college stats: ${error.message}`);
     } finally {
@@ -76,10 +81,13 @@ const RequestDrive = () => {
       });
       setIsModalOpen(false); // Close modal after submission
     } catch (error) {
-      console.error("Error requesting job drive:", error.response?.data || error.message);
+      console.error(
+        "Error requesting job drive:",
+        error.response?.data || error.message
+      );
       alert(
         error.response?.data?.message ||
-        "There was an issue requesting the job drive. Please try again."
+          "There was an issue requesting the job drive. Please try again."
       );
     } finally {
       setLoading(false);
@@ -89,13 +97,18 @@ const RequestDrive = () => {
   // Pagination Logic
   const indexOfLastCollege = currentPage * itemsPerPage;
   const indexOfFirstCollege = indexOfLastCollege - itemsPerPage;
-  const currentColleges = collegeStats.slice(indexOfFirstCollege, indexOfLastCollege);
+  const currentColleges = collegeStats.slice(
+    indexOfFirstCollege,
+    indexOfLastCollege
+  );
 
   const totalPages = Math.ceil(collegeStats.length / itemsPerPage);
 
   return (
     <div className="container mx-auto p-4">
-      <h2 className="text-2xl font-bold mb-4">Colleges&apos; Placement Statistics</h2>
+      <h2 className="text-2xl font-bold mb-4">
+        Colleges&apos; Placement Statistics
+      </h2>
 
       {/* Request Job Drive Button */}
       <div className="flex justify-end mb-4">
@@ -116,19 +129,35 @@ const RequestDrive = () => {
               <tr>
                 <th className="border border-gray-200 p-2">College Name</th>
                 <th className="border border-gray-200 p-2">Total Students</th>
-                <th className="border border-gray-200 p-2">Total Eligible Students</th>
-                <th className="border border-gray-200 p-2">Total Placed Students</th>
-                <th className="border border-gray-200 p-2">Total Drives Conducted</th>
+                <th className="border border-gray-200 p-2">
+                  Total Eligible Students
+                </th>
+                <th className="border border-gray-200 p-2">
+                  Total Placed Students
+                </th>
+                <th className="border border-gray-200 p-2">
+                  Total Drives Conducted
+                </th>
               </tr>
             </thead>
             <tbody>
               {currentColleges.map((stat) => (
                 <tr key={stat._id}>
-                  <td className="border border-gray-200 p-2">{stat.collegeId?.name || "N/A"}</td>
-                  <td className="border border-gray-200 p-2">{stat.totalStudents || 0}</td>
-                  <td className="border border-gray-200 p-2">{stat.totalEligibleStudents || 0}</td>
-                  <td className="border border-gray-200 p-2">{stat.totalPlacedStudents || 0}</td>
-                  <td className="border border-gray-200 p-2">{stat.totalDrives || 0}</td>
+                  <td className="border border-gray-200 p-2">
+                    {stat.collegeId?.name || "N/A"}
+                  </td>
+                  <td className="border border-gray-200 p-2">
+                    {stat.totalStudents || 0}
+                  </td>
+                  <td className="border border-gray-200 p-2">
+                    {stat.totalEligibleStudents || 0}
+                  </td>
+                  <td className="border border-gray-200 p-2">
+                    {stat.totalPlacedStudents || 0}
+                  </td>
+                  <td className="border border-gray-200 p-2">
+                    {stat.totalDrives || 0}
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -162,7 +191,10 @@ const RequestDrive = () => {
           <h2 className="text-2xl font-bold mb-6">Request a Job Drive</h2>
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-1" htmlFor="jobTitle">
+              <label
+                className="block text-sm font-medium mb-1"
+                htmlFor="jobTitle"
+              >
                 Job Title
               </label>
               <input
@@ -176,7 +208,10 @@ const RequestDrive = () => {
               />
             </div>
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-1" htmlFor="jobDescription">
+              <label
+                className="block text-sm font-medium mb-1"
+                htmlFor="jobDescription"
+              >
                 Job Description
               </label>
               <textarea
@@ -189,7 +224,10 @@ const RequestDrive = () => {
               />
             </div>
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-1" htmlFor="requirements">
+              <label
+                className="block text-sm font-medium mb-1"
+                htmlFor="requirements"
+              >
                 Requirements
               </label>
               <input
@@ -203,7 +241,10 @@ const RequestDrive = () => {
               />
             </div>
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-1" htmlFor="applicationDeadline">
+              <label
+                className="block text-sm font-medium mb-1"
+                htmlFor="applicationDeadline"
+              >
                 Application Deadline
               </label>
               <input
@@ -217,7 +258,10 @@ const RequestDrive = () => {
               />
             </div>
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-1" htmlFor="salary">
+              <label
+                className="block text-sm font-medium mb-1"
+                htmlFor="salary"
+              >
                 Salary
               </label>
               <input
@@ -231,7 +275,10 @@ const RequestDrive = () => {
               />
             </div>
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-1" htmlFor="college">
+              <label
+                className="block text-sm font-medium mb-1"
+                htmlFor="college"
+              >
                 College
               </label>
               {error && <p className="text-red-500">{error}</p>}

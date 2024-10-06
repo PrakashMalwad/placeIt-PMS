@@ -31,7 +31,7 @@ import Settings from "./components/student-dash-comp/Settings";
 // Admin Components
 import ManageDrive from "./components/admin-dash-comp/ManageDrive";
 import ManageUser from "./components/admin-dash-comp/ManageUser";
-import Reports from "./components/admin-dash-comp/reports";
+import Reports from "./components/admin-dash-comp/adminindex";
 import SettingsPage from "./components/admin-dash-comp/settings";
 import ManageCollege from "./components/admin-dash-comp/ManageCollege";
 import ManageCompany from "./components/admin-dash-comp/ManageCompany";
@@ -56,6 +56,9 @@ import ScheduledDrive from "./components/company-dash-comp/ScheduledDrive";
 import ManageInterview from "./components/company-dash-comp/ManageInterview";
 import ScheduleInterview from "./components/company-dash-comp/ScheduledInterview";
 import StudentInterviews from "./components/student-dash-comp/StudentInterview";
+import CompanyProfile from "./components/company-dash-comp/profile";
+import PlacementCellOverview from "./components/placementcell-dash-comp/placementcellIndex";
+
 
 function App() {
   return (
@@ -115,8 +118,10 @@ function App() {
             </ProtectedRoute>
           }
         >
+          <Route index element={<RequestDrive />} />
           <Route path="request-drive" element={<RequestDrive />} />
           <Route path="view-drive" element={<RequestedDrives />} />
+          <Route path="profile" element={<CompanyProfile />} />
           <Route
             path="view-drive/scheduled-drive/:applicationId"
             element={<ScheduledDrive />}
@@ -136,12 +141,13 @@ function App() {
               <AdminDashboard />
             </ProtectedRoute>
           }
-        >
+        ><Route index element={<Reports />} />
           <Route path="manage-users" element={<ManageUser />} />
           <Route path="reports" element={<Reports />} />
           <Route path="settings" element={<SettingsPage />} />
           <Route path="manage-college" element={<ManageCollege />} />
           <Route path="manage-company" element={<ManageCompany />} />
+          
           <Route path="manage-drive" element={<ManageDrive />}>
             <Route path="create-drive" element={<CreateDrive />} />
           </Route>
@@ -185,6 +191,8 @@ function App() {
             path="manage-drive/applications/:id"
             element={<ShowApplication />}
           />
+          <Route index element={<PlacementCellOverview />} />
+
           <Route path="profile" element={<PlacementCellProfile />} />
           <Route path="get-college-code" element={<GenerateCollegeCode />} />
 

@@ -58,7 +58,13 @@ exports.updateCollege = async (req, res) => {
 // Delete a college by ID
 exports.deleteCollege = async (req, res) => {
     try {
+       //delete college placement statistic too
+       await PlacementStatistic.deleteMany({ collegeId: req.params.id });
+        
+        //delete college statistis too
+        const collegeCode = await CollegeCode.deleteOne({ collegeid: req.params.id });
         const college = await College.findByIdAndDelete(req.params.id);
+       
         res.status(200).json({ message: 'College deleted successfully' });
     } catch (error) {
         res.status(500).json({ message: 'Error deleting college', error });

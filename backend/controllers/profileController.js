@@ -10,7 +10,7 @@ exports.getProfile = async (req, res) => {
   try {
     const userId = req.user.id; // Assuming you're storing the user ID in `req.user` after authentication
     // Fetch the user profile (assumes you're using a Student model, adjust as needed)
-    const profile = await User.findById(userId).populate('college'); // Populate any relations like 'college'
+    const profile = await User.findById(userId).populate('college').populate('company','companyname'); // Populate any relations like 'college'
 
     if (!profile) {
       return res.status(404).json({ message: 'Profile not found' });

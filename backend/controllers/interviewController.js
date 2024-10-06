@@ -2,12 +2,15 @@
 const JobApplication = require('../models/JobApplication');
 const Interview = require('../models/interview');
 const Company = require('../models/company');
+const Student = require('../models/Users/Students');
+const CompanyCoordinator = require('../models/Users/CompanyCoordinator');
+const Placement = require('../models/placement');
 
 //get all interview
 const getInterviews = async (req, res) => {
     try {
-        const interviews = await Interview.find();
 
+        const interviews = await Interview.find();
         res.status(200).json({ interviews });
     } catch (error) {
         console.error('Error fetching interviews:', error);
@@ -35,8 +38,97 @@ const countInterviewStudent = async (req, res) => {
         res.status(200).json({ count: filteredInterviews.length });
     } catch (error) {
         res.status(500).json({ message: 'Error counting interviews: ' + error.message });
+    }   
+};
+// controller for selecting candidate
+const selectCandidateById = async (req, res) => {
+    const { id } = req.params; // Get the job application ID
+
+    try {
+        // Fetch the job application to get the student ID
+        const jobApplication = await JobApplication.findById(id);
+        if (!jobApplication) {
+            return res.status(404).json({ message: 'Job application not found' });
+        }
+
+        const studentId = jobApplication.student; // Extract the student ID
+
+        // Get company ID through user ID
+        const companycoordId = req.user.id;
+        const companyData = await CompanyCoordinator.findById(companycoordId).select('company');
+        
+        if (!companyData) {
+            return res.status(404).json({ message: 'Company Coordinator not found' });
+        }
+        
+        const companyId = companyData.company;
+
+        // Assume you have these values available from the request body
+        const { jobTitle, message, package, location, joiningDate } = req.body;
+
+        // Validate input data
+        if (!jobTitle || !message || !package || !location || !joiningDate) {
+            return res.status(400).json({ message: 'All fields are required' });
+        }
+
+        // Check for existing placement for the student
+        const existingPlacement = await Placement.findOne({ student: studentId });
+
+        if (existingPlacement) {
+            // If there's an existing placement
+            if (existingPlacement.placedCompany.toString() === companyId.toString()) {
+                // If it's the same company, update the existing record
+                existingPlacement.jobTitle = jobTitle;
+                existingPlacement.message = message;
+                existingPlacement.package = package;
+                existingPlacement.location = location;
+                existingPlacement.joiningDate = joiningDate;
+
+                await existingPlacement.save();
+                
+                return res.status(200).json({ message: 'Candidate updated successfully', placement: existingPlacement });
+            } else {
+                // If it's a different company
+                return res.status(400).json({ message: 'Candidate is already placed with a different company' });
+            }
+        }
+
+        // Create a new placement record since there's no existing one
+        const placement = new Placement({
+            student: studentId,
+            placedCompany: companyId,
+            jobTitle,
+            package,
+            message,
+            location,
+            joiningDate,
+        });
+
+        await placement.save();
+
+        // Update the user to mark them as placed
+        const user = await Student.findByIdAndUpdate(
+            studentId,
+            { isPlaced: true },
+            { new: true }
+        );
+
+        if (!user) {
+            return res.status(404).json({ message: 'Student not found' });
+        }
+
+        res.status(200).json({ message: 'Candidate selected', user, placement });
+
+    } catch (error) {
+        console.error('Error selecting candidate:', error);
+        res.status(500).json({ message: 'Failed to select candidate', error });
     }
 };
+
+
+
+
+
 const scheduleInterview = async (req, res) => {
     console.log(req.params)
     const {id: applicationId } = req.params; // Extract the application ID from the request params
@@ -57,7 +149,8 @@ const scheduleInterview = async (req, res) => {
 
         // Schedule an interview using the job application
         const newInterview = new Interview({
-            candidateName: jobApplication.student.name, // Assuming "name" field exists on the student
+            candidateName: jobApplication.student.name, 
+            interviewerId: req.user.id,
             interviewerName,
             date,
             time,
@@ -160,6 +253,7 @@ module.exports = {
     getInterviews,
     getInterviewByStudent,
     deleteInterview,
+    selectCandidateById,
     updateInterview,
     countInterviewStudent,
     getInterviewByCompany

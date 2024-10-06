@@ -37,12 +37,14 @@ const statisticsRoutes = require("./routes/statsRoutes");
 const profileRoutes = require("./routes/profileRoutes");
 const CollegeCode= require("./routes/CollegeCodeRoute");
 const skillRoute = require("./routes/skillRoute");
+const adminReportRoute = require("./routes/adminReportRoute");
 const interviewRoutes = require("./routes/interviewRoutes");
 app.use("/api/stats/",homeRoutes);
 
 // Setting up all routes
 app.use("/api/home", homeRoutes);
 app.use("/api/interviews", auth.auth,interviewRoutes);
+app.use("/api/admin",adminReportRoute);
 app.use("/api/",profileRoutes);
 app.use("/api/statistics", auth.auth,statisticsRoutes );
 app.use("/api/enquiries", enquireRoutes);

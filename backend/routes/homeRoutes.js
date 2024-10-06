@@ -4,6 +4,8 @@ const College = require("../models/college");
 const router = express.Router();
 const Student = require("../models/Users/Students");
 const CollegeCode = require("../models/CollegeCodes");
+const auth = require("../middleware/auth");
+
 
 const { getTotalDrives } = require("../controllers/DriveController");
 const { getUserCount } = require("../controllers/userController");
@@ -75,9 +77,11 @@ router.get("/colleges", async (req, res) => {
   });
 });
 
+
 const {
   updatePlacementStatistics,
 } = require("../services/placementStatisticService");
+
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
   await updatePlacementStatistics(id);

@@ -5,6 +5,7 @@ const {
   getInterviewByCompany,
   countInterviewStudent,
   updateInterview,
+  selectCandidateById,
   deleteInterview,
   getInterviews
 
@@ -19,7 +20,8 @@ router.put("/update/:id",updateInterview);
 router.get("/company", getInterviewByCompany);
 router.get("/student", getInterviewByStudent);
 router.get("/student-count", countInterviewStudent);
-router.post("/c/:id", scheduleInterview);
+router.put("/select/:id", selectCandidateById);
+router.post("/schedule/:id", scheduleInterview);
 
 
 module.exports = router;

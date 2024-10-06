@@ -2,9 +2,6 @@ const express = require('express');
 const router = express.Router();
 const College = require('../models/college');
 const collegeController= require('../controllers/collegeController');
-  
-const college = require('../models/college');
-
 // Route to get all colleges
 router.get('/', collegeController.getAllColleges);
 
