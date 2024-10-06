@@ -1,23 +1,20 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const College = require('../models/college');
-const collegeController= require('../controllers/collegeController');
+const College = require("../models/college");
+const collegeController = require("../controllers/collegeController");
 // Route to get all colleges
-router.get('/', collegeController.getAllColleges);
+router.get("/", collegeController.getAllColleges);
 
 // Route to add a new college
-router.post('/', collegeController.createCollege);
+router.post("/", collegeController.createCollege);
 
 // Route to get a college by ID
-router.get('/:id', collegeController.getCollegeById);
-
+router.get("/:id", collegeController.getCollegeById);
 
 // Route to update a college by ID
-router.put('/:id', collegeController.updateCollege);
+router.put("/:id", collegeController.updateCollege);
 
 // Route to delete a college by ID
-router.delete('/:id', collegeController.deleteCollege);
-
-
+router.delete("/:id", collegeController.deleteCollege);
 
 module.exports = router;

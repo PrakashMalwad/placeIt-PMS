@@ -59,6 +59,8 @@ import StudentInterviews from "./components/student-dash-comp/StudentInterview";
 import CompanyProfile from "./components/company-dash-comp/profile";
 import PlacementCellOverview from "./components/placementcell-dash-comp/placementcellIndex";
 
+// Contact Page
+import Contact from "./pages/contact";
 
 function App() {
   return (
@@ -68,6 +70,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/register" element={<RoleSelection />} />
+        <Route path="/contact" element={<Contact />} />
         <Route
           path="/register/studentRegister"
           element={<StudentRegisterPage />}

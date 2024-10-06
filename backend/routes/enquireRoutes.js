@@ -36,7 +36,19 @@ router.get('/p/', async (req, res) => {
       res.status(500).json({ message: err.message });
   }
 });
+//general enquiries
+router.post('/general-enquiries', async (req, res) => {
+  const { contactName, email, phone, message, enquiryType} = req.body;
 
+  try {
+    const newEnquiry = new Enquiry({ contactName, email, phone, message ,enquiryType});
+    await newEnquiry.save();
+    res.status(201).json({ message: 'Enquiry submitted successfully' });
+  } catch (error) {
+    console.error('Error saving enquiry:', error);
+    res.status(500).json({ message: 'Error saving enquiry' });
+  }
+});
 // Create a new enquiry
 router.post('/placement-enquiries', async (req, res) => {
 const { collegeName, contactName, email, phone, message, enquiryType} = req.body;
