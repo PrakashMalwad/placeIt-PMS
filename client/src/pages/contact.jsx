@@ -136,7 +136,7 @@ const ContactPage = () => {
           <h3 className="text-lg font-semibold mb-2">Contact Details</h3>
           <p className="text-gray-700">📞 Phone: <a href="tel:+1234567890" className="text-blue-600">+1 (234) 567-890</a></p>
           <p className="text-gray-700">📧 Email: <a href="mailto:sies.cs@gmail.com" className="text-blue-600">sies.cs@gmail.com</a></p>
-          <p className="text-gray-700">🏢 Address: 123 Your Street, Your City, Your Country</p>
+          <p className="text-gray-700">🏢 Address: Mumbai, Maharashtra</p>
           <p className="text-gray-700">🌐 Website: <a href="https://placeit-pms.pages.dev" target="_blank" rel="noopener noreferrer" className="text-blue-600">www.placeit-pms.com</a></p>
         </div>
       </div>
