@@ -6,7 +6,7 @@ const featuredService = () => {
       icon: <FaUser />,
       title: 'Login',
       description: 'Students can login using their credentials.',
-      link: '#',
+      link: '/signin',
     },
     {
       icon: <FaUser />,
