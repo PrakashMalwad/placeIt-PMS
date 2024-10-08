@@ -84,7 +84,7 @@ exports.generateCollegeCode = async (req, res) => {
     try {
       const userId = req.user.id;
 
-      // Fetch the user's collegeId (assuming it's stored in the User model)
+      // Fetch the user's collegeId 
       const user = await User.findById(userId).select('college');
 
       if (!user || !user.college) {
@@ -132,7 +132,7 @@ exports.generateCollegeCode = async (req, res) => {
     try {
       const userId = req.user.id;
 
-      // Fetch the user's collegeId (assuming it's stored in the User model)
+      // Fetch the user's collegeId
       const user = await User.findById(userId).select('college');
 
       if (!user || !user.college) {
@@ -154,7 +154,7 @@ exports.generateCollegeCode = async (req, res) => {
     try {
       const userId = req.user.id;
 
-      // Fetch the user's collegeId (assuming it's stored in the User model)
+      // Fetch the user's collegeId 
       const user = await User.findById(userId).select('college');
       console.log(user.college[0])
 

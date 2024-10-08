@@ -78,50 +78,47 @@ const getReqDriveByCollege = async (req, res) => {
   }
 };
 
-
 const changeReqDriveStatus = async (req, res) => {
-    const { reqdrive,status } = req.body; 
-    try {
-      const validStatuses = ["pending", "accepted", "rejected"];
-      if (!validStatuses.includes(status)) {
-        return res.status(400).json({ message: "Invalid status provided." });
-      }
-      const updatedRequest = await RequestJobDrive.findByIdAndUpdate(
-        reqdrive,
-        { status },
-        { new: true }
-      );
-  
-      if (!updatedRequest) {
-        return res.status(404).json({ message: "Request not found." });
-      }
-      res.status(200).json(updatedRequest);
-    } catch (error) {
-      console.error("Error updating request status:", error.message);
-      res.status(500).json({ message: "Error updating request status." });
+  const { reqdrive, status } = req.body;
+  try {
+    const validStatuses = ["pending", "accepted", "rejected"];
+    if (!validStatuses.includes(status)) {
+      return res.status(400).json({ message: "Invalid status provided." });
     }
-  };
-  
+    const updatedRequest = await RequestJobDrive.findByIdAndUpdate(
+      reqdrive,
+      { status },
+      { new: true }
+    );
+
+    if (!updatedRequest) {
+      return res.status(404).json({ message: "Request not found." });
+    }
+    res.status(200).json(updatedRequest);
+  } catch (error) {
+    console.error("Error updating request status:", error.message);
+    res.status(500).json({ message: "Error updating request status." });
+  }
+};
 
 // add schelduledDrive as drive id provided
 
 const addScheduledDrive = async (req, res) => {
-      const { reqdrive, drive } = req.body;
-      try {
-        const updatedRequest = await RequestJobDrive.findByIdAndUpdate(
-            reqdrive,
-            { scheduledDrive: drive },
-            { new: true }
-            );
-        if (!updatedRequest) {
-            return res.status(404).json({ message: "Request not found." });
-        }
-        res.status(200).json(updatedRequest);
+  const { reqdrive, drive } = req.body;
+  try {
+    const updatedRequest = await RequestJobDrive.findByIdAndUpdate(
+      reqdrive,
+      { scheduledDrive: drive },
+      { new: true }
+    );
+    if (!updatedRequest) {
+      return res.status(404).json({ message: "Request not found." });
     }
-    catch (error) {
-        console.error("Error updating request status:", error.message);
-        res.status(500).json({ message: "Error updating request status." });
-    }
+    res.status(200).json(updatedRequest);
+  } catch (error) {
+    console.error("Error updating request status:", error.message);
+    res.status(500).json({ message: "Error updating request status." });
+  }
 };
 // Delete drive
 const deleteReqDrive = async (req, res) => {
@@ -139,24 +136,27 @@ const deleteReqDrive = async (req, res) => {
 };
 // get RequestDrive
 const getReqDrivebyCompany = async (req, res) => {
-  const { id:userId} = req.user;
+  const { id: userId } = req.user;
   const user = await CompanyCoordinator.findById(userId).populate("company");
   if (!user || !user.company) {
     return res.status(404).json({ message: "Company not found for the user" });
   }
   const id = user.company._id;
-  const reqDrive = (await RequestJobDrive.find({ company: id }).populate('college','name'));
+  const reqDrive = await RequestJobDrive.find({ company: id }).populate(
+    "college",
+    "name"
+  );
   if (!reqDrive) {
     return res.status(404).json({ message: "Drive not found" });
   }
   res.json(reqDrive);
 };
 
-module.exports = { 
-    createReqDrive,
-    getReqDriveByCollege,
-    getReqDrivebyCompany,
-    changeReqDriveStatus,
-    deleteReqDrive,
-    addScheduledDrive,
+module.exports = {
+  createReqDrive,
+  getReqDriveByCollege,
+  getReqDrivebyCompany,
+  changeReqDriveStatus,
+  deleteReqDrive,
+  addScheduledDrive,
 };

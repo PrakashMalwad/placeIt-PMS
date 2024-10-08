@@ -44,12 +44,15 @@ const SoftwareStatisticsSchema = new mongoose.Schema({
 });
 
 // Automatically update engagement metrics or other calculated fields
-SoftwareStatisticsSchema.pre('save', function(next) {
+SoftwareStatisticsSchema.pre("save", function (next) {
   // Custom logic to calculate metrics can go here
   next();
 });
 
 // Create the model
-const SoftwareStatistics = mongoose.model("SoftwareStatistics", SoftwareStatisticsSchema);
+const SoftwareStatistics = mongoose.model(
+  "SoftwareStatistics",
+  SoftwareStatisticsSchema
+);
 
 module.exports = SoftwareStatistics;

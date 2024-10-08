@@ -28,8 +28,8 @@ const UserSchema = new mongoose.Schema({
     default: "student",
   },
   profileImg: {
-    type: String, 
-    trim: true,    
+    type: String,
+    trim: true,
   },
   status: {
     type: Number,

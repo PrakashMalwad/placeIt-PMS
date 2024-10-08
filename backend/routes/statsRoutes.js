@@ -12,12 +12,12 @@ const {
 } = require("../controllers/statsController");
 
 // Routes for placement statistics
-router.post("/", createPlacementStatistic); // Create
-router.get("/", getAllPlacementStatistics); // Read all
-router.get("/bycollege/",getPlacementStatisticByCollegeId ); // Read one
-router.get("/get/:id", getPlacementStatisticById); // Read one
-router.put("/:id", updatePlacementStatistic); // Update
-router.delete("/:id", deletePlacementStatistic); // Delete
+router.post("/", createPlacementStatistic); 
+router.get("/", getAllPlacementStatistics); 
+router.get("/bycollege/",getPlacementStatisticByCollegeId ); 
+router.get("/get/:id", getPlacementStatisticById); 
+router.put("/:id", updatePlacementStatistic); 
+router.delete("/:id", deletePlacementStatistic); 
 
 
 module.exports = router;

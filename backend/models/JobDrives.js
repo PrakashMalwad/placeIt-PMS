@@ -3,11 +3,11 @@ const mongoose = require("mongoose");
 const driveSchema = new mongoose.Schema({
   company: {
     type: mongoose.Schema.Types.ObjectId,
-    ref:"Company",
+    ref: "Company",
     required: true,
     trim: true,
   },
-  jobtitle:{
+  jobtitle: {
     type: String,
     required: true,
     trim: true,
@@ -47,7 +47,7 @@ const driveSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
-  forCollege:{
+  forCollege: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "College",
   },

@@ -90,19 +90,15 @@ const selectCandidateById = async (req, res) => {
 
         await existingPlacement.save();
 
-        return res
-          .status(200)
-          .json({
-            message: "Candidate updated successfully",
-            placement: existingPlacement,
-          });
+        return res.status(200).json({
+          message: "Candidate updated successfully",
+          placement: existingPlacement,
+        });
       } else {
         // If it's a different company
-        return res
-          .status(400)
-          .json({
-            message: "Candidate is already placed with a different company",
-          });
+        return res.status(400).json({
+          message: "Candidate is already placed with a different company",
+        });
       }
     }
 
@@ -139,8 +135,8 @@ const selectCandidateById = async (req, res) => {
 
 const scheduleInterview = async (req, res) => {
   console.log(req.params);
-  const { id: applicationId } = req.params; // Extract the application ID from the request params
-  const { interviewerName, date, time, location, type, link } = req.body; // Interview details including type and link
+  const { id: applicationId } = req.params;
+  const { interviewerName, date, time, location, type, link } = req.body; 
 
   try {
     // Find the job application by its ID
@@ -175,12 +171,10 @@ const scheduleInterview = async (req, res) => {
     // Save the new interview
     await newInterview.save();
 
-    res
-      .status(201)
-      .json({
-        message: "Interview scheduled successfully",
-        interview: newInterview,
-      });
+    res.status(201).json({
+      message: "Interview scheduled successfully",
+      interview: newInterview,
+    });
   } catch (error) {
     console.error("Error scheduling interview:", error);
     res.status(500).json({ message: "Failed to schedule interview", error });

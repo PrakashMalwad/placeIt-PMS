@@ -1,7 +1,5 @@
-const 
-  mongoose = require('mongoose'); // Import mongoose
-const User = require('./User'); // Import the base User model
-
+const mongoose = require("mongoose");
+const User = require("./User");
 
 const companyCoordinatorSchema = new mongoose.Schema({
   phoneNumber: {
@@ -14,7 +12,7 @@ const companyCoordinatorSchema = new mongoose.Schema({
   },
   company: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Company',
+    ref: "Company",
     required: true,
   },
   department: {
@@ -44,6 +42,9 @@ const companyCoordinatorSchema = new mongoose.Schema({
 }); // No timestamps option here
 
 // Create a discriminator for `company-coordinator`
-const CompanyCoordinator = User.discriminator('company-coordinator', companyCoordinatorSchema);
+const CompanyCoordinator = User.discriminator(
+  "company-coordinator",
+  companyCoordinatorSchema
+);
 
 module.exports = CompanyCoordinator;

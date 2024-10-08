@@ -2,13 +2,13 @@ const Company = require("../models/company"); // Adjust the path as necessary
 
 // Create a new company
 exports.createCompany = async (req, res) => {
-  console.log("Request Body:", req.body); // Log the incoming request body
+
   try {
     const company = new Company(req.body);
     await company.save();
     res.status(201).json({ message: "Company created successfully", company });
   } catch (error) {
-    console.error("Error creating company:", error); // Log the error
+    console.error("Error creating company:", error); 
     res
       .status(400)
       .json({ message: "Error creating company", error: error.message });

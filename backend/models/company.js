@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 // Define the Company schema
 const CompanySchema = new mongoose.Schema({
@@ -23,7 +23,7 @@ const CompanySchema = new mongoose.Schema({
     type: String,
     required: true,
     trim: true,
-    match: [/^\+?[1-9]\d{1,14}$/, 'Invalid contact number format'],
+    match: [/^\+?[1-9]\d{1,14}$/, "Invalid contact number format"],
   },
   website: {
     type: String,
@@ -34,7 +34,7 @@ const CompanySchema = new mongoose.Schema({
     default: null,
     trim: true,
   },
-  type:{
+  type: {
     type: String,
     trim: true,
   },
@@ -53,13 +53,14 @@ const CompanySchema = new mongoose.Schema({
 });
 
 // Middleware to update the `updatedAt` field before saving
-CompanySchema.pre('save', function (next) {
+CompanySchema.pre("save", function (next) {
   this.updatedAt = Date.now();
   next();
 });
 
 // Create the Company model
-const Company = mongoose.models.Company || mongoose.model('Company', CompanySchema);
+const Company =
+  mongoose.models.Company || mongoose.model("Company", CompanySchema);
 
 // Export the Company model
 module.exports = Company;

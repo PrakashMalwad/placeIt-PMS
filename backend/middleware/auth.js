@@ -2,20 +2,24 @@ const jwt = require("jsonwebtoken");
 
 // Middleware to check authentication
 const auth = (req, res, next) => {
-  const token = req.header("Authorization")?.split(" ")[1]; // Extract token from "Bearer <token>"
+  const token = req.header("Authorization")?.split(" ")[1];
 
   if (!token) {
-    return res.status(401).json({ error: "No token provided, authorization denied" });
+    return res
+      .status(401)
+      .json({ error: "No token provided, authorization denied" });
   }
 
   try {
     // Verify the token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded.user; // Attach user info to request
+    req.user = decoded.user;
     next();
   } catch (err) {
-    if (err.name === 'TokenExpiredError') {
-      return res.status(401).json({ error: "Token has expired, please log in again" });
+    if (err.name === "TokenExpiredError") {
+      return res
+        .status(401)
+        .json({ error: "Token has expired, please log in again" });
     }
     return res.status(401).json({ error: "Token is not valid" });
   }
@@ -29,8 +33,14 @@ const checkRole = (roles) => {
 
   return (req, res, next) => {
     if (!req.user || !roles.includes(req.user.role)) {
-      console.warn(`Access denied for user ${req.user ? req.user.id : 'unknown'}, role: ${req.user ? req.user.role : 'none'}`);
-      return res.status(403).json({ error: "Access denied: insufficient permissions" });
+      console.warn(
+        `Access denied for user ${req.user ? req.user.id : "unknown"}, role: ${
+          req.user ? req.user.role : "none"
+        }`
+      );
+      return res
+        .status(403)
+        .json({ error: "Access denied: insufficient permissions" });
     }
     next();
   };
@@ -48,5 +58,4 @@ module.exports = {
   isStudent,
   isPlacementCell,
   isCompany,
-
 };

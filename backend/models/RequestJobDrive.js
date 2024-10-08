@@ -13,10 +13,10 @@ const RequestJobDriveSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  college:{
+  college: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "College",
-    required:true,
+    required: true,
   },
   applicationDeadline: {
     type: Date,
@@ -31,27 +31,29 @@ const RequestJobDriveSchema = new mongoose.Schema({
     ref: "Company",
     required: true,
   },
-  companyCoordinator:{
+  companyCoordinator: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true,
   },
-  scheduledDrive:
-    {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Drive",
-    },
-    status: {
+  scheduledDrive: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Drive",
+  },
+  status: {
     type: String,
     enum: ["pending", "accepted", "rejected"],
     default: "pending",
-    },
+  },
   requestedAt: {
     type: Date,
     default: Date.now,
   },
 });
 
-const RequestJobDrive = mongoose.model("RequestJobDrive", RequestJobDriveSchema);
+const RequestJobDrive = mongoose.model(
+  "RequestJobDrive",
+  RequestJobDriveSchema
+);
 
 module.exports = RequestJobDrive;

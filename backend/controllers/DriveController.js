@@ -1,4 +1,3 @@
-
 const Drive = require("../models/JobDrives");
 const winston = require("winston");
 const Student = require("../models/Users/Students");
@@ -24,21 +23,29 @@ const getDrivePostedByMe = async (req, res) => {
 
 const getDriveByCollege = async (req, res) => {
   try {
-    const userId = req.user.id; // Get user ID directly
-    const user = await User.findById(userId); // Find user by ID
+    const userId = req.user.id;
+    const user = await User.findById(userId);
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    const collegeId = user.college; 
-    const drives = await Drive.find({ 
-      postedBy: { $in: await PlacementCoordinator.find({ college: collegeId }).select('_id') } 
-    }).populate('postedBy','name company').populate('company','companyname'); 
+    const collegeId = user.college;
+    const drives = await Drive.find({
+      postedBy: {
+        $in: await PlacementCoordinator.find({ college: collegeId }).select(
+          "_id"
+        ),
+      },
+    })
+      .populate("postedBy", "name company")
+      .populate("company", "companyname");
     if (!drives.length) {
-      return res.status(404).json({ message: "No drives found for this college" });
+      return res
+        .status(404)
+        .json({ message: "No drives found for this college" });
     }
 
-    res.json(drives); // Return the list of drives
+    res.json(drives);
   } catch (error) {
     console.error("Error fetching drives:", error);
     res.status(500).json({ message: "Server error" });
@@ -57,13 +64,17 @@ const getDriveByStudentCollege = async (req, res) => {
     }
 
     const studentCollegeId = student.college;
-console.log(studentCollegeId)
+    console.log(studentCollegeId);
     // Find drives where the postedBy's college matches the student's college
-    const drives = await Drive.find({ 'postedBy.college': studentCollegeId }).populate('postedBy', 'college');
-    console.log(drives)
+    const drives = await Drive.find({
+      "postedBy.college": studentCollegeId,
+    }).populate("postedBy", "college");
+    console.log(drives);
 
     if (!drives || drives.length === 0) {
-      return res.status(404).json({ message: "Drives not found for this college" });
+      return res
+        .status(404)
+        .json({ message: "Drives not found for this college" });
     }
 
     res.json(drives);
@@ -71,9 +82,7 @@ console.log(studentCollegeId)
     console.error("Error fetching drives:", error);
     res.status(500).json({ message: "Internal server error" });
   }
-}
-
-
+};
 
 // get total drive
 const getTotalDrives = async () => {
@@ -86,10 +95,24 @@ const getTotalDrives = async () => {
 };
 
 // Utility function for pagination with populate
-const paginate = async (model, query, page, limit, populateOptions = "",populateOptions2= "") => {
+const paginate = async (
+  model,
+  query,
+  page,
+  limit,
+  populateOptions = "",
+  populateOptions2 = "",
+  populateOptions3  = ""
+) => {
   const skip = (page - 1) * limit;
   const [results, total] = await Promise.all([
-    model.find(query).skip(skip).limit(limit).populate(populateOptions).populate(populateOptions2),
+    model
+      .find(query)
+      .skip(skip)
+      .limit(limit)
+      .populate(populateOptions)
+      .populate(populateOptions2)
+      .populate(populateOptions3),
     model.countDocuments(query),
   ]);
   return {
@@ -114,17 +137,21 @@ const getAllDrives = async (req, res) => {
   const { page = 1, limit = 10, search = "" } = req.query;
   try {
     const query = search ? { company: { $regex: search, $options: "i" } } : {};
-    const populateOptions = { path: "postedBy", select: "name email" ,};
+    const populateOptions = { path: "postedBy", select: "name email college",populate: { path: "college", select: "name" }, };
     const populateOptions2 = { path: "company", select: "companyname" };
+   
     const { results, totalPages } = await paginate(
       Drive,
       query,
       +page,
       +limit,
       populateOptions,
-      populateOptions2
+      populateOptions2,
+      
+      
     );
-
+//create drives.map and find the college name
+    results 
     res.json({ drives: results, totalPages });
   } catch (error) {
     logger.error(`Error fetching drives: ${error.message}`);
@@ -136,7 +163,6 @@ const getAllDrives = async (req, res) => {
 const createDrive = async (req, res) => {
   const { id: userId } = req.user;
   const {
-
     company,
     jobtitle,
     date,
@@ -178,7 +204,7 @@ const getDriveById = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const drive = await Drive.findById(id).populate("company","companyname");
+    const drive = await Drive.findById(id).populate("company", "companyname");
     if (!drive) {
       return res.status(404).json({ message: "Drive not found" });
     }
@@ -196,7 +222,7 @@ const getDriveByUser = async (req, res) => {
 
   try {
     // Use the paginate utility function
-    const populateOptions = { path: "postedBy", select: "name email" ,};
+    const populateOptions = { path: "postedBy", select: "name email" };
     const populateOptions2 = { path: "company", select: "companyname" };
     const { results: drives, totalPages } = await paginate(
       Drive,

@@ -36,6 +36,7 @@ function ManageJobDrives() {
         `${apiUrl}/api/drives?page=${page}&limit=10&search=${search}`
       );
       setDrives(response.data.drives);
+      console.log(response.data)
       setTotalPages(response.data.totalPages);
     } catch (error) {
       console.error("Error fetching drives:", error);
@@ -57,11 +58,12 @@ function ManageJobDrives() {
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`; // Set default header for all Axios requests
     }
     fetchDrives();
+    
     fetchCompanies();
   }, []);
   // Handle search
   const handleSearch = (e) => {
-    e.preventDefault();
+  setSearch(e.preventDefault());
     setPage(1); // Reset to page 1 when searching
     fetchDrives();
   };
@@ -197,7 +199,7 @@ function ManageJobDrives() {
                 </td>
                 <td className="border px-4 py-2">{drive.location}</td>
                 <td className="border px-4 py-2">
-                  {drive.postedBy?.name || "N/A"}
+                  {drive.postedBy?.name||'N/A'}
                 </td>
                 <td className="border px-4 py-2 flex justify-center">
                   <button

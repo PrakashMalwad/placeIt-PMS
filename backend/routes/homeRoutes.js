@@ -6,7 +6,6 @@ const Student = require("../models/Users/Students");
 const CollegeCode = require("../models/CollegeCodes");
 const auth = require("../middleware/auth");
 
-
 const { getTotalDrives } = require("../controllers/DriveController");
 const { getUserCount } = require("../controllers/userController");
 const { getCompanyCoordinatorCount } = require("../controllers/userController");
@@ -76,7 +75,6 @@ router.get("/colleges", async (req, res) => {
     colleges: await getColleges(),
   });
 });
-
 
 const {
   updatePlacementStatistics,
