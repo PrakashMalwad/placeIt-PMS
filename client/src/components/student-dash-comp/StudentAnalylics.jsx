@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { FaBell, FaFileAlt, FaCalendarAlt } from 'react-icons/fa';
+import {  FaFileAlt, FaCalendarAlt, FaBuilding } from 'react-icons/fa';
 import { FaBriefcase, FaMoneyBillWave, FaMapMarkerAlt, FaComments } from 'react-icons/fa';
 
 import { Link } from 'react-router-dom';
@@ -57,6 +57,7 @@ function StudentAnalytics() {
          
         }));
         setStudentPlacement(offersReceived.studentPlacement);
+      
       } catch (error) {
         console.error('Error fetching performance data:', error);
       }
@@ -115,37 +116,38 @@ function StudentAnalytics() {
         </div>
       </section>
 
-
+     
 {studentPlacement ? (
+  
   <section className="mb-6">
     <h3 className="text-xl sm:text-2xl font-semibold mb-2">Placed Job Details</h3>
     <div className="bg-yellow-100 p-4 rounded-lg shadow-sm">
-      <p className="font-bold text-sm sm:text-lg flex items-center">
-        <FaBriefcase className="mr-2 text-blue-500" />
+      <p className="text-sm sm:text-base font-bold flex items-center">
+        <FaBuilding className="mr-2 text-blue-500" />
         Company:
-        <span className="font-normal ml-2">{studentPlacement.placedCompany.name}</span>
+        <span className="font-normal ml-2">{studentPlacement.placedCompany}</span>
       </p>
-      <p className="font-bold text-sm sm:text-lg flex items-center">
+      <p className="text-sm sm:text-base font-bold flex items-center">
         <FaBriefcase className="mr-2 text-blue-500" />
         Job Title: 
         <span className="font-normal ml-2">{studentPlacement.jobTitle}</span>
       </p>
-      <p className="font-bold text-sm sm:text-lg flex items-center">
+      <p className="text-sm sm:text-base font-bold flex items-center">
         <FaMoneyBillWave className="mr-2 text-blue-500" />
         Package: 
-        <span className="font-normal ml-2">{studentPlacement.package}</span>
+        <span className="font-normal ml-2">{studentPlacement.package} per/annum</span>
       </p>
-      <p className="font-bold text-sm sm:text-lg flex items-center">
+      <p className="text-sm sm:text-base font-bold flex items-center">
         <FaMapMarkerAlt className="mr-2 text-blue-500" />
         Location: 
         <span className="font-normal ml-2">{studentPlacement.location}</span>
       </p>
-      <p className="font-bold text-sm sm:text-lg flex items-center">
+      <p className="text-sm sm:text-base font-bold flex items-center">
         <FaCalendarAlt className="mr-2 text-blue-500" />
         Joining Date: 
         <span className="font-normal ml-2">{new Date(studentPlacement.joiningDate).toLocaleDateString()}</span>
       </p>
-      <p className="font-bold text-sm sm:text-lg flex items-center">
+      <p className="text-sm sm:text-base font-bold flex items-center">
         <FaComments className="mr-2 text-blue-500" />
         Message: 
         <span className="font-normal ml-2">{studentPlacement.message}</span>

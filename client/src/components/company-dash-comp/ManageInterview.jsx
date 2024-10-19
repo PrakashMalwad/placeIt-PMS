@@ -174,7 +174,7 @@ const [jobTitle, setJobTitle] = useState('');
                         {/* Form for entering placement details */}
                         <form onSubmit={(e) => {
                             e.preventDefault();
-                            selectApplicant();
+                            selectApplicant(selectedInterview);
                         }}>
                     
                         <div className="mt-4">
