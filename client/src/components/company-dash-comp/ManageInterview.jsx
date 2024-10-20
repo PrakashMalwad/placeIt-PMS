@@ -24,7 +24,7 @@ const [jobTitle, setJobTitle] = useState('');
     // Fetch all scheduled interviews for a given application
     const fetchInterviews = async () => {
         try {
-            const response = await axios.get(`${apiUrl}/api/interviews/all`);
+            const response = await axios.get(`${apiUrl}/api/interviews/company`);
             setInterviews(response.data.interviews);
             setLoading(false);
         } catch (error) {

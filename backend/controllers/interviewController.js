@@ -132,17 +132,19 @@ const selectCandidateById = async (req, res) => {
     res.status(500).json({ message: "Failed to select candidate", error });
   }
 };
-
 const scheduleInterview = async (req, res) => {
-  console.log(req.params);
   const { id: applicationId } = req.params;
-  const { interviewerName, date, time, location, type, link } = req.body; 
+  const { interviewerName, date, time, location, type, link } = req.body;
+  
 
   try {
+    // Validate date and time (simple check, you may improve based on format)
+    if (!date || !time) {
+      return res.status(400).json({ message: "Date and time are required" });
+    }
+
     // Find the job application by its ID
-    const jobApplication = await JobApplication.findById(
-      applicationId
-    ).populate("student", "name");
+    const jobApplication = await JobApplication.findById(applicationId).populate("student", "name");
 
     if (!jobApplication) {
       return res.status(404).json({ message: "Job application not found" });
@@ -150,12 +152,10 @@ const scheduleInterview = async (req, res) => {
 
     // Validate the interview type
     if (type === "Online" && !link) {
-      return res
-        .status(400)
-        .json({ message: "Interview link is required for online interviews" });
+      return res.status(400).json({ message: "Interview link is required for online interviews" });
     }
 
-    // Schedule an interview using the job application
+    // Create and schedule an interview
     const newInterview = new Interview({
       candidateName: jobApplication.student.name,
       interviewerId: req.user.id,
@@ -164,7 +164,7 @@ const scheduleInterview = async (req, res) => {
       time,
       location,
       type,
-      link: type === "Online" ? link : undefined, // Only store link if it's an online interview
+      link: type === "Online" ? link : undefined, // Only store link for online interviews
       jobApplication: applicationId, // Link the job application to the interview
     });
 
@@ -180,6 +180,7 @@ const scheduleInterview = async (req, res) => {
     res.status(500).json({ message: "Failed to schedule interview", error });
   }
 };
+
 //Get interview by student
 const getInterviewByStudent = async (req, res) => {
   const studentId = req.user.id;
@@ -210,14 +211,10 @@ const getInterviewByStudent = async (req, res) => {
 
 // get interview by company
 const getInterviewByCompany = async (req, res) => {
-  const { companycoordId } = req.user.id;
-  //company id from companycoord id
-  const companyId = await Company.findOne({
-    companyCoordinator: companycoordId,
-  });
+  
   try {
     const interviews = await Interview.find({
-      "jobApplication.drive": companyId,
+      interviewerId: req.user.id,
     });
 
     res.status(200).json({ interviews });

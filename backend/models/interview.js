@@ -5,6 +5,11 @@ const interviewSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  interviewerId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
   interviewerName: {
     type: String,
     required: true,
