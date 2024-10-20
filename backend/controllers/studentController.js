@@ -99,7 +99,7 @@ const getStudentsFromSameCollege = async (req, res) => {
 };
 // Update an existing student
 const updateStudent = async (req, res) => {
-  const { id } = req.params;
+  const { id } = req.params[0];
   const { ...other } = req.body;
 
   try {

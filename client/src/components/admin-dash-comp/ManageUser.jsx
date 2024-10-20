@@ -93,8 +93,9 @@ function ManageUser() {
     }
   };
   const handleOpenModifyModal = (user) => {
+    console.log(user);
     setSelectedUser(user);
-    setModifiedUser(selectedUser); // Pre-fill form with user data
+    setModifiedUser(user); // Pre-fill form with user data
     setIsModifyUserModalOpen(true);
   };
 
@@ -127,19 +128,19 @@ function ManageUser() {
     }
   };
 
-  const handleModifyUser = async (id, updatedUser) => {
+  const handleModifyUser = async () => {
     try {
       const token = sessionStorage.getItem("token");
       const response = await axios.put(
-        `${apiUrl}/api/users/${id}`,
-        updatedUser,
+        `${apiUrl}/api/users/${selectedUser._id}`,
+        modifiedUser,
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
-      setUsers(users.map((user) => (user._id === id ? response.data : user)));
+      setUsers(users.map((user) => (user._id === selectedUser._id ? response.data : user)));
       fetchColleges();
     } catch (error) {
       setError("Error modifying user: " + error.message);
@@ -261,6 +262,7 @@ function ManageUser() {
                             className="bg-blue-500 text-white px-2 py-1 rounded"
                             onClick={() => {
                               handleOpenModifyModal(user);
+                              
                             }}
                           >
                             <FaEdit />
@@ -308,111 +310,116 @@ function ManageUser() {
         )}
       </main>
       {isModifyUserModalOpen && (
-        <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white p-8 rounded-lg shadow-lg w-1/2">
-          <button
-                className="bg-gray-200 p-4 rounded-full mt-0 mb-2 self-end"
-                onClick={() => setIsModifyUserModalOpen(false)}
-              >
-                <FaTimes />
-              </button>
-            <h2 className="text-2xl mb-4">Modify User</h2>
-              
-            <div className="space-y-4">
-              <input
-                type="text"
-                className="w-full p-2 border border-gray-300 rounded-lg"
-                placeholder="Name"
-                required
-                value={modifiedUser.name}
-                onChange={(e) =>
-                  setModifiedUser({ ...modifiedUser, name: e.target.value })
-                }
-              />
-              <input
-                type="email"
-                className="w-full p-2 border border-gray-300 rounded-lg"
-                placeholder="Email"
-                required
-                value={modifiedUser.email}
-                onChange={(e) =>
-                  setModifiedUser({ ...modifiedUser, email: e.target.value })
-                }
-              />
-              <input
-                type="password"
-                className="w-full p-2 border border-gray-300 rounded-lg"
-                placeholder="Password"
-                required
-                value={modifiedUser.password}
-                onChange={(e) =>
-                  setModifiedUser({ ...modifiedUser, password: e.target.value })
-                }
-              />
-              <select
-                className="w-full p-2 border border-gray-300 rounded-lg"
-                value={modifiedUser.role}
-                required
-                onChange={(e) =>
-                  setModifiedUser({ ...modifiedUser, role: e.target.value })
-                }
-              >
-                <option value="">Select Role</option>
-                <option value="student">Student</option>
-                <option value="admin">Admin</option>
-                <option value="placement-cell">Placement Cell</option>
-                <option value="company-coordinator"> Company</option>
-              </select>
-              {newUser.role === "company-coordinator" ? (
-                <select
-                  value={newUser.company}
-                  onChange={(e) =>
-                    setNewUser({ ...newUser, company: e.target.value })
-                  }
-                  className="border border-gray-300 p-2 mb-4 w-full"
-                  required
-                >
-                  <option value="">Select Company</option>
-                  {companies.map((company) => (
-                    <option key={company._id} value={company._id}>
-                      {company.companyname}
-                    </option>
-                  ))}
-                </select>
-              ) : (
-                <select
-                  className="w-full p-2 border border-gray-300 rounded-lg"
-                  value={newUser.college}
-                  onChange={(e) =>
-                    setNewUser({ ...newUser, college: e.target.value })
-                  }
-                >
-                  <option value="">Select College</option>
-                  {colleges.map((college) => (
-                    <option key={college._id} value={college._id}>
-                      {college.name}
-                    </option>
-                  ))}
-                </select>
-              )}
-            </div>
-            <div className="mt-6 flex justify-end space-x-4">
-              <button
-                className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg"
-                onClick={() => setIsModifyUserModalOpen(false)}
-              >
-                Cancel
-              </button>
-              <button
-                className="bg-green-500 text-white px-4 py-2 rounded-lg"
-                onClick={handleModifyUser}
-              >
-                Modify User
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+  <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
+    <div className="bg-white p-8 rounded-lg shadow-lg w-1/2">
+      <button
+        className="bg-gray-200 p-4 rounded-full mt-0 mb-2 self-end"
+        onClick={() => setIsModifyUserModalOpen(false)}
+      >
+        <FaTimes />
+      </button>
+      <h2 className="text-2xl mb-4">Modify User</h2>
+      
+      <div className="space-y-4">
+        <input
+          type="text"
+          className="w-full p-2 border border-gray-300 rounded-lg"
+          placeholder="Name"
+          required
+          value={modifiedUser.name}
+          onChange={(e) =>
+            setModifiedUser({ ...modifiedUser, name: e.target.value })
+          }
+        />
+        <input
+          type="email"
+          className="w-full p-2 border border-gray-300 rounded-lg"
+          placeholder="Email"
+          required
+          value={modifiedUser.email}
+          onChange={(e) =>
+            setModifiedUser({ ...modifiedUser, email: e.target.value })
+          }
+        />
+        <input
+          type="password"
+          className="w-full p-2 border border-gray-300 rounded-lg"
+          placeholder="Password"
+          required
+          onChange={(e) =>
+            setModifiedUser({ ...modifiedUser, password: e.target.value })
+          }
+        />
+        <select
+          className="w-full p-2 border border-gray-300 rounded-lg"
+          value={modifiedUser.role}
+          required
+          onChange={(e) =>
+            setModifiedUser({ ...modifiedUser, role: e.target.value })
+          }
+        >
+          <option value="">Select Role</option>
+          <option value="student">Student</option>
+          <option value="admin">Admin</option>
+          <option value="placementcell-coordinator">Placementcell coordinator</option>
+          <option value="company-coordinator">Company</option>
+        </select>
+
+        {modifiedUser.role === "company-coordinator" ? (
+          <select
+            value={modifiedUser.company}
+            onChange={(e) =>
+              setModifiedUser({ ...modifiedUser, company: e.target.value })
+            }
+            className="border border-gray-300 p-2 mb-4 w-full"
+            required
+          >
+            <option value="">Select Company</option>
+            {companies.map((company) => (
+              <option key={company._id} value={company._id}>
+                {company.companyname}
+              </option>
+            ))}
+          </select>
+        ) : (
+          <select
+            className="w-full p-2 border border-gray-300 rounded-lg"
+            value={modifiedUser.college}
+            onChange={(e) =>
+              setModifiedUser({ ...modifiedUser, college: e.target.value })
+            }
+          >
+            <option value="">Select College</option>
+            {colleges.map((college) => (
+              <option key={college._id} value={college._id}>
+                {college.name}
+              </option>
+            ))}
+          </select>
+        )}
+      </div>
+
+      <div className="mt-6 flex justify-end space-x-4">
+        <button
+          className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg"
+          onClick={() => setIsModifyUserModalOpen(false)}
+        >
+          Cancel
+        </button>
+        <button
+          className="bg-green-500 text-white px-4 py-2 rounded-lg"
+          onClick={() => {
+            handleModifyUser();
+            setIsModifyUserModalOpen(false);
+          }}
+        >
+          Modify User
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
 
       {isAddUserModalOpen && (
         <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
