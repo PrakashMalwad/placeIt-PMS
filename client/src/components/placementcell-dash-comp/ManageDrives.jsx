@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { DriveContext } from "./DriveContext.jsx";
 import Modal from "../GeneralModal.jsx";
 
+
 const apiUrl = import.meta.env.VITE_BACKEND_URL;
 
 function ManageJobDrives() {
@@ -142,6 +143,7 @@ function ManageJobDrives() {
           }
         }
       }
+      setIsModalOpen(false);
       fetchDrives();
       resetForm();
     } catch (error) {
@@ -200,6 +202,7 @@ function ManageJobDrives() {
 
   return (
     <div className="container mx-auto p-4">
+
       <h1 className="text-2xl font-bold mb-4">Manage Job Drives</h1>
 
       <form onSubmit={handleSearch} className="mb-4">
@@ -430,8 +433,10 @@ function ManageJobDrives() {
           <button
             type="submit"
             className="bg-blue-500 text-white px-4 py-2 rounded"
+           
           >
             {isEditing ? "Update Drive" : "Add Drive"}
+            
           </button>
         </form>
       </Modal>

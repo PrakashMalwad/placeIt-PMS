@@ -106,7 +106,7 @@ const handleCloseModal = () => {
               </td>
               <td className="border px-4 py-2">
                 <button
-                  onClick={() => handleViewResume(application.studentResume)}
+                  onClick={() => handleViewResume(application.student.resume)}
                   className="bg-gray-200 p-2 text-blue-500"
                 >
                   View Resume

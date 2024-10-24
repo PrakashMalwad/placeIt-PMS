@@ -49,7 +49,7 @@ const getApplicationByStudentId = async (req, res) => {
           select: "companyname",
         },
       });
-  console.log(applications);
+  
       const updatedApplications = applications.map((app) => {
         const companyName = app.drive?.company?.companyname || "N/A"; 
         return {
