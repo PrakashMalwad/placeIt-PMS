@@ -84,7 +84,7 @@ function MyApplications() {
     className="bg-white shadow-lg rounded-lg p-4 hover:shadow-2xl transform hover:scale-105 transition duration-300"
   >
     <h3 className="text-xl font-semibold text-gray-800 mb-2">Application ID: {(application._id)}</h3>
-    <p><strong>Company Name:</strong> {application.drive?.company || 'N/A'}</p>
+    <p><strong>Company Name:</strong> {application.companyName || 'N/A'}</p>
     <p><strong>Status:</strong> {application.status}</p>
     <p><strong>Applied Date:</strong> {new Date(application.appliedDate).toLocaleDateString()}</p>
     

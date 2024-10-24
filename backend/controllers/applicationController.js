@@ -37,12 +37,29 @@ const getApplicationByStudentId = async (req, res) => {
     } else {
       id = req.params.id;
     }
-    const applications = await JobApplication.find({ student: id }).populate({
-      path: "student",
-      select: "name resume",
-    });
+    const applications = await JobApplication.find({ student: id })
+      .populate({
+        path: "student",
+        select: "name resume",
+      })
+      .populate({
+        path: "drive",
+        populate: {
+          path: "company",
+          select: "companyname",
+        },
+      });
+  console.log(applications);
+      const updatedApplications = applications.map((app) => {
+        const companyName = app.drive?.company?.companyname || "N/A"; 
+        return {
+          ...app._doc, 
+          companyName,  
+        };
+      });
+    
     // Populate student name
-    res.status(200).json(applications);
+    res.status(200).json(updatedApplications);
   } catch (error) {
     res
       .status(404)
